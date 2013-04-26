@@ -1,0 +1,16 @@
+[
+{
+	"modid": "panoramakit",
+	"name": "Panorama Kit",
+	"description": "Make backgrounds, panoramas and planets!",
+	"version": "3.0.0",
+	"url": "http://www.minecraftforum.net/topic/792414-",
+	"updateUrl": "",
+	"authorList": [ "dayanto" ],
+	"credits": "",
+	"logoFile": "",
+	"screenshots": [],
+	"parent": "",
+	"dependencies": []
+}
+]
