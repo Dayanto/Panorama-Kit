@@ -10,7 +10,7 @@ import converter.data.ColorData;
  * The best compromise between speed and quality is the bilinear interpolator.
  * 
  * @author dayanto
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
  */
 public abstract class Interpolator

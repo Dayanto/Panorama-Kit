@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.Side;
  * ClientProxy
  *  
  * @author dayanto
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
  */
 public class ClientProxy extends CommonProxy

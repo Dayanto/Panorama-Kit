@@ -9,7 +9,7 @@ import cpw.mods.fml.common.TickType;
  * ClientTickHandler
  * 
  * @author dayanto
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
  */
 public class ClientTickHandler implements ITickHandler

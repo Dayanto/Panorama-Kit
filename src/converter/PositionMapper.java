@@ -11,7 +11,7 @@ import converter.data.Position;
  * quality is lost.
  *
  * @author dayanto
- * @license Lesser GNU Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
  */
 public abstract class PositionMapper 
