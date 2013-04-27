@@ -1,29 +1,19 @@
 package panoramakit.task;
 
-
-public abstract interface Task
-{
+/**
+ * ThreadedTask
+ *  
+ * @author dayanto
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ *
+ */
+public abstract class Task
+{	
 	/**
-	 * Runs any pre-render code associated with this task.
+	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things
+	 * to be defined at the moment of execution.
 	 */
-	public abstract void clientTick();
-	
-	/**
-	 * Runs any pre-render code associated with this task.
-	 */
-	public abstract void preRenderTick();
-	
-	/**
-	 * Runs any post-render code associated with this task.
-	 */
-	public abstract void postRenderTick();
-
-	
-	/**
-	 * Displays a GUI specific to this task while it's running. The GUI usually displays the current 
-	 * progress as well as supplying a way of aborting all operation that is currently scheduled.  
-	 */
-	public abstract void displayGUI();
+	public abstract void init();
 	
 	/**
 	 * Politely asks the task to abort as quickly as possible, performing any cleanup that has
@@ -49,4 +39,10 @@ public abstract interface Task
 	 */
 	public abstract boolean isFinished();
 
+	/**
+	 * Displays a GUI specific to this task while it's running. The GUI usually displays the current 
+	 * progress as well as supplying a way of aborting all operation that is currently scheduled.  
+	 */
+	public abstract void displayGUI();
+	
 }

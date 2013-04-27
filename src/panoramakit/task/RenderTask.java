@@ -1,6 +1,15 @@
 package panoramakit.task;
 
-public abstract class RenderTask implements Task
+import panoramakit.task.tick.*;
+
+/**
+ * RenderTask
+ *  
+ * @author dayanto
+ * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
+ *
+ */
+public abstract class RenderTask extends Task implements ClientTick, RenderTick
 {
 	private int currentFrame = 0;
 	
@@ -16,18 +25,12 @@ public abstract class RenderTask implements Task
 	@Override
 	public void clientTick()
 	{
-		// TODO Auto-generated method stub
+		orientView(currentFrame);
 		
 	}
 	
 	@Override
-	public void preRenderTick()
-	{
-		orientView(currentFrame);
-	}
-
-	@Override
-	public void postRenderTick()
+	public void renderTick()
 	{
 		renderFrame(currentFrame);
 	}
