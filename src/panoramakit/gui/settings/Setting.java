@@ -1,4 +1,4 @@
-package panoramakit.settings;
+package panoramakit.gui.settings;
 
 /**
  * Setting

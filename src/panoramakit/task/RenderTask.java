@@ -9,43 +9,50 @@ import panoramakit.task.tick.*;
  * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
  */
-public abstract class RenderTask extends Task implements ClientTick, RenderTick
+public abstract class RenderTask extends Task implements ClientTick, PostRenderTick
 {
-	private int currentFrame = 0;
+	private int currentPiece = -1;
 	
 	public abstract void orientView(int frame);
 	
 	public abstract void renderFrame(int frame);
-
-	public void nextImage()
+	
+	public void nextPiece()
 	{
-		currentFrame++;
+		currentPiece++;
 	}
 	
 	@Override
 	public void clientTick()
 	{
-		orientView(currentFrame);
-		
+		if(!isWaiting()) 
+			currentPiece++;
+		if(currentPiece >= 0)
+			orientView(currentPiece);
 	}
 	
 	@Override
-	public void renderTick()
+	public void postRenderTick()
 	{
-		renderFrame(currentFrame);
+		if(currentPiece >= 0)
+			renderFrame(currentPiece);
 	}
 
 	@Override
-	public void displayGUI()
+	public void init()
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO Add render entity.
 	}
-
+	
+	public void end()
+	{
+		// TODO Remove render entity.
+	}
+	
 	@Override
-	public void stop()
+	public boolean isWaiting()
 	{
-		// TODO Auto-generated method stub
-		
+		return false;
 	}
+	
 }

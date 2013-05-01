@@ -1,7 +1,10 @@
 package panoramakit.task;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiNewChat;
+
 /**
- * ThreadedTask
+ * Task
  *  
  * @author dayanto
  * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
@@ -14,6 +17,11 @@ public abstract class Task
 	 * to be defined at the moment of execution.
 	 */
 	public abstract void init();
+	
+	/**
+	 * Cleans up after the task has finished running if necessary.
+	 */
+	public abstract void end();
 	
 	/**
 	 * Politely asks the task to abort as quickly as possible, performing any cleanup that has
@@ -43,6 +51,17 @@ public abstract class Task
 	 * Displays a GUI specific to this task while it's running. The GUI usually displays the current 
 	 * progress as well as supplying a way of aborting all operation that is currently scheduled.  
 	 */
-	public abstract void displayGUI();
+	public abstract void displayStatusGUI();
+	
+	/**
+	 * Used by tasks to display a status message in the chat.
+	 */
+	public void printStatusMessage(String message)
+	{
+		// TODO Add setting to disable status messages from tasks.
+		
+		GuiNewChat chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
+		chat.printChatMessage(message);
+	}
 	
 }

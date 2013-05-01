@@ -23,7 +23,7 @@ public class PanoramaKit
 	public static CommonProxy proxy;
 	
 	@Init
-	public void load(FMLInitializationEvent event)
+	public void init(FMLInitializationEvent event)
 	{
 		proxy.registerHandlers();
 	}
