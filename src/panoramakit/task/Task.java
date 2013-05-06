@@ -2,6 +2,7 @@ package panoramakit.task;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.GuiScreen;
 
 /**
  * Task
@@ -11,7 +12,7 @@ import net.minecraft.client.gui.GuiNewChat;
  *
  */
 public abstract class Task
-{	
+{
 	/**
 	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things
 	 * to be defined at the moment of execution.
@@ -21,7 +22,7 @@ public abstract class Task
 	/**
 	 * Cleans up after the task has finished running if necessary.
 	 */
-	public abstract void end();
+	public abstract void finish();
 	
 	/**
 	 * Politely asks the task to abort as quickly as possible, performing any cleanup that has
@@ -32,6 +33,11 @@ public abstract class Task
 	public abstract void stop();
 	
 	/**
+	 * Whether this task has been completed.
+	 */
+	public abstract boolean hasCompleted();
+	
+	/**
 	 * If this task has been aborted, returns whether it has done all cleanup and come to a halt.
 	 */
 	public abstract boolean hasStopped();
@@ -39,19 +45,17 @@ public abstract class Task
 	/**
 	 * Whether the task is currently waiting for something. Some tasks need to wait before running and
 	 * some might take pauses. 
+	 * 
+	 * Will probably be removed in favor of letting the tasks handle waiting themselves.
 	 */
 	public abstract boolean isWaiting();
-	
-	/**
-	 * Whether this task has been completed.
-	 */
-	public abstract boolean isFinished();
 
 	/**
-	 * Displays a GUI specific to this task while it's running. The GUI usually displays the current 
-	 * progress as well as supplying a way of aborting all operation that is currently scheduled.  
+	 * Retrieves a GUI specific to this task that usually contains information about the progress as
+	 * well as providing a way of stopping all tasks. There is however no requirement for the task to
+	 * provide such a GUI and it might just return null.
 	 */
-	public abstract void displayStatusGUI();
+	public abstract GuiScreen getStatusGUI();
 	
 	/**
 	 * Used by tasks to display a status message in the chat.

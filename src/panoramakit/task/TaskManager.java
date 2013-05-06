@@ -1,10 +1,9 @@
 package panoramakit.task;
 
 import java.util.ArrayList;
-import panoramakit.task.tick.*;
 
 /**
- * The task manager keeps track of all the tasks currently running and executes them.
+ * The task manager keeps track of all the tasks currently running.
  *  
  * @author dayanto
  * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
@@ -19,18 +18,57 @@ public class TaskManager
 		taskList.add(task);
 	}
 	
+	/**
+	 * Get the currently active task.
+	 */
 	public Task getCurrentTask()
 	{
 		return taskList.get(0);
 	}
 	
+	/**
+	 * Move on to the next task in the list if one exists. 
+	 * 
+	 * Should only be used by the task manager.
+	 */
+	public void nextTask()
+	{
+		if(getCurrentTask().hasCompleted())
+		{
+			getCurrentTask().finish();
+			taskList.remove(0);
+			if(hasTasks())
+			{
+				getCurrentTask().init();
+			}
+		}
+	}
+	
+	/**
+	 * Removes the current task if it has been stopped and handled all the cleanup. 
+	 * 
+	 * Should only be used by the task manager.
+	 */
+	public void clearStoppedTask()
+	{
+		if(getCurrentTask().hasStopped())
+		{
+			taskList.remove(0);
+		}
+	}
+	
+	/**
+	 * Whether or not there are any tasks in the taskList.
+	 */
 	public boolean hasTasks()
 	{
 		return !taskList.isEmpty();
 	}
 	
 	/**
-	 * 
+	 * Terminates all tasks by first clearing all the scheduled tasks and then asking
+	 * the currently active task to stop. The mod will then continuously ask the 
+	 * remaining task whether it has finished and remove it once it has.
 	 */
 	public void halt()
 	{

@@ -1,14 +1,19 @@
 package panoramakit;
 
+import org.lwjgl.input.Keyboard;
+
+import net.minecraft.client.gui.GuiScreen;
 import panoramakit.task.Task;
 import panoramakit.task.TaskManager;
 import panoramakit.task.tick.ClientTick;
 import panoramakit.task.tick.PostRenderTick;
 import panoramakit.task.tick.TickID;
 
+import static net.minecraft.client.Minecraft.getMinecraft;
+
 /**
- * FlowControl
- *  
+ * This class acts as the connection between the tick handlers and the task manager. 
+ * 
  * @author dayanto
  * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
  *
@@ -18,10 +23,11 @@ public class Dispatcher
 	public static TaskManager taskManager = new TaskManager();
 	
 	public static void runTick(TickID tickID)
-	{	
+	{
 		if(taskManager.hasTasks())
 		{
 			Task currentTask = taskManager.getCurrentTask();
+			
 			switch(tickID)
 			{
 				case CLIENT_TICK:
@@ -41,10 +47,28 @@ public class Dispatcher
 					break;
 				}
 			}
+			
+			if(currentTask.hasCompleted())
+			{
+				taskManager.nextTask();
+			}
+			if(currentTask.hasStopped())
+			{
+				taskManager.clearStoppedTask();
+			}
 		}
-		else
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_P)) // TODO Replace with keykind
 		{
-			// TODO Do the logic for when the mod is idle.
+			if(taskManager.hasTasks())
+			{
+				GuiScreen statusGUI = taskManager.getCurrentTask().getStatusGUI();
+				getMinecraft().displayGuiScreen(statusGUI);
+			}
+			else if(getMinecraft().currentScreen != null)
+			{
+				// TODO Display menu screen.
+			}
 		}
 	}
 }

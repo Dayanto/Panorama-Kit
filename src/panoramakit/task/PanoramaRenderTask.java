@@ -1,5 +1,7 @@
 package panoramakit.task;
 
+import net.minecraft.client.gui.GuiScreen;
+
 /**
  * RenderPanoramaTask
  *  
@@ -43,16 +45,16 @@ public class PanoramaRenderTask extends RenderTask
 	}
 
 	@Override
-	public boolean isFinished()
+	public boolean hasCompleted()
 	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void displayStatusGUI()
+	public GuiScreen getStatusGUI()
 	{
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

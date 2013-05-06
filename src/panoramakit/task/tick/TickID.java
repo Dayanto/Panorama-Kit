@@ -1,7 +1,7 @@
 package panoramakit.task.tick;
 
 /**
- * Ticks
+ * TickID
  *  
  * @author dayanto
  * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
