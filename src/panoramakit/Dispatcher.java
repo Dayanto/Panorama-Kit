@@ -42,10 +42,6 @@ public class Dispatcher
 						((PostRenderTick)currentTask).postRenderTick();
 					break;
 				}
-				default:
-				{
-					break;
-				}
 			}
 			
 			if(currentTask.hasCompleted())
@@ -68,6 +64,23 @@ public class Dispatcher
 			else if(getMinecraft().currentScreen != null)
 			{
 				// TODO Display menu screen.
+			}
+		}
+		
+		// TODO Remove test code
+		if(Keyboard.isKeyDown(Keyboard.KEY_G))
+		{
+			if(getMinecraft().renderViewEntity == getMinecraft().thePlayer)
+			{
+				getMinecraft().renderViewEntity = new EntityCamera(getMinecraft().theWorld);
+			}
+		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_H))
+		{
+			if(getMinecraft().renderViewEntity != getMinecraft().thePlayer)
+			{
+				getMinecraft().renderViewEntity = getMinecraft().thePlayer;
 			}
 		}
 	}

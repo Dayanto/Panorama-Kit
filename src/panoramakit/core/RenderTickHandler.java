@@ -2,6 +2,8 @@ package panoramakit.core;
 
 import java.util.EnumSet;
 
+import org.lwjgl.opengl.GL11;
+
 import panoramakit.Dispatcher;
 import panoramakit.task.tick.TickID;
 import cpw.mods.fml.common.ITickHandler;
@@ -26,7 +28,13 @@ public class RenderTickHandler implements ITickHandler
 	 * frame.
 	 */
 	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {}
+	public void tickStart(EnumSet<TickType> type, Object... tickData) 
+	{
+		// TODO Remove test code
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        GL11.glRotatef(90, 0, 1, 0);
+	}
 
 	/**
 	 * This block of code gets executed right after the vanilla code has rendered.

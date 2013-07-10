@@ -1,7 +1,10 @@
 package panoramakit.task;
 
+import net.minecraft.client.Minecraft;
+
 import org.lwjgl.opengl.GL11;
 
+import panoramakit.EntityCamera;
 import panoramakit.task.tick.*;
 
 /**
@@ -44,11 +47,13 @@ public abstract class RenderTask extends Task implements ClientTick, PostRenderT
 	public void init()
 	{
 		// TODO Add render entity.
+		Minecraft.getMinecraft().renderViewEntity = new EntityCamera(Minecraft.getMinecraft().theWorld); 
 	}
 	
 	public void finish()
 	{
 		// TODO Remove render entity.
+		Minecraft.getMinecraft().renderViewEntity = Minecraft.getMinecraft().thePlayer;
 	}
 	
 	@Override
