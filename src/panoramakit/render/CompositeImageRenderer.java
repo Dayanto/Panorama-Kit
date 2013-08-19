@@ -23,16 +23,18 @@ public abstract class CompositeImageRenderer {
 	private boolean advancedOpengl;
 	private MouseHelper mouseHelper;
 	private float fieldOfView;
+	private float pitch;
+	private float yaw;
 	
 	// screenshot size
 	private int screenshotWidth;
 	private int screenshotHeight;
 
-	// unmodified display size
-	private int displayWidth;
-	private int displayHeight;
-
-	// modified display size
+//	// unmodified display size
+//	private int displayWidth;
+//	private int displayHeight;
+//
+//	// modified display size
 //	private int renderWidth;
 //	private int renderHeight;
 
@@ -44,23 +46,20 @@ public abstract class CompositeImageRenderer {
 	}
 
 	public final void render() throws IOException { // store the game resolution
-		displayWidth = mc.displayWidth;
-		displayHeight = mc.displayHeight;
-
-		// calculate the optimal resolution not greater than the window size (to
-		// avoid excess rendering)
+//		displayWidth = mc.displayWidth;
+//		displayHeight = mc.displayHeight;
+//
+//		// calculate the optimal resolution not greater than the window size (to
+//		// avoid excess rendering)
 //		double tilesX = Math.ceil((double) screenshotWidth / (double) displayWidth);
-//		double tilesY = Math.ceil((double) screenshotHeight / (double) displayHeight);
+//		double tilesY = Math.ceil((double) screenshotHeight / (double) displayHeight);	
 //		renderWidth = (int) Math.ceil(screenshotWidth / tilesX);
 //		renderHeight = (int) Math.ceil(screenshotHeight / tilesY);
-		// renderWidth = mc.displayWidth;
-		// renderHeight = mc.displayHeight;
-//		System.out.println("Resolution:");
-//		System.out.println("X - " + displayWidth + " : " + renderWidth);
-//		System.out.println("Y - " + displayHeight + " : " + renderHeight);
+//
+//		screenshot = new TiledScreenshot(screenshotWidth, screenshotHeight, renderWidth, renderHeight);
 
-		screenshot = new TiledScreenshot(screenshotWidth, screenshotHeight, displayWidth, displayHeight);
-
+		screenshot = new TiledScreenshot(screenshotWidth, screenshotHeight, mc.displayWidth, mc.displayHeight);
+		
 		applyMods();
 
 		try {
@@ -77,8 +76,13 @@ public abstract class CompositeImageRenderer {
 		return screenshot.getScreenshot();
 	}
 
+	public void rotatePlayer(float yaw, float pitch) {
+		mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = yaw;
+		mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = pitch;
+	}
+	
 	/**
-	 * Borrowed method from Mineshot
+	 * Copied method from Mineshot
 	 */
 	private void applyMods() { 
 		// TODO Implement some sort of renderActive = true;
@@ -89,11 +93,15 @@ public abstract class CompositeImageRenderer {
 		
 		// disable advanced OpenGL features, they cause flickering on render chunks
 		advancedOpengl = mc.gameSettings.advancedOpengl;
-		mc.gameSettings.advancedOpengl = false;
+		//mc.gameSettings.advancedOpengl = false;
 		
 		// change the field of view to a quarter circle (90 degrees)
 		fieldOfView = mc.gameSettings.fovSetting;
-		mc.gameSettings.fovSetting = 90;
+		mc.gameSettings.fovSetting = (90F - 70F) / (110F - 70F); // fov 90 adjusted to a 0-1.0 scale representing 70-110
+
+		// save player rotation
+		this.yaw = mc.thePlayer.rotationYaw;
+		this.pitch = mc.thePlayer.rotationPitch;
 		
 		// lock the mouse to prevent misaligned tiles
 		LockableMouseHelper mouseHelperLocked = new LockableMouseHelper();
@@ -117,7 +125,7 @@ public abstract class CompositeImageRenderer {
 	}
 
 	/**
-	 * Borrowed method from Mineshot
+	 * Copied method from Mineshot
 	 */
 	private void restoreMods() { // restore camera settings
 		if (era != null) {
@@ -126,6 +134,9 @@ public abstract class CompositeImageRenderer {
 			era.setCameraOffsetY(0);
 		}
 
+		mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = yaw;
+		mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = pitch;
+		
 		// restore game resolution
 //		mc.displayWidth = displayWidth;
 //		mc.displayHeight = displayHeight;

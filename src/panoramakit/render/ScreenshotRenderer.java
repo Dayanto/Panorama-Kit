@@ -38,7 +38,7 @@ public class ScreenshotRenderer extends CompositeImageRenderer {
 
 		// save image
 		File file = new File("C:/Users/Bertil/Desktop/RenderTest.png");
-		if (file.exists())
+		if (!file.exists())
 			file.createNewFile();
 		ImageIO.write(image, "png", file);
 	}

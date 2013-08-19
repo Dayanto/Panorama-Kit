@@ -43,7 +43,7 @@ public class EquirectangularToPanorama extends PositionMapper {
 			return width;
 		}
 	}
-
+	
 	@Override
 	public int getNewHeight(int width, int height) {
 		if (customResolution) {

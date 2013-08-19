@@ -86,6 +86,8 @@ public abstract class Task {
 	 * Retrieves a GUI specific to this task that usually contains information about the progress as
 	 * well as providing a way of stopping all tasks. There is however no requirement for the task
 	 * to provide such a GUI and it might just return null.
+	 * 
+	 * TODO Might get replaced by something simpler.
 	 */
 	public abstract GuiScreen getStatusGUI();
 

@@ -31,6 +31,9 @@ public class EntityRendererAccessor {
 	private final static int FIELD_CAM_XOFS;
 	private final static int FIELD_CAM_YOFS;
 	private final static int FIELD_PREV_FRAME_TIME;
+	
+//	private final static int FIELD_CAM_ROLL;
+//	private final static int FIELD_PREV_CAM_ROLL;
 
 	static {
 		Field[] fields = EntityRenderer.class.getDeclaredFields();

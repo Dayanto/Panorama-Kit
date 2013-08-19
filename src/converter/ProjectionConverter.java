@@ -43,6 +43,10 @@ public class ProjectionConverter {
 	public ProjectionConverter(PositionMapper positionMapper, String imagePathInput, String imagePathOutput) {
 		this(positionMapper, new BilinearInterpolator(), imagePathInput, imagePathOutput);
 	}
+	
+	public ProjectionConverter(PositionMapper positionMapper, String imagePathOverwrite) {
+		this(positionMapper, imagePathOverwrite, imagePathOverwrite);
+	}
 
 	private void loadImage(String imagePath) throws IOException, Exception {
 		inputImage = ImageIO.read(new File(imagePath));

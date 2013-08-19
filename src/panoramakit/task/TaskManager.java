@@ -32,9 +32,19 @@ public class TaskManager {
 			if (currentTask.hasCompleted()) {
 				currentTask.finish();
 				taskList.remove(0);
-				if (hasTasks()) {
-					getCurrentTask().init();
-				}
+				runNextTask();
+			}
+		}
+	}
+	
+	private void runNextTask()
+	{
+		if (hasTasks()) {
+			Task currentTask = getCurrentTask();
+			currentTask.init();
+			if(currentTask instanceof ThreadedTask)
+			{
+				((ThreadedTask)currentTask).start();
 			}
 		}
 	}
