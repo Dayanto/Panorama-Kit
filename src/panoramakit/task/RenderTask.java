@@ -1,79 +1,65 @@
 package panoramakit.task;
 
-import net.minecraft.client.Minecraft;
-
-import org.lwjgl.opengl.GL11;
-
-import panoramakit.EntityCamera;
-import panoramakit.task.tick.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.minecraft.client.gui.GuiScreen;
+import panoramakit.render.CompositeImageRenderer;
 
 /**
  * RenderTask
- *  
+ * 
  * @author dayanto
- * @license GNU Lesser General Public License v3 (http://www.gnu.org/licenses/lgpl.html)
- *
  */
-public abstract class RenderTask extends Task implements ClientTick, PostRenderTick
-{
-	private int currentPiece = -1;
-	
-	public abstract void orientView(int frame);
-	
-	public abstract void renderFrame(int frame);
-	
-	public void nextPiece()
-	{
-		currentPiece++;
-	}
-	
-	@Override
-	public void clientTick()
-	{
-		if(!isWaiting()) 
-			currentPiece++;
-		if(currentPiece >= 0)
-			orientView(currentPiece);
-	}
-	
-	@Override
-	public void postRenderTick()
-	{
-		if(currentPiece >= 0)
-			renderFrame(currentPiece);
+public class RenderTask extends Task {
+
+	private static final Logger L = Logger.getLogger(RenderTask.class.getName());
+
+	// the active image renderer
+	private CompositeImageRenderer imageRenderer;
+	boolean hasRendered = false;
+
+	public RenderTask(CompositeImageRenderer imageRenderer) {
+		this.imageRenderer = imageRenderer;
 	}
 
 	@Override
-	public void init()
-	{
-		// TODO Add render entity.
-		Minecraft.getMinecraft().renderViewEntity = new EntityCamera(Minecraft.getMinecraft().theWorld); 
+	public void perform() {
+		try {
+			System.out.println("Rendering screenshot");
+			imageRenderer.render();
+		} catch (Exception ex) {
+			System.out.println("Render failed:"); ex.printStackTrace();
+			L.log(Level.SEVERE, "Render failed", ex);
+		}
+		setCompleted();
 	}
-	
-	public void finish()
-	{
-		// TODO Remove render entity.
-		Minecraft.getMinecraft().renderViewEntity = Minecraft.getMinecraft().thePlayer;
-	}
-	
+
 	@Override
-	public boolean isWaiting()
-	{
+	public void init() {
+
+	}
+
+	@Override
+	public void finish() {
+
+	}
+
+	/**
+	 * Defaults to false.
+	 */
+	@Override
+	public boolean isWaiting() {
 		return false;
 	}
-	
-	public void rotate(float pitch, float yaw, float spin)
-	{
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		
-		// TODO Reverse all the translation and apply the custom rotation.
-		
-		//GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * par1, 1.0F, 0.0F, 0.0F);
-        //GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * par1 + 180.0F, 0.0F, 1.0F, 0.0F);
-        
-        //GL11.glTranslatef(0.0F, 0.0F, -0.1F);
-        
-        
+
+	@Override
+	public void stop() { // TODO Auto-generated method stub
+
 	}
-	
+
+	@Override
+	public GuiScreen getStatusGUI() { // TODO Auto-generated method stub
+		return null;
+	}
+
 }
