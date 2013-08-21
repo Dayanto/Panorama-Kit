@@ -1,7 +1,7 @@
 package panoramakit.core;
 
 import java.util.EnumSet;
-import panoramakit.Dispatcher;
+import panoramakit.engine.Dispatcher;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
