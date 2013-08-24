@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -15,12 +18,12 @@ import panoramakit.converter.samplers.CubicSampler;
  * 
  * @author dayanto
  */
-public class CubicToEquirectangular extends PositionMapper {
-	public CubicToEquirectangular(PositionMapper preProjection) throws Exception {
+public class CubicToEquirect extends PositionMapper {
+	public CubicToEquirect(PositionMapper preProjection) throws Exception {
 		super(preProjection, new CubicSampler());
 	}
 
-	public CubicToEquirectangular() throws Exception {
+	public CubicToEquirect() throws Exception {
 		this(null);
 	}
 
@@ -41,7 +44,7 @@ public class CubicToEquirectangular extends PositionMapper {
 		double yCentered = y - pieceSize;
 
 		// The angles are calculated by dividing the distance in pixels by the
-		// circumferance in pixels and then converting to radians. 
+		// circumferance in pixels and then converting to radians.
 		double horizontalAngle = xCenteredLocal * ((2 * Math.PI) / inputWidth);
 		double verticalAngle = yCentered * ((2 * Math.PI) / inputWidth);
 
@@ -52,7 +55,7 @@ public class CubicToEquirectangular extends PositionMapper {
 		double tanHorizontal = sinHorizontal / cosHorizontal; // Math.tan(horizontalAngle); This is purely for optimization.
 		double tanVertical = Math.tan(verticalAngle);
 
-		// The calculations are based on the idea of a sphere inside of a cube and following the straight lines 
+		// The calculations are based on the idea of a sphere inside of a cube and following the straight lines
 		// from the center through the sphere and to the matching point on the outside cube.
 
 		// Calculate the relative position from the equator.
@@ -72,7 +75,8 @@ public class CubicToEquirectangular extends PositionMapper {
 		if (pieceSize <= Math.round(equator.y) && Math.round(equator.y) < pieceSize * 2) {
 			return equator;
 		} else {
-			// Which pole we're at currently. Represents a value of 1 or -1 where -1 is the pole on top and 1 is the one on the bottom. Since
+			// Which pole we're at currently. Represents a value of 1 or -1 where -1 is the pole on top and 1 is the one on the bottom.
+			// Since
 			// 1 doesn't change anything when multiplied, all calculations will be based off of the bottom pole and flipped for the top.
 			int hemisphere = (int) (verticalAngle / Math.abs(verticalAngle));
 
@@ -100,8 +104,7 @@ public class CubicToEquirectangular extends PositionMapper {
 	}
 
 	/**
-	 * Rotates the position 90 degrees to the right around the origin. This is 
-	 * repeated the number of times given.
+	 * Rotates the position 90 degrees to the right around the origin. This is repeated the number of times given.
 	 */
 	public static Position rotate(double x, double y, int rotations) {
 		rotations = (rotations + 4) % 4;

@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -5,17 +8,16 @@ import panoramakit.converter.data.Position;
 import panoramakit.converter.samplers.FlatSampler;
 
 /**
- * This projeciton is based on a certain type of world map where any one part of the map 
- * has the same area as it has in reality. 
+ * This projeciton is based on a certain type of world map where any one part of the map has the same area as it has in reality.
  * 
  * @author dayanto
  */
-public class EquirectangularToMollweide extends PositionMapper {
-	public EquirectangularToMollweide(PositionMapper preProjection) throws Exception {
+public class EquirectToMollweide extends PositionMapper {
+	public EquirectToMollweide(PositionMapper preProjection) throws Exception {
 		super(preProjection, new FlatSampler());
 	}
 
-	public EquirectangularToMollweide() throws Exception {
+	public EquirectToMollweide() throws Exception {
 		this(null);
 	}
 

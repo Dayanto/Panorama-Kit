@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -5,28 +8,27 @@ import panoramakit.converter.data.Position;
 import panoramakit.converter.samplers.FlatSampler;
 
 /**
- * This projection takes an equirectangular panorama and wraps it in a circle around a center point
- * to create a planetlike effect. As with all projections, it's performed in reverse, meaning that 
- * the distance from the center is the same as the Y position in the equirectangular panorama and the 
- * angle around the circle translates to the the X position in the equirectangular panorama. 
+ * This projection takes an equirectangular panorama and wraps it in a circle around a center point to create a planetlike effect. As with
+ * all projections, it's performed in reverse, meaning that the distance from the center is the same as the Y position in the
+ * equirectangular panorama and the angle around the circle translates to the the X position in the equirectangular panorama.
  * 
- * The more proper name for this projection is Azimuthal Equidistant Projection. You can also make
- * one by applying the polar coordinates filter on an equirectangular panorama in Photoshop.
+ * The more proper name for this projection is Azimuthal Equidistant Projection. You can also make one by applying the polar coordinates
+ * filter on an equirectangular panorama in Photoshop.
  * 
  * @author dayanto
  */
-public class EquirectangularToPolar extends PositionMapper {
+public class EquirectToPolar extends PositionMapper {
 	public static final boolean PLANET = true;
 	public static final boolean WELL = false;
 
 	public boolean invert;
 
-	public EquirectangularToPolar(PositionMapper preProjection, boolean type) throws Exception {
+	public EquirectToPolar(PositionMapper preProjection, boolean type) throws Exception {
 		super(preProjection, new FlatSampler());
 		invert = type;
 	}
 
-	public EquirectangularToPolar(boolean type) throws Exception {
+	public EquirectToPolar(boolean type) throws Exception {
 		this(null, type);
 	}
 

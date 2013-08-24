@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -8,12 +11,12 @@ import panoramakit.converter.samplers.FlatSampler;
  * 
  * @author dayanto
  */
-public class EquirectangularToPanorama extends PositionMapper {
+public class EquirectToPanorama extends PositionMapper {
 	public boolean customResolution;
 	public int newWidth;
 	public int newHeight;
 
-	public EquirectangularToPanorama(PositionMapper preProjection, int newWidth, int newHeight) throws Exception {
+	public EquirectToPanorama(PositionMapper preProjection, int newWidth, int newHeight) throws Exception {
 		super(preProjection, new FlatSampler());
 
 		customResolution = true;
@@ -21,16 +24,16 @@ public class EquirectangularToPanorama extends PositionMapper {
 		this.newHeight = newHeight;
 	}
 
-	public EquirectangularToPanorama(PositionMapper preProjection) throws Exception {
+	public EquirectToPanorama(PositionMapper preProjection) throws Exception {
 		this(preProjection, 0, 0);
 		customResolution = false;
 	}
 
-	public EquirectangularToPanorama(int newWidth, int newHeight) throws Exception {
+	public EquirectToPanorama(int newWidth, int newHeight) throws Exception {
 		this(null, newWidth, newHeight);
 	}
 
-	public EquirectangularToPanorama() throws Exception {
+	public EquirectToPanorama() throws Exception {
 		this(null, 0, 0);
 		customResolution = false;
 	}
@@ -43,7 +46,7 @@ public class EquirectangularToPanorama extends PositionMapper {
 			return width;
 		}
 	}
-	
+
 	@Override
 	public int getNewHeight(int width, int height) {
 		if (customResolution) {

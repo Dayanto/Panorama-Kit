@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakitcore.setup;
 
 import java.util.Arrays;
@@ -11,8 +14,8 @@ import cpw.mods.fml.common.ModMetadata;
  * 
  * @author dayanto
  */
-public class PKCModContainer extends DummyModContainer {
-	public PKCModContainer() {
+public class PKitCoreModContainer extends DummyModContainer {
+	public PKitCoreModContainer() {
 		super(new ModMetadata());
 		ModMetadata myMeta = super.getMetadata();
 		myMeta.authorList = Arrays.asList(new String[] { "Dayanto" });
@@ -21,7 +24,7 @@ public class PKCModContainer extends DummyModContainer {
 		myMeta.name = "Panorama Kit Core";
 		myMeta.url = "http://www.minecraftforum.net/topic/792414-panorama-kit/";
 	}
-
+	
 	public boolean registerBus(EventBus eb, LoadController lc) {
 		eb.register(this);
 		return true;

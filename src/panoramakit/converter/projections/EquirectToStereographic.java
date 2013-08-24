@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -5,20 +8,18 @@ import panoramakit.converter.data.Position;
 import panoramakit.converter.samplers.FlatSampler;
 
 /**
- * The stereographic projection is based on the polar projection, but gives it a more realistic look
- * by treating the equirectangular panorama as surface curving in a half circle away from the  flat 
- * output image plane. The image is being projected through the curved survace onto the plane, so
- * that the further towards the edges of the image you get, the more stretched it will be. The field
- * of view decides the maximum angle visible within image vertically and is used to decide the
- * height of the image output plane in relation to the curving surface. In difference to the polar
- * projection, no matter how far away from the center you get, it's impossible to go outside the
- * boundaries of the equirectangular panorama since the absolute edge of it is curving away at 90
- * degrees, which you would have to go to infinity on the plane to reach.
+ * The stereographic projection is based on the polar projection, but gives it a more realistic look by treating the equirectangular
+ * panorama as surface curving in a half circle away from the flat output image plane. The image is being projected through the curved
+ * survace onto the plane, so that the further towards the edges of the image you get, the more stretched it will be. The field of view
+ * decides the maximum angle visible within image vertically and is used to decide the height of the image output plane in relation to the
+ * curving surface. In difference to the polar projection, no matter how far away from the center you get, it's impossible to go outside the
+ * boundaries of the equirectangular panorama since the absolute edge of it is curving away at 90 degrees, which you would have to go to
+ * infinity on the plane to reach.
  * 
  * @author dayanto
  */
 
-public class EquirectangularToStereographic extends PositionMapper {
+public class EquirectToStereographic extends PositionMapper {
 	public static final boolean PLANET = true;
 	public static final boolean WELL = false;
 
@@ -29,7 +30,7 @@ public class EquirectangularToStereographic extends PositionMapper {
 	public int newWidth;
 	public int newHeight;
 
-	public EquirectangularToStereographic(PositionMapper preProjection, boolean type, double fieldOfView, int newWidth, int newHeight)
+	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView, int newWidth, int newHeight)
 			throws Exception {
 		super(preProjection, new FlatSampler());
 		invert = type;
@@ -40,16 +41,16 @@ public class EquirectangularToStereographic extends PositionMapper {
 		this.newHeight = newHeight;
 	}
 
-	public EquirectangularToStereographic(PositionMapper preProjection, boolean type, double fieldOfView) throws Exception {
+	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView) throws Exception {
 		this(preProjection, type, fieldOfView, 0, 0);
 		customResolution = false;
 	}
 
-	public EquirectangularToStereographic(boolean type, double fieldOfView, int newWidth, int newHeight) throws Exception {
+	public EquirectToStereographic(boolean type, double fieldOfView, int newWidth, int newHeight) throws Exception {
 		this(null, type, fieldOfView, newWidth, newHeight);
 	}
 
-	public EquirectangularToStereographic(boolean type, double fieldOfView) throws Exception {
+	public EquirectToStereographic(boolean type, double fieldOfView) throws Exception {
 		this(null, type, fieldOfView, 0, 0);
 		customResolution = false;
 	}

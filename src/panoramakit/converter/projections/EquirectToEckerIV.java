@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.projections;
 
 import panoramakit.converter.PositionMapper;
@@ -5,18 +8,17 @@ import panoramakit.converter.data.Position;
 import panoramakit.converter.samplers.FlatSampler;
 
 /**
- * This projection works much like the Mollweide projection, but halves the distance
- * that is rounded to make things less distorted.
+ * This projection works much like the Mollweide projection, but halves the distance that is rounded to make things less distorted.
  * 
  * @author dayanto
  */
 
-public class EquirectangularToEckerIV extends PositionMapper {
-	public EquirectangularToEckerIV(PositionMapper preProjection) throws Exception {
+public class EquirectToEckerIV extends PositionMapper {
+	public EquirectToEckerIV(PositionMapper preProjection) throws Exception {
 		super(preProjection, new FlatSampler());
 	}
 
-	public EquirectangularToEckerIV() throws Exception {
+	public EquirectToEckerIV() throws Exception {
 		this(null);
 	}
 
