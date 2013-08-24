@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.engine.task;
 
 import java.util.ArrayList;
@@ -8,8 +11,13 @@ import java.util.ArrayList;
  * @author dayanto
  */
 public class TaskManager {
+	public static final TaskManager instance = new TaskManager();
+
 	private ArrayList<Task> taskList = new ArrayList<>();
 
+	/**
+	 * Add a new task to the end of the task list.
+	 */
 	public void addTask(Task task) {
 		taskList.add(task);
 	}
@@ -24,7 +32,7 @@ public class TaskManager {
 	/**
 	 * Move on to the next task in the list if one exists.
 	 * 
-	 * Should only be used by the dispatcher.
+	 * Should not be called manually.
 	 */
 	public void runNextTaskIfCompleted() {
 		if (hasTasks()) {
@@ -36,15 +44,13 @@ public class TaskManager {
 			}
 		}
 	}
-	
-	private void runNextTask()
-	{
+
+	private void runNextTask() {
 		if (hasTasks()) {
 			Task currentTask = getCurrentTask();
 			currentTask.init();
-			if(currentTask instanceof ThreadedTask)
-			{
-				((ThreadedTask)currentTask).start();
+			if (currentTask instanceof ThreadedTask) {
+				((ThreadedTask) currentTask).start();
 			}
 		}
 	}
@@ -52,7 +58,7 @@ public class TaskManager {
 	/**
 	 * Removes the current task if it has been stopped and handled all the cleanup.
 	 * 
-	 * Should only be used by the task manager.
+	 * Should not be called manually.
 	 */
 	public void clearTaskIfStopped() {
 		if (hasTasks() && getCurrentTask().hasStopped()) {
@@ -61,16 +67,15 @@ public class TaskManager {
 	}
 
 	/**
-	 * Whether or not there are any tasks in the taskList.
+	 * Returns whether or not there are any tasks in the taskList.
 	 */
 	public boolean hasTasks() {
 		return !taskList.isEmpty();
 	}
 
 	/**
-	 * Terminates all tasks by first clearing all the scheduled tasks and then asking the currently
-	 * active task to stop. The mod will then continuously ask the remaining task whether it has
-	 * finished and remove it once it has.
+	 * Terminates all tasks by first clearing all the scheduled tasks and then asking the currently active task to stop. The mod will then
+	 * continuously ask the remaining task whether it has finished and remove it once it has.
 	 */
 	public void halt() {
 		if (!taskList.isEmpty()) {
