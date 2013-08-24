@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.engine.task;
 
 /**
@@ -22,12 +25,12 @@ public abstract class ThreadedTask extends Task implements Runnable {
 	}
 	
 	@Override
-	public final void run(){
-		try{
+	public final void run() {
+		try {
 			performThreaded();
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			// TODO alert uer that the task has failed.
-			setStopped();	
+			setStopped();
 			return;
 		}
 		setCompleted();

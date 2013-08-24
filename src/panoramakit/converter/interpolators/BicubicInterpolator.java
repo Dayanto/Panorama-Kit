@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.interpolators;
 
 import panoramakit.converter.Interpolator;
@@ -12,32 +15,32 @@ public class BicubicInterpolator extends Interpolator {
 	public BicubicInterpolator() {
 		super(4); // Sample size of 4x4 pixels.
 	}
-
+	
 	@Override
 	public int getPixelValue(double xFraction, double yFraction, ColorData[][] pixels) {
 		double[] colorChannelData = new double[4];
-
+		
 		for (int colorChannel = 0; colorChannel < 4; colorChannel++) {
 			double[][] componentColorChannels = getColorChannelData(pixels, colorChannel);
 			colorChannelData[colorChannel] = new BicubicInterpolation().getValue(componentColorChannels, xFraction, yFraction);
 		}
-
+		
 		ColorData outputPixel = new ColorData(colorChannelData);
 		return outputPixel.getIntValue();
 	}
-
+	
 	public double[][] getColorChannelData(ColorData[][] pixels, int colorChannel) {
 		double[][] colorChannels = new double[pixels.length][pixels.length];
-
+		
 		for (int x = 0; x < pixels.length; x++) {
 			for (int y = 0; y < pixels.length; y++) {
 				colorChannels[x][y] = pixels[x][y].colorChannels[colorChannel];
 			}
 		}
-
+		
 		return colorChannels;
 	}
-
+	
 }
 
 /**
@@ -54,7 +57,7 @@ class CubicInterpolation {
  */
 class BicubicInterpolation extends CubicInterpolation {
 	private double[] arr = new double[4];
-
+	
 	public double getValue(double[][] p, double x, double y) {
 		arr[0] = getValue(p[0], y);
 		arr[1] = getValue(p[1], y);

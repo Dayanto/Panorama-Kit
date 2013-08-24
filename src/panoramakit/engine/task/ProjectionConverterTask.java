@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.engine.task;
 
 import panoramakit.converter.ProjectionConverter;
@@ -7,17 +10,16 @@ public class ProjectionConverterTask extends ThreadedTask {
 	
 	private ProjectionConverter projectionConverter;
 	
-	public ProjectionConverterTask(ProjectionConverter converter)
-	{
+	public ProjectionConverterTask(ProjectionConverter converter) {
 		this.projectionConverter = converter;
 	}
 	
 	@Override
-	public void performThreaded() throws Exception{
+	public void performThreaded() throws Exception {
 		projectionConverter.convert();
 	}
-
-
+	
+	
 	@Override
 	public void init() {}
 	@Override

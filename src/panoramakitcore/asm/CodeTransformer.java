@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakitcore.asm;
 
 import static org.objectweb.asm.Opcodes.ASM4;
@@ -22,7 +25,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
  * @author dayanto
  */
 public class CodeTransformer implements IClassTransformer {
-
+	
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
 		if ("net.minecraft.client.renderer.EntityRenderer".equals(name)) {
@@ -30,27 +33,27 @@ public class CodeTransformer implements IClassTransformer {
 			doViewPositionTransform(classNode);
 			bytes = writeBytes(classNode);
 		}
-
+		
 		return bytes;
 	}
-
+	
 	public ClassNode doViewPositionTransform(ClassNode classNode) {
 		for (MethodNode mn : classNode.methods) {
 			if (!"orientCamera".equals(mn.name)) {
 				continue;
 			}
-
+			
 			Iterator<AbstractInsnNode> instructionItterator = mn.instructions.iterator();
 			while (instructionItterator.hasNext()) {
 				AbstractInsnNode instruction = instructionItterator.next();
-
+				
 				if (instruction instanceof LineNumberNode && ((LineNumberNode) instruction).line == 551) {
 					AbstractInsnNode nextLineNumInstr = instruction.getNext();
 					while (!(nextLineNumInstr instanceof LineNumberNode)) {
 						nextLineNumInstr = nextLineNumInstr.getNext();
 					}
 					LabelNode jumpTo = ((LineNumberNode) nextLineNumInstr).start;
-
+					
 					InsnList customInstrList = new InsnList();
 					customInstrList.add(new MethodInsnNode(INVOKESTATIC, "panoramakitcore/ControlPanel", "isRendering", "()Z"));
 					customInstrList.add(new JumpInsnNode(IFEQ, jumpTo));
@@ -62,14 +65,14 @@ public class CodeTransformer implements IClassTransformer {
 		}
 		return classNode;
 	}
-
+	
 	private ClassNode readBytes(byte[] bytes) {
 		ClassReader cr = new ClassReader(bytes);
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		return cn;
 	}
-
+	
 	private byte[] writeBytes(ClassNode cn) {
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);

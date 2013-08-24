@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter;
 
 import panoramakit.converter.data.ColorData;
@@ -15,11 +18,11 @@ import panoramakit.converter.data.ColorData;
 public abstract class Interpolator {
 	public int sampleSize;
 	public static int sample;
-
+	
 	public Interpolator(int sampleSize) {
 		this.sampleSize = sampleSize;
 		sample = sampleSize;
 	}
-
+	
 	public abstract int getPixelValue(double xFraction, double yFraction, ColorData[][] pixels);
 }

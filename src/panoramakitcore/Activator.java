@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakitcore;
 
 /**
@@ -7,13 +10,13 @@ package panoramakitcore;
  */
 public class Activator {
 	private static boolean render;
-
+	
 	public static void setRenderState(boolean state) {
 		render = state;
 	}
-
+	
 	public static boolean isRendering() {
 		return render;
 	}
-
+	
 }

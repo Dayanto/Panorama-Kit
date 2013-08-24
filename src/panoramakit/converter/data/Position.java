@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter.data;
 
 /**
@@ -10,16 +13,16 @@ package panoramakit.converter.data;
 public class Position {
 	public double x;
 	public double y;
-
+	
 	public Position(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
-
+	
 	public double getXFraction() {
 		return (x % 1 + 1) % 1;
 	}
-
+	
 	public double getYFraction() {
 		return (y % 1 + 1) % 1;
 	}

@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter;
 
 import panoramakit.converter.data.*;
@@ -17,14 +20,14 @@ public abstract class PixelSampler {
 	 * is instead of just an error.
 	 */
 	public Bounds edge;
-
+	
 	public abstract PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize);
-
+	
 	public final void setAllBounds(int width, int height) {
 		edge = new Bounds(0, width, 0, height);
 		setBounds(width, height);
 	}
-
+	
 	public void setBounds(int width, int height) {
 	}
 }

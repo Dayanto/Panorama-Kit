@@ -20,28 +20,28 @@ import panoramakit.converter.samplers.FlatSampler;
 public class EquirectToPolar extends PositionMapper {
 	public static final boolean PLANET = true;
 	public static final boolean WELL = false;
-
+	
 	public boolean invert;
-
+	
 	public EquirectToPolar(PositionMapper preProjection, boolean type) throws Exception {
 		super(preProjection, new FlatSampler());
 		invert = type;
 	}
-
+	
 	public EquirectToPolar(boolean type) throws Exception {
 		this(null, type);
 	}
-
+	
 	@Override
 	public int getNewWidth(int width, int height) {
 		return width;
 	}
-
+	
 	@Override
 	public int getNewHeight(int width, int height) {
 		return width;
 	}
-
+	
 	@Override
 	public boolean testValidProportions() {
 		if (inputWidth % 2 != 0) {
@@ -52,16 +52,16 @@ public class EquirectToPolar extends PositionMapper {
 		}
 		return true;
 	}
-
+	
 	@Override
 	public Position getProjectedPosition(double x, double y) {
 		// adjust from index to pixel position
 		x += 0.5;
 		y += 0.5;
-
+		
 		x = x - outputWidth / 2;
 		y = y - outputHeight / 2;
-
+		
 		double angle = Math.atan2(y, x);
 		double radius;
 		if (Math.abs(x) > Math.abs(y)) {
@@ -69,27 +69,27 @@ public class EquirectToPolar extends PositionMapper {
 		} else {
 			radius = y / Math.sin(angle);
 		}
-
+		
 		double relativeX = inputWidth * (angle / (2 * Math.PI));
-
+		
 		double xOut = relativeX + (inputWidth / 2);
 		double yOut = radius;
-
+		
 		if (yOut - 0.5 > inputHeight) {
 			return null;
 			// yOut = inputHeight;
 		}
-
+		
 		if (invert) {
 			yOut = inputHeight - yOut;
 			xOut = inputWidth - xOut;
 		}
-
+		
 		// adjust from position to pixel index
 		x -= 0.5;
 		y -= 0.5;
-
+		
 		return new Position(xOut, yOut);
 	}
-
+	
 }

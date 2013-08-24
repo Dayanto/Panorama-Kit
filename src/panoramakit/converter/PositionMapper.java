@@ -1,3 +1,6 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
 package panoramakit.converter;
 
 import panoramakit.converter.data.PixelCoordinate;
@@ -15,12 +18,12 @@ import panoramakit.converter.data.Position;
 public abstract class PositionMapper {
 	private PositionMapper preProjection;
 	private PixelSampler sampler;
-
+	
 	public int inputHeight;
 	public int inputWidth;
 	public int outputHeight;
 	public int outputWidth;
-
+	
 	public PositionMapper(PositionMapper preProjection, PixelSampler pixelSampler) throws Exception {
 		this.preProjection = preProjection;
 		if (preProjection == null) {
@@ -30,65 +33,65 @@ public abstract class PositionMapper {
 			}
 		}
 	}
-
+	
 	public abstract int getNewWidth(int width, int height);
-
+	
 	public abstract int getNewHeight(int width, int height);
-
+	
 	public final void setResolution(int width, int height) {
 		if (preProjection != null) {
 			preProjection.setResolution(width, height);
-
+			
 			this.outputWidth = getNewWidth(preProjection.outputWidth, preProjection.outputHeight);
 			this.outputHeight = getNewHeight(preProjection.outputWidth, preProjection.outputHeight);
-
+			
 			inputWidth = preProjection.outputWidth;
 			inputHeight = preProjection.outputHeight;
 		} else {
 			this.outputWidth = getNewWidth(width, height);
 			this.outputHeight = getNewHeight(width, height);
-
+			
 			inputWidth = width;
 			inputHeight = height;
 		}
 	}
-
+	
 	public final int getWidth() {
 		return outputWidth;
 	}
-
+	
 	public final int getHeight() {
 		return outputHeight;
 	}
-
+	
 	public abstract boolean testValidProportions();
-
+	
 	public final boolean hasValidProportions() {
 		boolean valid = testValidProportions();
-
+		
 		if (valid && preProjection != null) {
 			valid = preProjection.hasValidProportions();
 		}
-
+		
 		return valid;
 	}
-
+	
 	public abstract Position getProjectedPosition(double x, double y);
-
+	
 	public final Position getPosition(double x, double y) {
 		Position pos = getProjectedPosition(x, y);
-
+		
 		if (pos == null) {
 			return pos;
 		}
-
+		
 		if (preProjection == null) {
 			return pos;
 		} else {
 			return preProjection.getPosition(pos.x, pos.y);
 		}
 	}
-
+	
 	public final PixelCoordinate[][] getPixelCoordinates(Position position, int width, int height, int sampleSize) {
 		if (preProjection == null) {
 			return sampler.getSamplePixels(position, width, height, sampleSize);
@@ -96,7 +99,7 @@ public abstract class PositionMapper {
 			return preProjection.getPixelCoordinates(position, width, height, sampleSize);
 		}
 	}
-
+	
 	public final void setProjectionBounds() {
 		if (preProjection != null) {
 			preProjection.setProjectionBounds();
@@ -104,11 +107,11 @@ public abstract class PositionMapper {
 			setBounds();
 		}
 	}
-
+	
 	public final void setBounds() {
 		sampler.setAllBounds(inputWidth, inputHeight);
 	}
-
+	
 	public final PixelSampler getPixelSampler() {
 		if (preProjection == null) {
 			return sampler;
@@ -116,5 +119,5 @@ public abstract class PositionMapper {
 			return preProjection.getPixelSampler();
 		}
 	}
-
+	
 }

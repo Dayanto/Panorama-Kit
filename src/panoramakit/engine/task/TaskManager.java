@@ -12,23 +12,23 @@ import java.util.ArrayList;
  */
 public class TaskManager {
 	public static final TaskManager instance = new TaskManager();
-
+	
 	private ArrayList<Task> taskList = new ArrayList<>();
-
+	
 	/**
 	 * Add a new task to the end of the task list.
 	 */
 	public void addTask(Task task) {
 		taskList.add(task);
 	}
-
+	
 	/**
 	 * Get the currently active task.
 	 */
 	public Task getCurrentTask() {
 		return taskList.get(0);
 	}
-
+	
 	/**
 	 * Move on to the next task in the list if one exists.
 	 * 
@@ -44,7 +44,7 @@ public class TaskManager {
 			}
 		}
 	}
-
+	
 	private void runNextTask() {
 		if (hasTasks()) {
 			Task currentTask = getCurrentTask();
@@ -54,7 +54,7 @@ public class TaskManager {
 			}
 		}
 	}
-
+	
 	/**
 	 * Removes the current task if it has been stopped and handled all the cleanup.
 	 * 
@@ -65,14 +65,14 @@ public class TaskManager {
 			taskList.remove(0);
 		}
 	}
-
+	
 	/**
 	 * Returns whether or not there are any tasks in the taskList.
 	 */
 	public boolean hasTasks() {
 		return !taskList.isEmpty();
 	}
-
+	
 	/**
 	 * Terminates all tasks by first clearing all the scheduled tasks and then asking the currently active task to stop. The mod will then
 	 * continuously ask the remaining task whether it has finished and remove it once it has.

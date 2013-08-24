@@ -17,10 +17,10 @@ import net.minecraft.util.MouseHelper;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class LockableMouseHelper extends MouseHelper {
-
+	
 	private boolean locked;
 	private boolean grab = true;
-
+	
 	@Override
 	public void mouseXYChange() {
 		if (!locked) {
@@ -30,11 +30,11 @@ public class LockableMouseHelper extends MouseHelper {
 			deltaY = 0;
 		}
 	}
-
+	
 	public boolean isLocked() {
 		return locked;
 	}
-
+	
 	public void setLocked(boolean locked) {
 		if (grab) {
 			if (this.locked && !locked) {
@@ -45,14 +45,14 @@ public class LockableMouseHelper extends MouseHelper {
 		}
 		this.locked = locked;
 	}
-
+	
 	/**
 	 * @return the ungrab
 	 */
 	public boolean isGrabbing() {
 		return grab;
 	}
-
+	
 	/**
 	 * @param ungrab
 	 *            the ungrab to set

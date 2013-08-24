@@ -22,9 +22,9 @@ import net.minecraft.client.renderer.EntityRenderer;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public class EntityRendererAccessor {
-
+	
 	private static final Logger L = Logger.getLogger(EntityRendererAccessor.class.getName());
-
+	
 	private final static int FIELD_SMOOTH_CAM_FILTER_X;
 	private final static int FIELD_SMOOTH_CAM_FILTER_Y;
 	private final static int FIELD_CAM_ZOOM;
@@ -32,13 +32,13 @@ public class EntityRendererAccessor {
 	private final static int FIELD_CAM_YOFS;
 	private final static int FIELD_PREV_FRAME_TIME;
 	
-//	private final static int FIELD_CAM_ROLL;
-//	private final static int FIELD_PREV_CAM_ROLL;
-
+	// private final static int FIELD_CAM_ROLL;
+	// private final static int FIELD_PREV_CAM_ROLL;
+	
 	static {
 		Field[] fields = EntityRenderer.class.getDeclaredFields();
 		int fieldOfs = -1;
-
+		
 		for (int i = 0; i < fields.length - 3; i++) {
 			if (fields[i].getType() == Double.TYPE && fields[i + 1].getType() == Double.TYPE && fields[i + 2].getType() == Double.TYPE
 					&& fields[i + 3].getType() == Long.TYPE) {
@@ -46,10 +46,10 @@ public class EntityRendererAccessor {
 				break;
 			}
 		}
-
+		
 		if (fieldOfs == -1) {
 			L.severe("Couldn't find fields for EntityRenderer!");
-
+			
 			// default offsets
 			FIELD_SMOOTH_CAM_FILTER_X = 21;
 			FIELD_SMOOTH_CAM_FILTER_Y = 22;
@@ -66,9 +66,9 @@ public class EntityRendererAccessor {
 			FIELD_PREV_FRAME_TIME = fieldOfs + 3;
 		}
 	}
-
+	
 	private final Minecraft mc = Minecraft.getMinecraft();
-
+	
 	public void setCameraZoom(double zoom) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, zoom, FIELD_CAM_ZOOM);
@@ -76,7 +76,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public double getCameraZoom() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_CAM_ZOOM);
@@ -85,7 +85,7 @@ public class EntityRendererAccessor {
 			return 0;
 		}
 	}
-
+	
 	public void setCameraOffsetX(double offset) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, offset, FIELD_CAM_XOFS);
@@ -93,7 +93,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public double getCameraOffsetX() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_CAM_XOFS);
@@ -102,7 +102,7 @@ public class EntityRendererAccessor {
 			return 0;
 		}
 	}
-
+	
 	public void setCameraOffsetY(double offset) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, offset, FIELD_CAM_YOFS);
@@ -110,7 +110,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public double getCameraOffsetY() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_CAM_YOFS);
@@ -119,7 +119,7 @@ public class EntityRendererAccessor {
 			return 0;
 		}
 	}
-
+	
 	public void setPreviousFrameTime(long time) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, time, FIELD_PREV_FRAME_TIME);
@@ -127,7 +127,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public double getPreviousFrameTime() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_PREV_FRAME_TIME);
@@ -136,7 +136,7 @@ public class EntityRendererAccessor {
 			return 0;
 		}
 	}
-
+	
 	public void setSmoothCamFilterX(float value) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, value, FIELD_SMOOTH_CAM_FILTER_X);
@@ -144,7 +144,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public float getSmoothCamFilterX() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_SMOOTH_CAM_FILTER_X);
@@ -153,7 +153,7 @@ public class EntityRendererAccessor {
 			return 0;
 		}
 	}
-
+	
 	public void setSmoothCamFilterY(float value) {
 		try {
 			ReflectionHelper.setPrivateValue(EntityRenderer.class, mc.entityRenderer, value, FIELD_SMOOTH_CAM_FILTER_Y);
@@ -161,7 +161,7 @@ public class EntityRendererAccessor {
 			L.log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	public float getSmoothCamFilterY() {
 		try {
 			return ReflectionHelper.getPrivateValue(EntityRenderer.class, mc.entityRenderer, FIELD_SMOOTH_CAM_FILTER_Y);
