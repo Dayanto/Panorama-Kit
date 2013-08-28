@@ -3,16 +3,13 @@
  */
 package panoramakit.engine.task;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
-import net.minecraft.client.gui.GuiScreen;
-
 /**
  * Task
  * 
  * @author dayanto
  */
-public abstract class Task {
+public abstract class Task
+{
 	/**
 	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things to be
 	 * defined at the moment of execution.
@@ -44,34 +41,34 @@ public abstract class Task {
 	/**
 	 * Once the task has finished running, this method must be called to signal that the task should
 	 * be removed. (the task will perpetually run its perfom method until this has been done)
-	 * 
-	 * TODO Actually use it in the task manager/dispatcher
 	 */
-	public void setCompleted() {
+	public void setCompleted()
+	{
 		completed = true;
 	}
 	
 	/**
 	 * Once any cleanup has been performed after stopping a task, this has to be called to signal
 	 * that
-	 * 
-	 * TODO Actually use it in the task manager/dispatcher
 	 */
-	public void setStopped() {
+	public void setStopped()
+	{
 		stopped = true;
 	}
 	
 	/**
 	 * Whether this task has been completed.
 	 */
-	public final boolean hasCompleted() {
+	public final boolean hasCompleted()
+	{
 		return completed;
 	}
 	
 	/**
 	 * If this task has been aborted, returns whether it has done all cleanup and come to a halt.
 	 */
-	public final boolean hasStopped() {
+	public final boolean hasStopped()
+	{
 		return stopped;
 	}
 	
@@ -81,27 +78,14 @@ public abstract class Task {
 	 * 
 	 * Will probably be removed in favor of letting the tasks handle waiting themselves.
 	 */
-	public boolean isWaiting() {
+	public boolean isWaiting()
+	{
 		return false; // default value
 	}
 	
 	/**
-	 * Retrieves a GUI specific to this task that usually contains information about the progress as
-	 * well as providing a way of stopping all tasks. There is however no requirement for the task
-	 * to provide such a GUI and it might just return null.
-	 * 
-	 * TODO Might get replaced by something simpler.
+	 * Gives how far the task has progressed as a proportion.
 	 */
-	public abstract GuiScreen getStatusGUI();
-	
-	/**
-	 * Used by tasks to display a status message in the chat.
-	 */
-	public void printStatusMessage(String message) {
-		// TODO Add setting to disable status messages from tasks.
-		
-		GuiNewChat chat = Minecraft.getMinecraft().ingameGUI.getChatGUI();
-		chat.printChatMessage(message);
-	}
+	public abstract double getProgress();
 	
 }

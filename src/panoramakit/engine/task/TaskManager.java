@@ -10,7 +10,8 @@ import java.util.ArrayList;
  * 
  * @author dayanto
  */
-public class TaskManager {
+public class TaskManager
+{
 	public static final TaskManager instance = new TaskManager();
 	
 	private ArrayList<Task> taskList = new ArrayList<>();
@@ -18,23 +19,72 @@ public class TaskManager {
 	/**
 	 * Add a new task to the end of the task list.
 	 */
-	public void addTask(Task task) {
+	public void addTask(Task task)
+	{
 		taskList.add(task);
+	}
+	
+	/**
+	 * Returns whether or not there are any tasks in the taskList.
+	 */
+	public boolean hasTasks()
+	{
+		return !taskList.isEmpty();
+	}
+	
+	/**
+	 * Returns the number of tasks that are still remaining.
+	 */
+	public int tasksRemaining()
+	{
+		return taskList.size();
 	}
 	
 	/**
 	 * Get the currently active task.
 	 */
-	public Task getCurrentTask() {
-		return taskList.get(0);
+	public Task getCurrentTask()
+	{
+		if(!taskList.isEmpty()) {
+			return taskList.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Terminates all tasks by first clearing all the scheduled tasks and then asking the currently active task to stop. The mod will then
+	 * continuously ask the remaining task whether it has finished and remove it once it has.
+	 */
+	public void halt()
+	{
+		if (!taskList.isEmpty()) {
+			Task currentTask = getCurrentTask();
+			taskList.clear();
+			taskList.add(currentTask);
+			currentTask.stop();
+		}
+	}
+	
+	/**
+	 * Executes the current task and 
+	 */
+	public void runTick()
+	{
+		if (hasTasks()) {
+			Task currentTask = getCurrentTask();
+			currentTask.perform();
+			
+			runNextTaskIfCompleted();
+			clearTaskIfStopped();
+		}
 	}
 	
 	/**
 	 * Move on to the next task in the list if one exists.
-	 * 
-	 * Should not be called manually.
 	 */
-	public void runNextTaskIfCompleted() {
+	private void runNextTaskIfCompleted()
+	{
 		if (hasTasks()) {
 			Task currentTask = getCurrentTask();
 			if (currentTask.hasCompleted()) {
@@ -45,7 +95,8 @@ public class TaskManager {
 		}
 	}
 	
-	private void runNextTask() {
+	private void runNextTask()
+	{
 		if (hasTasks()) {
 			Task currentTask = getCurrentTask();
 			currentTask.init();
@@ -57,32 +108,11 @@ public class TaskManager {
 	
 	/**
 	 * Removes the current task if it has been stopped and handled all the cleanup.
-	 * 
-	 * Should not be called manually.
 	 */
-	public void clearTaskIfStopped() {
+	private void clearTaskIfStopped()
+	{
 		if (hasTasks() && getCurrentTask().hasStopped()) {
 			taskList.remove(0);
-		}
-	}
-	
-	/**
-	 * Returns whether or not there are any tasks in the taskList.
-	 */
-	public boolean hasTasks() {
-		return !taskList.isEmpty();
-	}
-	
-	/**
-	 * Terminates all tasks by first clearing all the scheduled tasks and then asking the currently active task to stop. The mod will then
-	 * continuously ask the remaining task whether it has finished and remove it once it has.
-	 */
-	public void halt() {
-		if (!taskList.isEmpty()) {
-			Task currentTask = getCurrentTask();
-			taskList.clear();
-			taskList.add(currentTask);
-			currentTask.stop();
 		}
 	}
 }

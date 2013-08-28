@@ -6,12 +6,15 @@ package panoramakit.converter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import panoramakit.converter.data.Bounds;
 import panoramakit.converter.data.ColorData;
 import panoramakit.converter.data.PixelCoordinate;
 import panoramakit.converter.data.Position;
 import panoramakit.converter.interpolators.BilinearInterpolator;
+import panoramakit.engine.task.ProgressTracker;
+import panoramakit.mod.PanoramaKit;
 
 /**
  * This converter loads a panorama made with one projection and converts it to another projection.
@@ -24,7 +27,11 @@ import panoramakit.converter.interpolators.BilinearInterpolator;
  * 
  * @author dayanto
  */
-public class ProjectionConverter {
+public class ProjectionConverter
+{
+	
+	private final Logger L = PanoramaKit.instance.L;
+	
 	private PositionMapper positionMapper;
 	private Interpolator interpolator;
 	
@@ -34,24 +41,30 @@ public class ProjectionConverter {
 	private BufferedImage inputImage;
 	private BufferedImage outputImage;
 	
-	private double progress;
+	private ProgressTracker progressTracker;
 	
-	public ProjectionConverter(PositionMapper positionMapper, Interpolator interpolator, String imagePathInput, String imagePathOutput) {
+	private boolean stop = false;
+	
+	public ProjectionConverter(PositionMapper positionMapper, Interpolator interpolator, String imagePathInput, String imagePathOutput)
+	{
 		this.positionMapper = positionMapper;
 		this.interpolator = interpolator;
 		this.imagePathInput = imagePathInput;
 		this.imagePathOutput = imagePathOutput;
 	}
 	
-	public ProjectionConverter(PositionMapper positionMapper, String imagePathInput, String imagePathOutput) {
+	public ProjectionConverter(PositionMapper positionMapper, String imagePathInput, String imagePathOutput)
+	{
 		this(positionMapper, new BilinearInterpolator(), imagePathInput, imagePathOutput);
 	}
 	
-	public ProjectionConverter(PositionMapper positionMapper, String imagePathOverwrite) {
+	public ProjectionConverter(PositionMapper positionMapper, String imagePathOverwrite)
+	{
 		this(positionMapper, imagePathOverwrite, imagePathOverwrite);
 	}
 	
-	private void loadImage(String imagePath) throws IOException, Exception {
+	private void loadImage(String imagePath) throws IOException, IllegalArgumentException
+	{
 		inputImage = ImageIO.read(new File(imagePath));
 		
 		int width = inputImage.getWidth();
@@ -61,30 +74,38 @@ public class ProjectionConverter {
 		positionMapper.setProjectionBounds();
 		
 		if (!positionMapper.hasValidProportions()) {
-			throw new Exception("Image has bad proportions");
+			throw new IllegalArgumentException("Image has bad proportions");
 		}
 		
 		outputImage = new BufferedImage(positionMapper.getWidth(), positionMapper.getHeight(), inputImage.getType());
 	}
 	
-	private void saveImage(String imagePath) throws IOException {
+	private void saveImage(String imagePath) throws IOException
+	{
 		ImageIO.write(outputImage, "png", new File(imagePath));
 	}
 	
 	/**
 	 * Once the converter has been set up, this command executes the actual convertion.
 	 */
-	public void convert() throws IOException, Exception {
-		System.out.println("Converting...");
+	public void convert() throws IOException, IllegalArgumentException, InterruptedException
+	{
+		L.info("Converting...");
 		long startTime = System.currentTimeMillis();
 		
 		loadImage(imagePathInput);
 		
 		for (int xOutput = 0; xOutput < outputImage.getWidth(); xOutput++) {
-			if (xOutput % 100 == 0) {
-				progress = 100D * xOutput / outputImage.getWidth();
-				System.out.println((int) Math.round(progress) + "%");
+			// check once every column whether the task should stop
+			if(stop) {
+				throw new InterruptedException();
+			}	
+			
+			double progress = (double) xOutput / (double) outputImage.getWidth();
+			if(progressTracker != null){
+				progressTracker.setCurrentProgress(progress);
 			}
+			
 			for (int yOutput = 0; yOutput < outputImage.getHeight(); yOutput++) {
 				Position position = positionMapper.getPosition(xOutput, yOutput);
 				
@@ -118,7 +139,17 @@ public class ProjectionConverter {
 		
 		saveImage(imagePathOutput);
 		
-		System.out.println("Time: " + (System.currentTimeMillis() - startTime));
-		System.out.println("Done");
+		L.info("Time: " + (System.currentTimeMillis() - startTime));
+		L.info("Done");
+	}
+	
+	public void setProgressTracker(ProgressTracker progressTracker)
+	{
+		this.progressTracker = progressTracker;
+	}
+	
+	public void stop()
+	{
+		stop = true;
 	}
 }

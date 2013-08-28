@@ -4,31 +4,48 @@
 package panoramakit.engine.task;
 
 import panoramakit.converter.ProjectionConverter;
-import net.minecraft.client.gui.GuiScreen;
+import panoramakit.mod.PanoramaKit;
 
-public class ProjectionConverterTask extends ThreadedTask {
+public class ProjectionConverterTask extends ThreadedTask
+{
 	
 	private ProjectionConverter projectionConverter;
 	
-	public ProjectionConverterTask(ProjectionConverter converter) {
+	public ProjectionConverterTask(ProjectionConverter converter)
+	{
 		this.projectionConverter = converter;
 	}
 	
 	@Override
-	public void performThreaded() throws Exception {
+	public void performThreaded() throws Exception
+	{
+		PanoramaKit.instance.printChat("panoramakit.process");
+		projectionConverter.setProgressTracker(progressTracker);
 		projectionConverter.convert();
+	}
+	
+	@Override
+	public double getProgress()
+	{
+		return progressTracker.getCurrentProgress();
 	}
 	
 	
 	@Override
-	public void init() {}
+	public void init()
+	{}
+	
 	@Override
-	public void finish() {}
+	public void finish()
+	{}
+	
 	@Override
-	public void perform() {}
+	public void perform()
+	{}
+	
 	@Override
-	public void stop() { /* TODO make it stoppable */ }
-	@Override
-	public GuiScreen getStatusGUI() {return null;}
-
+	public void stop()
+	{
+		projectionConverter.stop();
+	}
 }
