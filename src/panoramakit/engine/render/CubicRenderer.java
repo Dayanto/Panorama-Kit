@@ -79,6 +79,7 @@ public class CubicRenderer extends CompositeImageRenderer
 		// save the image
 		File file = new File(filePath);
 		if (!file.exists()) {
+			file.mkdirs();
 			file.createNewFile();
 		}
 		ImageIO.write(image, "png", file);

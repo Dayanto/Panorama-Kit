@@ -126,6 +126,7 @@ public class GuiCustomSlider extends GuiButton
 			sliderValue = Math.round(sliderValue * tmp) / tmp;
 		}
 		
+		settingsScreen.sliderMoved(id, getValue());
 		updateDisplayString();
 	}
 	
@@ -141,6 +142,6 @@ public class GuiCustomSlider extends GuiButton
 	
 	public void updateDisplayString()
 	{
-		displayString = baseString + ": " + getValue();
+		displayString = String.format(baseString + ": %.1f", getValue());
 	}
 }

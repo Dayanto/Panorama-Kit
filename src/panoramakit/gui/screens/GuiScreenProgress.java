@@ -11,13 +11,14 @@ import net.minecraft.client.gui.GuiScreen;
 /** 
  * @author dayanto
  */
-public class GuiProgressScreen extends GuiScreen
+public class GuiScreenProgress extends GuiScreen
 {
 	protected String screenTitle = "Current Progress";
 	
 	/**
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initGui()
 	{

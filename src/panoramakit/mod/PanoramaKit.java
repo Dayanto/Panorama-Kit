@@ -5,8 +5,6 @@ package panoramakit.mod;
 
 import java.io.File;
 import java.util.logging.Logger;
-import panoramakit.mod.handlers.MenuKeyHandler;
-import panoramakit.mod.handlers.OnFrameTickHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
@@ -20,7 +18,6 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 /**
- * 
  * @author dayanto
  */
 @Mod(
@@ -30,7 +27,6 @@ import cpw.mods.fml.relauncher.Side;
 public class PanoramaKit
 {
 	private final Minecraft mc = Minecraft.getMinecraft();
-	
 	public final Logger L = Logger.getLogger("PanoramaKit");
 	
 	@Instance("PanoramaKit")

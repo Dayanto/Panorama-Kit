@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.mod.handlers;
+package panoramakit.mod;
 
 import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
@@ -9,15 +9,9 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
-import panoramakit.converter.ProjectionConverter;
-import panoramakit.converter.projections.CubicToEquirect;
-import panoramakit.converter.projections.EquirectToPanorama;
-import panoramakit.engine.render.CubicRenderer;
-import panoramakit.engine.task.ProjectionConverterTask;
-import panoramakit.engine.task.RenderTask;
 import panoramakit.engine.task.TaskManager;
-import panoramakit.gui.screens.GuiProgressScreen;
-import panoramakit.mod.PanoramaKit;
+import panoramakit.gui.screens.GuiScreenMain;
+import panoramakit.gui.screens.GuiScreenProgress;
 
 /**
  * This class acts as the connection between the tick handlers and the task manager.
@@ -43,28 +37,15 @@ public class MenuKeyHandler extends KeyHandler
 	{
 		if (kb == RENDER_KEY) {
 			if (!taskManager.hasTasks()) {
-				PanoramaKit.instance.L.info("Render panorama");
 				
-				// create a cubic base image
-				String filePath = "C:/Users/Bertil/Desktop/RenderTest.png";
-				taskManager.addTask(new RenderTask(new CubicRenderer(1000, filePath, 157, 60)));
-				
-				// convert it to a panorama
-				try {
-					EquirectToPanorama panorama = new EquirectToPanorama(new CubicToEquirect(), 1680, 1050);
-					ProjectionConverter converter = new ProjectionConverter(panorama, filePath);
-					taskManager.addTask(new ProjectionConverterTask(converter));
-				} catch (Exception e) {
-				}
 			}
 		}
 		
 		if (kb == MENU_KEY) {
 			if (taskManager.hasTasks()) {
-				GuiProgressScreen progress = new GuiProgressScreen();
-				mc.displayGuiScreen(progress);
-			} else if (mc.currentScreen != null) {
-				// TODO Display menu screen.
+				mc.displayGuiScreen(new GuiScreenProgress());
+			} else if(mc.currentScreen == null) {
+				mc.displayGuiScreen(new GuiScreenMain());
 			}
 		}
 	}
