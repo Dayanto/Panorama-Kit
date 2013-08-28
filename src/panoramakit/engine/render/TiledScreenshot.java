@@ -11,10 +11,12 @@ import panoramakit.engine.accessor.EntityRendererAccessor;
 import net.minecraft.client.Minecraft;
 
 /**
+ * Based on Mineshot's TiledScreenshot
  * 
- * @author Bertil
+ * @author Dayanto
  */
-public class TiledScreenshot {
+public class TiledScreenshot
+{
 	private final Minecraft mc = Minecraft.getMinecraft();
 	
 	// accessor
@@ -33,7 +35,8 @@ public class TiledScreenshot {
 	private double camZoom;
 	private float partialTicks = 0.0F;
 	
-	public TiledScreenshot(int screenshotWidth, int screenshotHeight, int tileWidth, int tileHeight) {
+	public TiledScreenshot(int screenshotWidth, int screenshotHeight, int tileWidth, int tileHeight)
+	{
 		this.fullWidth = screenshotWidth;
 		this.fullHeight = screenshotHeight;
 		
@@ -47,7 +50,8 @@ public class TiledScreenshot {
 		camZoom = (double) fullHeight / (double) tileHeight;
 	}
 	
-	public void capture() { // make sure the display hasn't changed in size after buffer allocation
+	public void capture()
+	{ // make sure the display hasn't changed in size after buffer allocation
 		if (mc.displayWidth != tileWidth || mc.displayHeight != tileHeight) {
 			throw new IllegalStateException("Display size changed");
 		}
@@ -107,7 +111,8 @@ public class TiledScreenshot {
 		}
 	}
 	
-	public int[] getScreenshot() {
+	public int[] getScreenshot()
+	{
 		return screenshot;
 	}
 	

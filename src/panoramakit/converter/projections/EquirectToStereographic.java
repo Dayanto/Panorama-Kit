@@ -19,7 +19,8 @@ import panoramakit.converter.samplers.FlatSampler;
  * @author dayanto
  */
 
-public class EquirectToStereographic extends PositionMapper {
+public class EquirectToStereographic extends PositionMapper
+{
 	public static final boolean PLANET = true;
 	public static final boolean WELL = false;
 	
@@ -31,7 +32,8 @@ public class EquirectToStereographic extends PositionMapper {
 	public int newHeight;
 	
 	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView, int newWidth, int newHeight)
-			throws Exception {
+			throws Exception
+	{
 		super(preProjection, new FlatSampler());
 		invert = type;
 		scale = Math.tan(fieldOfView / 2 * (Math.PI / 180));
@@ -41,22 +43,26 @@ public class EquirectToStereographic extends PositionMapper {
 		this.newHeight = newHeight;
 	}
 	
-	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView) throws Exception {
+	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView) throws Exception
+	{
 		this(preProjection, type, fieldOfView, 0, 0);
 		customResolution = false;
 	}
 	
-	public EquirectToStereographic(boolean type, double fieldOfView, int newWidth, int newHeight) throws Exception {
+	public EquirectToStereographic(boolean type, double fieldOfView, int newWidth, int newHeight) throws Exception
+	{
 		this(null, type, fieldOfView, newWidth, newHeight);
 	}
 	
-	public EquirectToStereographic(boolean type, double fieldOfView) throws Exception {
+	public EquirectToStereographic(boolean type, double fieldOfView) throws Exception
+	{
 		this(null, type, fieldOfView, 0, 0);
 		customResolution = false;
 	}
 	
 	@Override
-	public int getNewWidth(int width, int height) {
+	public int getNewWidth(int width, int height)
+	{
 		if (customResolution) {
 			return newWidth;
 		} else {
@@ -65,7 +71,8 @@ public class EquirectToStereographic extends PositionMapper {
 	}
 	
 	@Override
-	public int getNewHeight(int width, int height) {
+	public int getNewHeight(int width, int height)
+	{
 		if (customResolution) {
 			return newHeight;
 		} else {
@@ -74,7 +81,8 @@ public class EquirectToStereographic extends PositionMapper {
 	}
 	
 	@Override
-	public boolean testValidProportions() {
+	public boolean testValidProportions()
+	{
 		if (inputWidth % 2 != 0) {
 			return false;
 		}
@@ -85,7 +93,8 @@ public class EquirectToStereographic extends PositionMapper {
 	}
 	
 	@Override
-	public Position getProjectedPosition(double x, double y) {
+	public Position getProjectedPosition(double x, double y)
+	{
 		// adjust from index to pixel position
 		x += 0.5;
 		y += 0.5;

@@ -17,33 +17,39 @@ import panoramakit.converter.samplers.FlatSampler;
  * 
  * @author dayanto
  */
-public class EquirectToPolar extends PositionMapper {
+public class EquirectToPolar extends PositionMapper
+{
 	public static final boolean PLANET = true;
 	public static final boolean WELL = false;
 	
 	public boolean invert;
 	
-	public EquirectToPolar(PositionMapper preProjection, boolean type) throws Exception {
+	public EquirectToPolar(PositionMapper preProjection, boolean type) throws Exception
+	{
 		super(preProjection, new FlatSampler());
 		invert = type;
 	}
 	
-	public EquirectToPolar(boolean type) throws Exception {
+	public EquirectToPolar(boolean type) throws Exception
+	{
 		this(null, type);
 	}
 	
 	@Override
-	public int getNewWidth(int width, int height) {
+	public int getNewWidth(int width, int height)
+	{
 		return width;
 	}
 	
 	@Override
-	public int getNewHeight(int width, int height) {
+	public int getNewHeight(int width, int height)
+	{
 		return width;
 	}
 	
 	@Override
-	public boolean testValidProportions() {
+	public boolean testValidProportions()
+	{
 		if (inputWidth % 2 != 0) {
 			return false;
 		}
@@ -54,7 +60,8 @@ public class EquirectToPolar extends PositionMapper {
 	}
 	
 	@Override
-	public Position getProjectedPosition(double x, double y) {
+	public Position getProjectedPosition(double x, double y)
+	{
 		// adjust from index to pixel position
 		x += 0.5;
 		y += 0.5;

@@ -11,7 +11,8 @@ import panoramakit.converter.data.*;
  * 
  * @author dayanto
  */
-public abstract class PixelSampler {
+public abstract class PixelSampler
+{
 	/*
 	 * The edge bounds limits the index value from going beyond the edges of the image. This is
 	 * mainly a safety precaution while developing a filter. If the position mapper is incorrectly
@@ -23,11 +24,12 @@ public abstract class PixelSampler {
 	
 	public abstract PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize);
 	
-	public final void setAllBounds(int width, int height) {
+	public final void setAllBounds(int width, int height)
+	{
 		edge = new Bounds(0, width, 0, height);
 		setBounds(width, height);
 	}
 	
-	public void setBounds(int width, int height) {
-	}
+	public void setBounds(int width, int height)
+	{}
 }

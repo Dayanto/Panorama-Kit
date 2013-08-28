@@ -11,12 +11,14 @@ import panoramakit.converter.samplers.FlatSampler;
  * 
  * @author dayanto
  */
-public class EquirectToPanorama extends PositionMapper {
+public class EquirectToPanorama extends PositionMapper
+{
 	public boolean customResolution;
 	public int newWidth;
 	public int newHeight;
 	
-	public EquirectToPanorama(PositionMapper preProjection, int newWidth, int newHeight) throws Exception {
+	public EquirectToPanorama(PositionMapper preProjection, int newWidth, int newHeight) throws Exception
+	{
 		super(preProjection, new FlatSampler());
 		
 		customResolution = true;
@@ -24,22 +26,26 @@ public class EquirectToPanorama extends PositionMapper {
 		this.newHeight = newHeight;
 	}
 	
-	public EquirectToPanorama(PositionMapper preProjection) throws Exception {
+	public EquirectToPanorama(PositionMapper preProjection) throws Exception
+	{
 		this(preProjection, 0, 0);
 		customResolution = false;
 	}
 	
-	public EquirectToPanorama(int newWidth, int newHeight) throws Exception {
+	public EquirectToPanorama(int newWidth, int newHeight) throws Exception
+	{
 		this(null, newWidth, newHeight);
 	}
 	
-	public EquirectToPanorama() throws Exception {
+	public EquirectToPanorama() throws Exception
+	{
 		this(null, 0, 0);
 		customResolution = false;
 	}
 	
 	@Override
-	public int getNewWidth(int width, int height) {
+	public int getNewWidth(int width, int height)
+	{
 		if (customResolution) {
 			return newWidth;
 		} else {
@@ -48,7 +54,8 @@ public class EquirectToPanorama extends PositionMapper {
 	}
 	
 	@Override
-	public int getNewHeight(int width, int height) {
+	public int getNewHeight(int width, int height)
+	{
 		if (customResolution) {
 			return newHeight;
 		} else {
@@ -57,12 +64,14 @@ public class EquirectToPanorama extends PositionMapper {
 	}
 	
 	@Override
-	public boolean testValidProportions() {
+	public boolean testValidProportions()
+	{
 		return true;
 	}
 	
 	@Override
-	public Position getProjectedPosition(double x, double y) {
+	public Position getProjectedPosition(double x, double y)
+	{
 		// adjust from index to pixel position
 		x += 0.5;
 		y += 0.5;

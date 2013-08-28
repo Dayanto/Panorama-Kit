@@ -12,13 +12,15 @@ import panoramakit.converter.data.Position;
  * 
  * @author dayanto
  */
-public class CubicSampler extends PixelSampler {
+public class CubicSampler extends PixelSampler
+{
 	public Bounds equator;
 	public Bounds northPole;
 	public Bounds southPole;
 	
 	@Override
-	public PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize) {
+	public PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize)
+	{
 		Bounds currentBounds;
 		
 		int yPos = (int) Math.round(position.y);
@@ -48,7 +50,8 @@ public class CubicSampler extends PixelSampler {
 	}
 	
 	@Override
-	public void setBounds(int width, int height) {
+	public void setBounds(int width, int height)
+	{
 		super.setBounds(width, height);
 		
 		northPole = new Bounds(width / 4, 2 * width / 4, 0, height / 3);

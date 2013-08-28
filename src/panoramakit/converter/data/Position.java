@@ -10,20 +10,24 @@ package panoramakit.converter.data;
  * 
  * @author dayanto
  */
-public class Position {
+public class Position
+{
 	public double x;
 	public double y;
 	
-	public Position(double x, double y) {
+	public Position(double x, double y)
+	{
 		this.x = x;
 		this.y = y;
 	}
 	
-	public double getXFraction() {
+	public double getXFraction()
+	{
 		return (x % 1 + 1) % 1;
 	}
 	
-	public double getYFraction() {
+	public double getYFraction()
+	{
 		return (y % 1 + 1) % 1;
 	}
 }

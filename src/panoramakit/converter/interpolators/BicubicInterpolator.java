@@ -11,13 +11,16 @@ import panoramakit.converter.data.ColorData;
  * 
  * @author dayanto
  */
-public class BicubicInterpolator extends Interpolator {
-	public BicubicInterpolator() {
+public class BicubicInterpolator extends Interpolator
+{
+	public BicubicInterpolator()
+	{
 		super(4); // Sample size of 4x4 pixels.
 	}
 	
 	@Override
-	public int getPixelValue(double xFraction, double yFraction, ColorData[][] pixels) {
+	public int getPixelValue(double xFraction, double yFraction, ColorData[][] pixels)
+	{
 		double[] colorChannelData = new double[4];
 		
 		for (int colorChannel = 0; colorChannel < 4; colorChannel++) {
@@ -29,7 +32,8 @@ public class BicubicInterpolator extends Interpolator {
 		return outputPixel.getIntValue();
 	}
 	
-	public double[][] getColorChannelData(ColorData[][] pixels, int colorChannel) {
+	public double[][] getColorChannelData(ColorData[][] pixels, int colorChannel)
+	{
 		double[][] colorChannels = new double[pixels.length][pixels.length];
 		
 		for (int x = 0; x < pixels.length; x++) {
@@ -46,8 +50,10 @@ public class BicubicInterpolator extends Interpolator {
 /**
  * @see http://www.paulinternet.nl/?page=bicubic
  */
-class CubicInterpolation {
-	public static double getValue(double[] p, double x) {
+class CubicInterpolation
+{
+	public static double getValue(double[] p, double x)
+	{
 		return p[1] + 0.5 * x * (p[2] - p[0] + x * (2.0 * p[0] - 5.0 * p[1] + 4.0 * p[2] - p[3] + x * (3.0 * (p[1] - p[2]) + p[3] - p[0])));
 	}
 }
@@ -55,10 +61,12 @@ class CubicInterpolation {
 /**
  * @see http://www.paulinternet.nl/?page=bicubic
  */
-class BicubicInterpolation extends CubicInterpolation {
+class BicubicInterpolation extends CubicInterpolation
+{
 	private double[] arr = new double[4];
 	
-	public double getValue(double[][] p, double x, double y) {
+	public double getValue(double[][] p, double x, double y)
+	{
 		arr[0] = getValue(p[0], y);
 		arr[1] = getValue(p[1], y);
 		arr[2] = getValue(p[2], y);

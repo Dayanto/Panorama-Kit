@@ -8,14 +8,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MouseHelper;
 import panoramakit.engine.accessor.EntityRendererAccessor;
-import panoramakit.engine.util.LockableMouseHelper;
+import panoramakit.util.LockableMouseHelper;
 
 /**
  * CompositeImage
  * 
  * @author dayanto
  */
-public abstract class CompositeImageRenderer {
+public abstract class CompositeImageRenderer
+{
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	
 	// accessor
@@ -43,12 +44,14 @@ public abstract class CompositeImageRenderer {
 	
 	private TiledScreenshot screenshot;
 	
-	public CompositeImageRenderer(int screenshotWidth, int screenshotHeight) {
+	public CompositeImageRenderer(int screenshotWidth, int screenshotHeight)
+	{
 		this.screenshotWidth = screenshotWidth;
 		this.screenshotHeight = screenshotHeight;
 	}
 	
-	public final void render() throws IOException { // store the game resolution
+	public final void render() throws IOException
+	{ // store the game resolution
 //		displayWidth = mc.displayWidth;
 //		displayHeight = mc.displayHeight;
 //
@@ -60,7 +63,7 @@ public abstract class CompositeImageRenderer {
 //		renderHeight = (int) Math.ceil(screenshotHeight / tilesY);
 //
 //		screenshot = new TiledScreenshot(screenshotWidth, screenshotHeight, renderWidth, renderHeight);
-		
+	
 		screenshot = new TiledScreenshot(screenshotWidth, screenshotHeight, mc.displayWidth, mc.displayHeight);
 		
 		applyMods();
@@ -74,20 +77,24 @@ public abstract class CompositeImageRenderer {
 	
 	public abstract void assembleImage() throws IOException;
 	
-	public int[] captureScreenshot() {
+	public int[] captureScreenshot()
+	{
 		screenshot.capture();
 		return screenshot.getScreenshot();
 	}
 	
-	public void rotatePlayer(float yaw, float pitch) {
+	public void rotatePlayer(float yaw, float pitch, float roll)
+	{
 		mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = yaw;
 		mc.thePlayer.rotationPitch = mc.thePlayer.prevRotationPitch = pitch;
+		era.setCameraRoll(roll);
 	}
 	
 	/**
 	 * Copied method from Mineshot
 	 */
-	private void applyMods() {
+	private void applyMods()
+	{
 		// TODO Implement some sort of renderActive = true;
 		
 		// hide GUI elements, they would appear on each tile otherwise
@@ -130,11 +137,13 @@ public abstract class CompositeImageRenderer {
 	/**
 	 * Copied method from Mineshot
 	 */
-	private void restoreMods() { // restore camera settings
+	private void restoreMods()
+	{ // restore camera settings
 		if (era != null) {
 			era.setCameraZoom(1);
 			era.setCameraOffsetX(0);
 			era.setCameraOffsetY(0);
+			era.setCameraRoll(0);
 		}
 		
 		mc.thePlayer.rotationYaw = mc.thePlayer.prevRotationYaw = yaw;

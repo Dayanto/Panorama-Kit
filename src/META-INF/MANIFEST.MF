@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-FMLCorePlugin: panoramakitcore.setup.PKCPluginLoader
+FMLCorePlugin: panoramakitcore.setup.PKitCorePluginLoader

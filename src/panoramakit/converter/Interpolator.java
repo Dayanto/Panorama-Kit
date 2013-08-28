@@ -15,11 +15,13 @@ import panoramakit.converter.data.ColorData;
  * 
  * @author dayanto
  */
-public abstract class Interpolator {
+public abstract class Interpolator
+{
 	public int sampleSize;
 	public static int sample;
 	
-	public Interpolator(int sampleSize) {
+	public Interpolator(int sampleSize)
+	{
 		this.sampleSize = sampleSize;
 		sample = sampleSize;
 	}

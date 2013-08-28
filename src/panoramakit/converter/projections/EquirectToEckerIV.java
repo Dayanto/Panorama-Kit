@@ -13,27 +13,33 @@ import panoramakit.converter.samplers.FlatSampler;
  * @author dayanto
  */
 
-public class EquirectToEckerIV extends PositionMapper {
-	public EquirectToEckerIV(PositionMapper preProjection) throws Exception {
+public class EquirectToEckerIV extends PositionMapper
+{
+	public EquirectToEckerIV(PositionMapper preProjection) throws Exception
+	{
 		super(preProjection, new FlatSampler());
 	}
 	
-	public EquirectToEckerIV() throws Exception {
+	public EquirectToEckerIV() throws Exception
+	{
 		this(null);
 	}
 	
 	@Override
-	public int getNewWidth(int width, int height) {
+	public int getNewWidth(int width, int height)
+	{
 		return width;
 	}
 	
 	@Override
-	public int getNewHeight(int width, int height) {
+	public int getNewHeight(int width, int height)
+	{
 		return height;
 	}
 	
 	@Override
-	public boolean testValidProportions() {
+	public boolean testValidProportions()
+	{
 		if (inputWidth % 2 != 0) {
 			return false;
 		}
@@ -44,7 +50,8 @@ public class EquirectToEckerIV extends PositionMapper {
 	}
 	
 	@Override
-	public Position getProjectedPosition(double x, double y) {
+	public Position getProjectedPosition(double x, double y)
+	{
 		// adjust from index to pixel position
 		x += 0.5;
 		y += 0.5;

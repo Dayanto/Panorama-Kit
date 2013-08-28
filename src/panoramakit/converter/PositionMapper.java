@@ -15,7 +15,8 @@ import panoramakit.converter.data.Position;
  * 
  * @author dayanto
  */
-public abstract class PositionMapper {
+public abstract class PositionMapper
+{
 	private PositionMapper preProjection;
 	private PixelSampler sampler;
 	
@@ -24,7 +25,8 @@ public abstract class PositionMapper {
 	public int outputHeight;
 	public int outputWidth;
 	
-	public PositionMapper(PositionMapper preProjection, PixelSampler pixelSampler) throws Exception {
+	public PositionMapper(PositionMapper preProjection, PixelSampler pixelSampler) throws Exception
+	{
 		this.preProjection = preProjection;
 		if (preProjection == null) {
 			sampler = pixelSampler;
@@ -38,7 +40,8 @@ public abstract class PositionMapper {
 	
 	public abstract int getNewHeight(int width, int height);
 	
-	public final void setResolution(int width, int height) {
+	public final void setResolution(int width, int height)
+	{
 		if (preProjection != null) {
 			preProjection.setResolution(width, height);
 			
@@ -56,17 +59,20 @@ public abstract class PositionMapper {
 		}
 	}
 	
-	public final int getWidth() {
+	public final int getWidth()
+	{
 		return outputWidth;
 	}
 	
-	public final int getHeight() {
+	public final int getHeight()
+	{
 		return outputHeight;
 	}
 	
 	public abstract boolean testValidProportions();
 	
-	public final boolean hasValidProportions() {
+	public final boolean hasValidProportions()
+	{
 		boolean valid = testValidProportions();
 		
 		if (valid && preProjection != null) {
@@ -78,7 +84,8 @@ public abstract class PositionMapper {
 	
 	public abstract Position getProjectedPosition(double x, double y);
 	
-	public final Position getPosition(double x, double y) {
+	public final Position getPosition(double x, double y)
+	{
 		Position pos = getProjectedPosition(x, y);
 		
 		if (pos == null) {
@@ -92,7 +99,8 @@ public abstract class PositionMapper {
 		}
 	}
 	
-	public final PixelCoordinate[][] getPixelCoordinates(Position position, int width, int height, int sampleSize) {
+	public final PixelCoordinate[][] getPixelCoordinates(Position position, int width, int height, int sampleSize)
+	{
 		if (preProjection == null) {
 			return sampler.getSamplePixels(position, width, height, sampleSize);
 		} else {
@@ -100,7 +108,8 @@ public abstract class PositionMapper {
 		}
 	}
 	
-	public final void setProjectionBounds() {
+	public final void setProjectionBounds()
+	{
 		if (preProjection != null) {
 			preProjection.setProjectionBounds();
 		} else {
@@ -108,11 +117,13 @@ public abstract class PositionMapper {
 		}
 	}
 	
-	public final void setBounds() {
+	public final void setBounds()
+	{
 		sampler.setAllBounds(inputWidth, inputHeight);
 	}
 	
-	public final PixelSampler getPixelSampler() {
+	public final PixelSampler getPixelSampler()
+	{
 		if (preProjection == null) {
 			return sampler;
 		} else {

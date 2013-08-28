@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package panoramakit.engine.util;
+package panoramakit.util;
 
 import net.minecraft.util.MouseHelper;
 
@@ -16,13 +16,15 @@ import net.minecraft.util.MouseHelper;
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class LockableMouseHelper extends MouseHelper {
+public class LockableMouseHelper extends MouseHelper
+{
 	
 	private boolean locked;
 	private boolean grab = true;
 	
 	@Override
-	public void mouseXYChange() {
+	public void mouseXYChange()
+	{
 		if (!locked) {
 			super.mouseXYChange();
 		} else {
@@ -31,11 +33,13 @@ public class LockableMouseHelper extends MouseHelper {
 		}
 	}
 	
-	public boolean isLocked() {
+	public boolean isLocked()
+	{
 		return locked;
 	}
 	
-	public void setLocked(boolean locked) {
+	public void setLocked(boolean locked)
+	{
 		if (grab) {
 			if (this.locked && !locked) {
 				grabMouseCursor();
@@ -49,7 +53,8 @@ public class LockableMouseHelper extends MouseHelper {
 	/**
 	 * @return the ungrab
 	 */
-	public boolean isGrabbing() {
+	public boolean isGrabbing()
+	{
 		return grab;
 	}
 	
@@ -57,7 +62,8 @@ public class LockableMouseHelper extends MouseHelper {
 	 * @param ungrab
 	 *            the ungrab to set
 	 */
-	public void setGrabbing(boolean ungrab) {
+	public void setGrabbing(boolean ungrab)
+	{
 		this.grab = ungrab;
 	}
 }

@@ -23,7 +23,8 @@ import net.minecraft.util.Timer;
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class MinecraftAccessor {
+public class MinecraftAccessor
+{
 	
 	private static final Logger L = Logger.getLogger(MinecraftAccessor.class.getName());
 	
@@ -59,19 +60,23 @@ public class MinecraftAccessor {
 	
 	private final Minecraft mc;
 	
-	public MinecraftAccessor(Minecraft mc) {
+	public MinecraftAccessor(Minecraft mc)
+	{
 		this.mc = mc;
 	}
 	
-	public MinecraftAccessor() {
+	public MinecraftAccessor()
+	{
 		this(Minecraft.getMinecraft());
 	}
 	
-	public Minecraft getMinecraftInstance() {
+	public Minecraft getMinecraftInstance()
+	{
 		return mc;
 	}
 	
-	public void setTimer(Timer timer) {
+	public void setTimer(Timer timer)
+	{
 		try {
 			ReflectionHelper.setPrivateValue(Minecraft.class, mc, timer, FIELD_TIMER);
 		} catch (Exception ex) {
@@ -79,7 +84,8 @@ public class MinecraftAccessor {
 		}
 	}
 	
-	public Timer getTimer() {
+	public Timer getTimer()
+	{
 		try {
 			return ReflectionHelper.getPrivateValue(Minecraft.class, mc, FIELD_TIMER);
 		} catch (Exception ex) {
@@ -88,7 +94,8 @@ public class MinecraftAccessor {
 		}
 	}
 	
-	public void setSoundManager(SoundManager sndManager) {
+	public void setSoundManager(SoundManager sndManager)
+	{
 		try {
 			ReflectionHelper.setPrivateValue(Minecraft.class, mc, sndManager, FIELD_SNDMANAGER);
 		} catch (Exception ex) {
@@ -96,7 +103,8 @@ public class MinecraftAccessor {
 		}
 	}
 	
-	public SoundManager getSoundManager() {
+	public SoundManager getSoundManager()
+	{
 		try {
 			return (SoundManager) ReflectionHelper.getPrivateValue(Minecraft.class, mc, FIELD_SNDMANAGER);
 		} catch (Exception ex) {
@@ -105,7 +113,8 @@ public class MinecraftAccessor {
 		}
 	}
 	
-	public void setEffectRenderer(EffectRenderer effectRenderer) {
+	public void setEffectRenderer(EffectRenderer effectRenderer)
+	{
 		try {
 			ReflectionHelper.setPrivateValue(Minecraft.class, mc, effectRenderer, FIELD_EFFECTRENDERER);
 		} catch (Exception ex) {
@@ -113,7 +122,8 @@ public class MinecraftAccessor {
 		}
 	}
 	
-	public EffectRenderer getEffectRenderer() {
+	public EffectRenderer getEffectRenderer()
+	{
 		try {
 			return ReflectionHelper.getPrivateValue(Minecraft.class, mc, FIELD_EFFECTRENDERER);
 		} catch (Exception ex) {

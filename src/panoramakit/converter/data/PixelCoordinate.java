@@ -8,11 +8,13 @@ package panoramakit.converter.data;
  * 
  * @author dayanto
  */
-public class PixelCoordinate {
+public class PixelCoordinate
+{
 	public int x;
 	public int y;
 	
-	public PixelCoordinate(int xPos, int yPos) {
+	public PixelCoordinate(int xPos, int yPos)
+	{
 		this.x = xPos;
 		this.y = yPos;
 	}

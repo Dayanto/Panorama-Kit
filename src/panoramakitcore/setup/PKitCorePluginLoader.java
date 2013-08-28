@@ -4,6 +4,7 @@
 package panoramakitcore.setup;
 
 import java.util.Map;
+import panoramakit.mod.VersionInfo;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
@@ -14,31 +15,36 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
  * @author dayanto
  */
 @TransformerExclusions({ "panoramakitcore" })
-@MCVersion("1.5.1")
-public class PKitCorePluginLoader implements IFMLLoadingPlugin {
+@MCVersion(VersionInfo.MC_VERSION)
+public class PKitCorePluginLoader implements IFMLLoadingPlugin
+{
 	
 	@Override
-	public String[] getASMTransformerClass() {
+	public String[] getASMTransformerClass()
+	{
 		return new String[] { "panoramakitcore.asm.CodeTransformer" };
 	}
 	
 	@Override
-	public String getModContainerClass() {
-		return "panoramakitcore.setup.PKCModContainer";
+	public String getModContainerClass()
+	{
+		return "panoramakitcore.setup.PKitCoreModContainer";
 	}
 	
 	@Override
-	public String[] getLibraryRequestClass() {
+	public String[] getLibraryRequestClass()
+	{
 		return null;
 	}
 	
 	@Override
-	public String getSetupClass() {
+	public String getSetupClass()
+	{
 		return null;
 	}
 	
 	@Override
-	public void injectData(Map<String, Object> data) {
-	}
+	public void injectData(Map<String, Object> data)
+	{}
 	
 }

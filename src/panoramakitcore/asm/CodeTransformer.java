@@ -20,14 +20,16 @@ import org.objectweb.asm.tree.MethodNode;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 /**
- * PKCTransformer
+ * PKitCoreTransformer
  * 
  * @author dayanto
  */
-public class CodeTransformer implements IClassTransformer {
+public class CodeTransformer implements IClassTransformer
+{
 	
 	@Override
-	public byte[] transform(String name, String transformedName, byte[] bytes) {
+	public byte[] transform(String name, String transformedName, byte[] bytes)
+	{
 		if ("net.minecraft.client.renderer.EntityRenderer".equals(name)) {
 			ClassNode classNode = readBytes(bytes);
 			doViewPositionTransform(classNode);
@@ -37,7 +39,11 @@ public class CodeTransformer implements IClassTransformer {
 		return bytes;
 	}
 	
-	public ClassNode doViewPositionTransform(ClassNode classNode) {
+	/**
+	 * Adds an if statement before line 551, skipping it whenever the mod is rendering.
+	 */
+	public ClassNode doViewPositionTransform(ClassNode classNode)
+	{
 		for (MethodNode mn : classNode.methods) {
 			if (!"orientCamera".equals(mn.name)) {
 				continue;
@@ -55,7 +61,7 @@ public class CodeTransformer implements IClassTransformer {
 					LabelNode jumpTo = ((LineNumberNode) nextLineNumInstr).start;
 					
 					InsnList customInstrList = new InsnList();
-					customInstrList.add(new MethodInsnNode(INVOKESTATIC, "panoramakitcore/ControlPanel", "isRendering", "()Z"));
+					customInstrList.add(new MethodInsnNode(INVOKESTATIC, "panoramakitcore/CoreStates", "isRendering", "()Z"));
 					customInstrList.add(new JumpInsnNode(IFEQ, jumpTo));
 					mn.instructions.insertBefore(instruction, customInstrList);
 					break;
@@ -66,14 +72,16 @@ public class CodeTransformer implements IClassTransformer {
 		return classNode;
 	}
 	
-	private ClassNode readBytes(byte[] bytes) {
+	private ClassNode readBytes(byte[] bytes)
+	{
 		ClassReader cr = new ClassReader(bytes);
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		return cn;
 	}
 	
-	private byte[] writeBytes(ClassNode cn) {
+	private byte[] writeBytes(ClassNode cn)
+	{
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);
 		return cw.toByteArray();

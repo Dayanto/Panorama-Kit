@@ -11,10 +11,12 @@ import panoramakit.converter.data.Position;
  * 
  * @author dayanto
  */
-public class FlatSampler extends PixelSampler {
+public class FlatSampler extends PixelSampler
+{
 	
 	@Override
-	public PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize) {
+	public PixelCoordinate[][] getSamplePixels(Position position, int width, int height, int sampleSize)
+	{
 		int xBase = (int) Math.floor(position.x) - (sampleSize / 2 - 1);
 		int yBase = (int) Math.floor(position.y) - (sampleSize / 2 - 1);
 		
