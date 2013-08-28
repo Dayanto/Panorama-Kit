@@ -18,17 +18,21 @@ import panoramakit.converter.samplers.CubicSampler;
  * 
  * @author dayanto
  */
-public class CubicToEquirect extends PositionMapper {
-	public CubicToEquirect(PositionMapper preProjection) throws Exception {
+public class CubicToEquirect extends PositionMapper
+{
+	public CubicToEquirect(PositionMapper preProjection) throws Exception
+	{
 		super(preProjection, new CubicSampler());
 	}
 	
-	public CubicToEquirect() throws Exception {
+	public CubicToEquirect() throws Exception
+	{
 		this(null);
 	}
 	
 	@Override
-	public Position getProjectedPosition(double x, double y) {
+	public Position getProjectedPosition(double x, double y)
+	{
 		// adjust from index to the pixel's center point position
 		x += 0.5;
 		y += 0.5;
@@ -38,9 +42,14 @@ public class CubicToEquirect extends PositionMapper {
 		double halfPieceSize = pieceSize / 2;
 		double radius = pieceSize / 2;
 		
-		int cardinalDirection = (int) Math.floor((x + halfPieceSize) / pieceSize) % 4 - 1;
+		// offset the image to place the center of the cross in the center of the image
+		x -= halfPieceSize;
+		// make sure it stays within the original range
+		x = (x + outputWidth) % outputWidth;
 		
-		double xCenteredLocal = ((x + halfPieceSize) % pieceSize) - halfPieceSize;
+		int cardinalDirection = (int) Math.floor(x / pieceSize) % 4 - 1;
+		
+		double xCenteredLocal = (x % pieceSize) - halfPieceSize;
 		double yCentered = y - pieceSize;
 		
 		// The angles are calculated by dividing the distance in pixels by the
@@ -106,7 +115,8 @@ public class CubicToEquirect extends PositionMapper {
 	/**
 	 * Rotates the position 90 degrees to the right around the origin. This is repeated the number of times given.
 	 */
-	public static Position rotate(double x, double y, int rotations) {
+	public static Position rotate(double x, double y, int rotations)
+	{
 		rotations = (rotations + 4) % 4;
 		double temp;
 		
@@ -120,7 +130,8 @@ public class CubicToEquirect extends PositionMapper {
 	}
 	
 	@Override
-	public boolean testValidProportions() {
+	public boolean testValidProportions()
+	{
 		// The image has to be able to be divided into a grid of 4 by 3 pieces
 		// and requires an aspect ratio of 4:3.
 		
@@ -138,12 +149,14 @@ public class CubicToEquirect extends PositionMapper {
 	}
 	
 	@Override
-	public int getNewWidth(int originalWidth, int originalHeight) {
+	public int getNewWidth(int originalWidth, int originalHeight)
+	{
 		return originalWidth;
 	}
 	
 	@Override
-	public int getNewHeight(int originalWidth, int originalHeight) {
+	public int getNewHeight(int originalWidth, int originalHeight)
+	{
 		return 2 * originalHeight / 3;
 	}
 }
