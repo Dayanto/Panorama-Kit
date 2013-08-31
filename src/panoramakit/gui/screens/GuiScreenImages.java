@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiScreen;
  * @author dayanto
  */
 public class GuiScreenImages extends GuiScreen
-{
+{	
 	public String screenTitle = "Image Types";
 	public String screenLabel = "Images...";
 	public static ArrayList<Class<GuiScreen>> menuLinks = new ArrayList<Class<GuiScreen>>();
@@ -80,6 +80,7 @@ public class GuiScreenImages extends GuiScreen
 			GuiScreen screen = guiscreen.newInstance();
 			return screen;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

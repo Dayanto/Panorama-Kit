@@ -4,11 +4,12 @@
 package panoramakit.gui.screens;
 
 import java.util.ArrayList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.Configuration;
+import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomButton;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.mod.PanoramaKit;
@@ -18,9 +19,12 @@ import panoramakit.mod.PanoramaKit;
  */
 public abstract class SettingsScreen extends GuiScreen
 {
-	public ArrayList<GuiCustomTextField> textFieldList = new ArrayList<GuiCustomTextField>();
-	protected boolean disableInput = false;
+	protected Minecraft mc = Minecraft.getMinecraft();
+	
 	private String screenLabel;
+	protected ArrayList<GuiCustomTextField> textFieldList = new ArrayList<GuiCustomTextField>();
+	protected PreviewRenderer previewRenderer = new PreviewRenderer(Minecraft.getMinecraft().renderEngine);
+	protected boolean disableInput = false;
 	
 	public SettingsScreen(String screenLabel) {
 		this.screenLabel = screenLabel;
@@ -143,34 +147,15 @@ public abstract class SettingsScreen extends GuiScreen
 		if (config.hasChanged()) {
 			config.save();
 		}
+		previewRenderer.clearPreview();
 	}
 	
+	/**
+	 * The label that the menus will put on the button opening this GUI.
+	 */
 	@Override
 	public String toString()
 	{
 		return screenLabel;
 	}
-	
-	public String translate(String key)
-	{
-		return I18n.func_135053_a(key);
-	}
-	
-	public String[] translate(String[] keys)
-	{
-		String[] translated = new String[keys.length];
-		for (int i = 0; i < keys.length; i++) {
-			translated[i] = translate(keys[i]);
-		}
-		return translated;
-	}
-	
-	public String shortenString(String text, int limit, int cutIndex)
-	{
-		if(text.length() > limit) {
-			return text.substring(0, cutIndex - 3) + "... ..." + text.substring(text.length() - limit + cutIndex + 3, text.length());
-		}
-		return text;
-	}
-	
 }

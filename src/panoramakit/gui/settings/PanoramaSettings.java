@@ -3,9 +3,7 @@
  */
 package panoramakit.gui.settings;
 
-import java.io.File;
 import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
@@ -16,7 +14,6 @@ import panoramakit.mod.PanoramaKit;
  */
 public class PanoramaSettings
 {
-	private final Minecraft mc = Minecraft.getMinecraft();
 	private final PanoramaKit pk = PanoramaKit.instance;
 	
 	private final Configuration config = pk.getConfig();
@@ -28,9 +25,8 @@ public class PanoramaSettings
 	private Property panoramaWidth;
 	private Property panoramaHeight;
 	private Property sampleSize;
-	private Property filePath;
-	private float orientation;
-	private float angle;
+	private static float orientation;
+	private static float angle;
 	
 	public ArrayList<Class<GuiScreen>> imageMenuLinks = new ArrayList<Class<GuiScreen>>();
 	
@@ -39,8 +35,12 @@ public class PanoramaSettings
 		panoramaWidth = config.get("panorama", "width", DEF_PANORAMA_WIDTH);
 		panoramaHeight = config.get("panorama", "height", DEF_PANORAMA_HEIGHT);
 		sampleSize = config.get("panorama", "samplesize", DEF_SAMPLE_SIZE);
-		filePath = config.get("panorama", "filepath", new File(pk.getRenderDir(), "Panorama.png").getPath());
-		orientation = ((mc.thePlayer.rotationYaw % 360) + 360) % 360;
+	}
+	
+	public PanoramaSettings(float playerRotation)
+	{
+		this();
+		orientation = ((playerRotation % 360) + 360) % 360;
 		angle = 0;
 	}
 	
@@ -71,22 +71,13 @@ public class PanoramaSettings
 		sampleSize.set(size);
 	}
 	
-	public String getFilePath()
-	{
-		return filePath.getString();
-	}
-	public void setFilePath(String path)
-	{
-		filePath.set(path);
-	}
-	
 	public float getOrientation()
 	{
 		return orientation;
 	}
 	public void setOrientation(float orientation)
 	{
-		this.orientation = orientation;
+		PanoramaSettings.orientation = orientation;
 	}
 	
 	public float getAngle()
@@ -95,7 +86,7 @@ public class PanoramaSettings
 	}
 	public void setAngle(float angle)
 	{
-		this.angle = angle;
+		PanoramaSettings.angle = angle;
 	}
 	
 	

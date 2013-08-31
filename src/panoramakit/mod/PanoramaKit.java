@@ -5,6 +5,7 @@ package panoramakit.mod;
 
 import java.io.File;
 import java.util.logging.Logger;
+import panoramakit.gui.PreviewRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
@@ -50,6 +51,11 @@ public class PanoramaKit
 		KeyBindingRegistry.registerKeyBinding(new MenuKeyHandler());
 		renderDir = new File(mc.mcDataDir, "panoramas");
 		tempRenderDir = new File(renderDir, "temp");
+		
+		File preview = PreviewRenderer.getPreviewFile();
+		if(preview.exists()) {
+			preview.delete();
+		}
 	}
 	
 	public Configuration getConfig()

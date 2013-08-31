@@ -23,7 +23,7 @@ public class GuiScreenProgress extends GuiScreen
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0, width / 2 - 84, 126, "Stop all tasks"));
+		buttonList.add(new GuiButton(0, width / 2 - 84, 126, "Stop All"));
 		buttonList.add(new GuiButton(1, width / 2 - 84, 150, "Back"));
 	}
 	
@@ -62,7 +62,7 @@ public class GuiScreenProgress extends GuiScreen
 		int line = 12;
 		
 		double progress = currentTask.getProgress();
-		String percent = Math.round(100 * progress) + "%";
+		String percent = progress == -1 ? "Unknown" : (Math.round(100 * progress) + "%");
 		int tasksRemaining = TaskManager.instance.tasksRemaining() - 1;
 		
 		drawString(fontRenderer, "Current progress: " + percent, xs - 80, ys += line, 0xa0a0a0);

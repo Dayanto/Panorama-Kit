@@ -15,17 +15,27 @@ public class GuiCustomTextField extends GuiTextField
 	private boolean onlyNumbers;
 	private boolean error = false;
 	
+	// store variables for drawing
+	protected int xPos;
+	protected int yPos;
+	protected int width;
+	protected int height;
+	
 	public GuiCustomTextField(FontRenderer fontRenderer, int id, int xPos, int yPos, int width, int height, boolean onlyNumbers)
 	{
 		super(fontRenderer, xPos, yPos, width, height);
 		this.id = id;
 		this.onlyNumbers = onlyNumbers;
+		
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.width = width;
+		this.height = height;
 	}
 	
 	
 	/**
-     * Fired when a key is typed. This is the equivalent of
-     * KeyListener.keyTyped(KeyEvent e).
+     * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
 	@Override
 	public boolean textboxKeyTyped(char character, int keyCode)
@@ -40,9 +50,24 @@ public class GuiCustomTextField extends GuiTextField
 		}
 	}
 	
+	@Override
+	public void drawTextBox()
+	{
+		if (error)
+        {
+			// draw textfield background
+            drawRect(this.xPos - 1, this.yPos - 1, this.xPos + this.width + 1, this.yPos + this.height + 1, -6250336);
+            drawRect(this.xPos, this.yPos, this.xPos + this.width, this.yPos + this.height, 0xff800000);
+        }
+		super.drawTextBox();
+	}
+	
+	/**
+	 * If there has been an error, this turns the background red until it's turned back.
+	 */
 	public void setError(boolean error)
 	{
-		error = false;
-		setTextColor(error ? 0xff0000 : 14737632);
+		this.error = error;
+		setEnableBackgroundDrawing(!error);
 	}
 }

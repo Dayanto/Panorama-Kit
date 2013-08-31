@@ -71,13 +71,16 @@ public class TaskManager
 	 */
 	public void runTick()
 	{
-		if (hasTasks()) {
-			Task currentTask = getCurrentTask();
+		Task currentTask;
+		do {
+			if (!hasTasks()) return;
+			
+			currentTask = getCurrentTask();
 			currentTask.perform();
 			
 			runNextTaskIfCompleted();
 			clearTaskIfStopped();
-		}
+		} while (currentTask != getCurrentTask()); // if one has been completed continue doing the next
 	}
 	
 	/**

@@ -14,7 +14,8 @@ public abstract class Task
 	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things to be
 	 * defined at the moment of execution.
 	 */
-	public abstract void init();
+	public void init()
+	{}
 	
 	/**
 	 * Performs the task. Until the task has finished, this will repeat once every frame.
@@ -24,7 +25,8 @@ public abstract class Task
 	/**
 	 * Cleans up after the task has finished running if necessary.
 	 */
-	public abstract void finish();
+	public void finish()
+	{}
 	
 	/**
 	 * Politely asks the task to abort as quickly as possible, performing any cleanup that has to be
@@ -32,7 +34,8 @@ public abstract class Task
 	 * come to a halt and there is no guarantee that a task will be able to stop at all before
 	 * finishing.
 	 */
-	public abstract void stop();
+	public void stop()
+	{}
 	
 	// current states of the task
 	private boolean completed = false;
@@ -86,6 +89,9 @@ public abstract class Task
 	/**
 	 * Gives how far the task has progressed as a proportion.
 	 */
-	public abstract double getProgress();
+	public double getProgress()
+	{
+		return 0;
+	}
 	
 }
