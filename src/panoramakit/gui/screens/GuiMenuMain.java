@@ -4,21 +4,23 @@
 package panoramakit.gui.screens;
 
 import java.util.ArrayList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 /** 
  * @author dayanto
  */
-public class GuiScreenImages extends GuiScreen
-{	
-	public String screenTitle = "Image Types";
-	public String screenLabel = "Images...";
+public class GuiMenuMain extends GuiScreen
+{
+	public String screenTitle = "Panorama Kit";
 	public static ArrayList<Class<GuiScreen>> menuLinks = new ArrayList<Class<GuiScreen>>();
+	private Minecraft mc = Minecraft.getMinecraft();
 	
 	static
 	{
-		addMenuLink(GuiScreenPanorama.class);
+//		addMenuLink(GuiScreenBackground.class);
+		addMenuLink(GuiMenuPanoramas.class);
 	}
 	
 	/**
@@ -44,7 +46,7 @@ public class GuiScreenImages extends GuiScreen
 	public void actionPerformed(GuiButton guibutton)
 	{
 		if (guibutton.id == 100) {
-			mc.displayGuiScreen(new GuiScreenMain());
+			mc.displayGuiScreen(null);
 			return;
 		}
 		mc.displayGuiScreen(getScreen(guibutton.id));
@@ -67,7 +69,7 @@ public class GuiScreenImages extends GuiScreen
 	@SuppressWarnings("unchecked")
 	public static void addMenuLink(Class<? extends GuiScreen> screen)
 	{
-		menuLinks.add((Class<GuiScreen>)screen.asSubclass(GuiScreen.class));
+		menuLinks.add((Class<GuiScreen>) screen.asSubclass(GuiScreen.class));
 	}
 	
 	/**
@@ -80,14 +82,7 @@ public class GuiScreenImages extends GuiScreen
 			GuiScreen screen = guiscreen.newInstance();
 			return screen;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	@Override
-	public String toString()
-	{
-		return screenLabel;
 	}
 }

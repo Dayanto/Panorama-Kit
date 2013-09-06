@@ -41,7 +41,7 @@ public class RenderTask extends Task
 			imageRenderer.render();
 		} catch (Exception ex) {
 			L.log(Level.SEVERE, "Render failed: " + ex.getMessage(), ex);
-			PanoramaKit.instance.printChat("panoramakit.renderfail", ex);
+			printChat("panoramakit.renderfail", ex);
 		}
 		// Render a clean image to hide what was just rendered.
 		mc.entityRenderer.updateCameraAndRender(0);

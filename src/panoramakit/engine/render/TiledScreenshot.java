@@ -51,15 +51,14 @@ public class TiledScreenshot
 	}
 	
 	public void capture()
-	{ // make sure the display hasn't changed in size after buffer allocation
+	{	// make sure the display hasn't changed in size after buffer allocation
 		if (mc.displayWidth != tileWidth || mc.displayHeight != tileHeight) {
 			throw new IllegalStateException("Display size changed");
 		}
 		
 		for (int tileOfsX = 0; tileOfsX < fullWidth; tileOfsX += tileWidth) {
 			for (int tileOfsY = 0; tileOfsY < fullHeight; tileOfsY += tileHeight)
-			// for (int tileOfsY = fullHeight - fullHeight % tileHeight; tileOfsY >= 0; tileOfsY -=
-			// tileHeight)
+			// for (int tileOfsY = fullHeight - fullHeight % tileHeight; tileOfsY >= 0; tileOfsY -= tileHeight)
 			{
 				if (era != null) {
 					double camOfsX = fullWidth - tileWidth - tileOfsX * 2;

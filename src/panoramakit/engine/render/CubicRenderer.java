@@ -20,6 +20,9 @@ public class CubicRenderer extends CompositeImageRenderer
 	
 	private final Logger L = PanoramaKit.instance.L;
 	
+	// image transferer if we're passing the image along for further processing
+	ImageLink imageTransferer;
+	
 	// image settings
 	private int resolution;
 	private String filePath;
@@ -33,6 +36,10 @@ public class CubicRenderer extends CompositeImageRenderer
 		this.filePath = filePath;
 		this.orientation = orientation;
 		this.angle = angle;
+	}
+	
+	public void setImageTransferer(ImageLink imageTransferer) {
+		this.imageTransferer = imageTransferer;
 	}
 	
 	@Override
@@ -76,13 +83,17 @@ public class CubicRenderer extends CompositeImageRenderer
 			image.setRGB(resolution, i * resolution, resolution, resolution, screenshot, 0, resolution);
 		}
 		
-		// save the image
-		File file = new File(filePath);
-		if (!file.exists()) {
-			file.mkdirs();
-			file.createNewFile();
+		if(imageTransferer == null){
+			// save the image
+			File file = new File(filePath);
+			if (!file.exists()) {
+				file.mkdirs();
+				file.createNewFile();
+			}
+			ImageIO.write(image, "png", file);
+		} else {
+			imageTransferer.setImage(image);
 		}
-		ImageIO.write(image, "png", file);
 		
 		L.info("Cubic render: " + (System.currentTimeMillis() - startTime) + "ms");
 	}

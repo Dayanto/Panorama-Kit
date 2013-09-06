@@ -10,53 +10,42 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public class PanoramaSettings
+public class EquirectSettings
 {
 	private final PanoramaKit pk = PanoramaKit.instance;
 	
 	private final Configuration config = pk.getConfig();
 	
-	private static final int DEF_PANORAMA_WIDTH = 2000;
-	private static final int DEF_PANORAMA_HEIGHT = 800;
+	private static final int DEF_RESOLUTION = 500;
 	private static final double DEF_SAMPLE_SIZE = 1.0;
 	
-	private Property panoramaWidth;
-	private Property panoramaHeight;
+	private Property resolution;
 	private Property sampleSize;
 	private static float orientation;
 	private static float angle;
 	
-	public PanoramaSettings()
+	public EquirectSettings()
 	{
-		panoramaWidth = config.get("panorama", "width", DEF_PANORAMA_WIDTH);
-		panoramaHeight = config.get("panorama", "height", DEF_PANORAMA_HEIGHT);
-		sampleSize = config.get("panorama", "samplesize", DEF_SAMPLE_SIZE);
+		resolution = config.get("equirect", "resolution", DEF_RESOLUTION);
+		sampleSize = config.get("equirect", "samplesize", DEF_SAMPLE_SIZE);
 	}
 	
-	public PanoramaSettings(float playerRotation)
+	public EquirectSettings(float playerRotation)
 	{
 		this();
 		orientation = ((playerRotation % 360) + 360) % 360;
 		angle = 0;
 	}
 	
-	public int getPanoramaWidth()
+	public int getResolution()
 	{
-		return panoramaWidth.getInt(DEF_PANORAMA_WIDTH);
+		return resolution.getInt(DEF_RESOLUTION);
 	}
-	public void setPanoramaWidth(int width)
+	public void setResolution(int resolution)
 	{
-		panoramaWidth.set(width);
+		this.resolution.set(resolution);
 	}
 	
-	public int getPanoramaHeight()
-	{
-		return panoramaHeight.getInt(DEF_PANORAMA_HEIGHT);
-	}
-	public void setPanoramaHeight(int height)
-	{
-		panoramaHeight.set(height);
-	}
 	
 	public float getSampleSize()
 	{
@@ -73,7 +62,7 @@ public class PanoramaSettings
 	}
 	public void setOrientation(float orientation)
 	{
-		PanoramaSettings.orientation = orientation;
+		EquirectSettings.orientation = orientation;
 	}
 	
 	public float getAngle()
@@ -82,7 +71,7 @@ public class PanoramaSettings
 	}
 	public void setAngle(float angle)
 	{
-		PanoramaSettings.angle = angle;
+		EquirectSettings.angle = angle;
 	}
 	
 	

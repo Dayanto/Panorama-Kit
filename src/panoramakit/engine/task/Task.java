@@ -3,6 +3,8 @@
  */
 package panoramakit.engine.task;
 
+import panoramakit.mod.PanoramaKit;
+
 /**
  * Task
  * 
@@ -10,6 +12,8 @@ package panoramakit.engine.task;
  */
 public abstract class Task
 {
+	private boolean silent = false;
+	
 	/**
 	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things to be
 	 * defined at the moment of execution.
@@ -92,6 +96,18 @@ public abstract class Task
 	public double getProgress()
 	{
 		return 0;
+	}
+	
+	public void setSilent()
+	{
+		silent = true;
+	}
+	
+	public void printChat(String msg, Object... params) {
+		if(!silent)
+		{
+			PanoramaKit.instance.printChat(msg, params);
+		}
 	}
 	
 }

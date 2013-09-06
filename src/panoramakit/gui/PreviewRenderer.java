@@ -80,7 +80,10 @@ public class PreviewRenderer
 			boolean successful = loadPreview();
 			if(!successful) return;
 		}
-		drawImage(xPos + (width - image.getWidth()) / 2, yPos + (height - image.getHeight()) / 2, image.getWidth(), image.getHeight());
+		double ratio = (double) image.getWidth() / (double) image.getHeight();
+		int imageWidth = ratio > 1 ? width : (int)(width / ratio);
+		int imageHeight = ratio < 1 ? height : (int)(height / ratio);
+		drawImage(xPos + (width - imageWidth) / 2, yPos + (height - imageHeight) / 2, imageWidth, imageHeight);
 	}
 	
 	private void drawImage(int xPos, int yPos, int width, int height)
@@ -91,6 +94,7 @@ public class PreviewRenderer
 		GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glColor4f(1, 1, 1, 1);
         tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(xPos        , yPos + height, 0, 0.0, 1.0);
         tessellator.addVertexWithUV(xPos + width, yPos + height, 0, 1.0, 1.0);

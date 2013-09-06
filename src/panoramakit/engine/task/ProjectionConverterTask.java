@@ -4,22 +4,26 @@
 package panoramakit.engine.task;
 
 import panoramakit.converter.ProjectionConverter;
-import panoramakit.mod.PanoramaKit;
+import panoramakit.engine.render.ImageLink;
 
 public class ProjectionConverterTask extends ThreadedTask
 {
-	
 	private ProjectionConverter projectionConverter;
 	
-	public ProjectionConverterTask(ProjectionConverter converter)
+	public ProjectionConverterTask(ProjectionConverter converter, ImageLink imagetransferer)
 	{
+		this(converter);
+		projectionConverter.setInputImage(imagetransferer.getImage());
+	}
+	
+	public ProjectionConverterTask(ProjectionConverter converter) {
 		this.projectionConverter = converter;
 	}
 	
 	@Override
 	public void performThreaded() throws Exception
 	{
-		PanoramaKit.instance.printChat("panoramakit.process");
+		printChat("panoramakit.process");
 		projectionConverter.setProgressTracker(progressTracker);
 		projectionConverter.convert();
 	}

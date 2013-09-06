@@ -6,7 +6,7 @@ package panoramakit.gui.screens;
 /** 
  * @author dayanto
  */
-public class GuiScreenBackground extends SettingsScreen
+public class GuiScreenBackground extends GuiSettingsScreen
 {
 	public GuiScreenBackground()
 	{

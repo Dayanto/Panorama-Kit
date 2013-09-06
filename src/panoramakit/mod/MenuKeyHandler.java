@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import panoramakit.engine.task.TaskManager;
-import panoramakit.gui.screens.GuiScreenMain;
+import panoramakit.gui.screens.GuiMenuMain;
 import panoramakit.gui.screens.GuiScreenProgress;
 
 /**
@@ -45,7 +45,7 @@ public class MenuKeyHandler extends KeyHandler
 			if (taskManager.hasTasks()) {
 				mc.displayGuiScreen(new GuiScreenProgress());
 			} else if(mc.currentScreen == null) {
-				mc.displayGuiScreen(new GuiScreenMain());
+				mc.displayGuiScreen(new GuiMenuMain());
 			}
 		}
 	}

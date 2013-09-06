@@ -17,7 +17,7 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public abstract class SettingsScreen extends GuiScreen
+public abstract class GuiSettingsScreen extends GuiScreen
 {
 	protected Minecraft mc = Minecraft.getMinecraft();
 	
@@ -26,7 +26,7 @@ public abstract class SettingsScreen extends GuiScreen
 	protected PreviewRenderer previewRenderer = new PreviewRenderer(Minecraft.getMinecraft().renderEngine);
 	protected boolean disableInput = false;
 	
-	public SettingsScreen(String screenLabel) {
+	public GuiSettingsScreen(String screenLabel) {
 		this.screenLabel = screenLabel;
 	}
 	
@@ -82,7 +82,7 @@ public abstract class SettingsScreen extends GuiScreen
 			return;
 		}
 		
-		// switch text fields with tab
+		// switch text fields with tab #DA570B
 		if (character == '\t') {
 			int activeTextField = -1;
 			for (int i = 0; i < textFieldList.size(); i++) {

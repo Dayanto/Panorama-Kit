@@ -62,10 +62,17 @@ public class ProjectionConverter
 	{
 		this(positionMapper, imagePathOverwrite, imagePathOverwrite);
 	}
+
+	public void setInputImage(BufferedImage image)
+	{
+		inputImage = image;
+	}
 	
 	private void loadImage(String imagePath) throws IOException, IllegalArgumentException
 	{
-		inputImage = ImageIO.read(new File(imagePath));
+		if(inputImage == null) {
+			inputImage = ImageIO.read(new File(imagePath));
+		}
 		
 		int width = inputImage.getWidth();
 		int height = inputImage.getHeight();
@@ -82,6 +89,12 @@ public class ProjectionConverter
 	
 	private void saveImage(String imagePath) throws IOException
 	{
+		// save the image
+		File file = new File(imagePath);
+		if (!file.exists()) {
+			file.mkdirs();
+			file.createNewFile();
+		}
 		ImageIO.write(outputImage, "png", new File(imagePath));
 	}
 	

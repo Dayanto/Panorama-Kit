@@ -1,4 +1,8 @@
-﻿key.panoramakit.menu=Panorama Kit Key
+key.panoramakit.menu=Panorama Kit
 
-panoramakit.process=ffds
-panoramakit.fail=fds
+panoramakit.process=Processing image... (press %s to see the progress)
+panoramakit.renderfail=Rendering failed: %s
+panoramakit.saveimage=Image saved as %s
+panoramakit.progress.unknown=Unknown
+panoramakit.progress.converter=Converting image
+panoramakit.progress.zip=Zipping resource pack

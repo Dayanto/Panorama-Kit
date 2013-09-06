@@ -12,6 +12,9 @@ public class CoreStates
 {
 	private static boolean render = false;
 	
+	/**
+	 * Enables the view correction to make sure panoramas are captured without misalignments.
+	 */
 	public static void setRenderState(boolean state)
 	{
 		render = state;

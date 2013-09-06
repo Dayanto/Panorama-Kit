@@ -20,6 +20,8 @@ import panoramakit.converter.samplers.CubicSampler;
  */
 public class CubicToEquirect extends PositionMapper
 {
+	int resolution = -1;
+	
 	public CubicToEquirect(PositionMapper preProjection) throws Exception
 	{
 		super(preProjection, new CubicSampler());
@@ -28,6 +30,17 @@ public class CubicToEquirect extends PositionMapper
 	public CubicToEquirect() throws Exception
 	{
 		this(null);
+	}
+	
+	public CubicToEquirect(PositionMapper preProjection, int newResolution) throws Exception
+	{
+		this(preProjection);
+		resolution = newResolution;
+	}
+	
+	public CubicToEquirect(int newResolution) throws Exception
+	{
+		this(null, newResolution);
 	}
 	
 	@Override
@@ -151,12 +164,18 @@ public class CubicToEquirect extends PositionMapper
 	@Override
 	public int getNewWidth(int originalWidth, int originalHeight)
 	{
-		return originalWidth;
+		if(resolution == -1)
+			return originalWidth;
+		else
+			return resolution * 4;
 	}
 	
 	@Override
 	public int getNewHeight(int originalWidth, int originalHeight)
 	{
-		return 2 * originalHeight / 3;
+		if(resolution == -1)
+			return 2 * originalHeight / 3;
+		else
+			return resolution * 2;
 	}
 }

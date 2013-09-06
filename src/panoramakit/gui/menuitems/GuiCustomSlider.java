@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
-import panoramakit.gui.screens.SettingsScreen;
+import panoramakit.gui.screens.GuiSettingsScreen;
 
 /**
  * Customizable slider button.
@@ -22,7 +22,7 @@ import panoramakit.gui.screens.SettingsScreen;
  */
 public class GuiCustomSlider extends GuiButton
 {
-	private SettingsScreen settingsScreen;
+	private GuiSettingsScreen settingsScreen;
 	
 	private final int sliderWidth = 4;
 	private final int widthOffs = sliderWidth * 2;
@@ -35,7 +35,7 @@ public class GuiCustomSlider extends GuiButton
 	
 	public boolean dragged = false;
 	
-	public GuiCustomSlider(int id, int x, int y, SettingsScreen settingsScreen, String baseString, float min, float max, float step, float value)
+	public GuiCustomSlider(int id, int x, int y, GuiSettingsScreen settingsScreen, String baseString, float min, float max, float step, float value)
 	{
 		super(id, x, y, 150, 20, null);
 		

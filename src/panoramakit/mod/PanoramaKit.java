@@ -24,7 +24,8 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(
 		modid = "PanoramaKit",
 		name = "Panorama Kit",
-		version = VersionInfo.VERSION)
+		version = VersionInfo.VERSION
+)
 public class PanoramaKit
 {
 	private final Minecraft mc = Minecraft.getMinecraft();
@@ -76,6 +77,4 @@ public class PanoramaKit
 	public void printChat(String msg, Object... params) {
         mc.ingameGUI.getChatGUI().addTranslatedMessage(msg, params);
     }
-	
-	
 }
