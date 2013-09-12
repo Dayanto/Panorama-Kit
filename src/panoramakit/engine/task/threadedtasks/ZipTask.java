@@ -1,0 +1,31 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
+package panoramakit.engine.task.threadedtasks;
+
+import java.io.File;
+import panoramakit.engine.task.ThreadedTask;
+import panoramakit.engine.util.Zipper;
+
+/** 
+ * @author dayanto
+ */
+public class ZipTask extends ThreadedTask
+{
+	private File folder;
+	private File zipFile;
+	
+	public ZipTask(File folderToZip, File zipDest)
+	{
+		folder = folderToZip;
+		zipFile = zipDest;
+	}
+	
+	@Override
+	public void performThreaded() throws Exception
+	{
+		printChat("Zipping...");
+		Zipper.zipFolder(folder, zipFile);
+		printChat("Done zipping!");
+	}
+}
