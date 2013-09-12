@@ -1,6 +1,6 @@
-key.panoramakit.menu=Panorama Kit
+key.panoramakit.menu=Panorama Kit Menu
 
-panoramakit.process=Processing image... (press %s to see the progress)
+panoramakit.process=Processing image... (press %s for current progress)
 panoramakit.renderfail=Rendering failed: %s
 panoramakit.saveimage=Image saved as %s
 panoramakit.progress.unknown=Unknown
