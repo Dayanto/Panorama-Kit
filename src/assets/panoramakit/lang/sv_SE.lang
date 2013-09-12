@@ -1,8 +1,0 @@
-key.panoramakit.menu=Panorama Kit
-
-panoramakit.process=Omvandlar bilden... (tryck %s för att föjla vad som händer)
-panoramakit.renderfail=Renderingen misslyckades: %s
-panoramakit.saveimage=Sparade bild som %s
-panoramakit.progress.unknown=Okänt
-panoramakit.progress.converter=Omvandlar bild
-panoramakit.progress.zip=Zippar resurspaket
