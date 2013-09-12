@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package panoramakit.util;
+package panoramakit.engine.util;
 
 import net.minecraft.util.MouseHelper;
 

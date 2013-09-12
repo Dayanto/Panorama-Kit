@@ -3,7 +3,7 @@
  */
 package panoramakit.gui.menuitems;
 
-import panoramakit.gui.screens.GuiSettingsScreen;
+import panoramakit.gui.screens.settings.GuiScreenSettings;
 
 /**
  * @author dayanto
@@ -12,7 +12,7 @@ public class GuiCustomSliderOrientation extends GuiCustomSlider
 {
 	public static final String[] POINTS_OF_COMPASS = {"S","SW","W","NW","N","NE","E","SE"};
 	
-	public GuiCustomSliderOrientation(int id, int x, int y, GuiSettingsScreen settingsScreen, String baseString, float min, float max, float step, float value)
+	public GuiCustomSliderOrientation(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, float min, float max, float step, float value)
 	{
 		super(id, x, y, settingsScreen, baseString, min, max, step, value);
 	}

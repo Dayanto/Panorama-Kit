@@ -1,9 +1,10 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.engine.task;
+package panoramakit.engine.task.tasks;
 
 import java.util.logging.Level;
+import panoramakit.engine.task.Task;
 import panoramakit.mod.PanoramaKit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

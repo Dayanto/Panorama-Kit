@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens;
+package panoramakit.gui.screens.settings;
 
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
@@ -17,48 +17,23 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public abstract class GuiSettingsScreen extends GuiScreen
+public abstract class GuiScreenSettings extends GuiScreen
 {
 	protected Minecraft mc = Minecraft.getMinecraft();
 	
 	private String screenLabel;
 	protected ArrayList<GuiCustomTextField> textFieldList = new ArrayList<GuiCustomTextField>();
 	protected PreviewRenderer previewRenderer = new PreviewRenderer(Minecraft.getMinecraft().renderEngine);
+	
+	// used for displaying the overlay before rendering a preview
+	private boolean capturingPreview = false;
+	private boolean hasDrawnOverlayMessage = false;
+	
+	// disables all input if the user is browsing for files.
 	protected boolean disableInput = false;
 	
-	public GuiSettingsScreen(String screenLabel) {
+	public GuiScreenSettings(String screenLabel) {
 		this.screenLabel = screenLabel;
-	}
-	
-	/**
-	 * Called whenever a button has been pressed. If there are multiple options,
-	 * the button will have cycled among them on its own.
-	 */
-	public void buttonPressed(GuiButton button, int id, int currentOption)
-	{}
-	
-	/**
-	 * Called whenever a slider has moved. 
-	 */
-	public void sliderMoved(int id, float value)
-	{}
-	
-	/**
-	 * Called whenever a textfield has been updated
-	 */
-	public void textFieldUpdated(GuiCustomTextField textField, int id, String value)
-	{}
-	
-	/**
-	 * Called from the main game loop to update the screen.
-	 */
-	@Override
-	public void updateScreen()
-	{
-		for (GuiTextField textfield : textFieldList) {
-			// increments the counter that makes the cursor blink
-			textfield.updateCursorCounter();
-		}
 	}
 	
 	@Override
@@ -122,6 +97,53 @@ public abstract class GuiSettingsScreen extends GuiScreen
 	}
 	
 	/**
+	 * Called whenever a button has been pressed. If there are multiple options,
+	 * the button will have cycled among them on its own.
+	 */
+	public void buttonPressed(GuiButton button, int id, int currentOption)
+	{}
+	
+	/**
+	 * Called whenever a slider has moved. 
+	 */
+	public void sliderMoved(int id, float value)
+	{}
+	
+	/**
+	 * Called whenever a textfield has been updated
+	 */
+	public void textFieldUpdated(GuiCustomTextField textField, int id, String value)
+	{}
+	
+	/**
+	 * Returns a textfield with the id or null if none was found.
+	 */
+	public GuiCustomTextField getTextField(int id)
+	{
+		for(GuiCustomTextField textfield : textFieldList) {
+			if(textfield.id == id) {
+				return textfield;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Attempts to change the value of a textfield with the chosen id. Returns
+	 * whether it was successful.
+	 */
+	public boolean setTextField(int id, String value)
+	{
+		GuiCustomTextField textfield = getTextField(id);
+		if(textfield == null) {
+			return false;
+		} else {
+			textfield.setText(value);
+			return true;
+		}
+	}
+	
+	/**
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
@@ -131,6 +153,35 @@ public abstract class GuiSettingsScreen extends GuiScreen
 			textfield.drawTextBox();
 		}
 		super.drawScreen(x, y, z);
+		
+		// display an overlay if we're about to render a preview (it stays on the screen while it's rendering)
+		if(capturingPreview){
+			drawDefaultBackground();
+			drawCenteredString(fontRenderer, "Rendering Preview...", width / 2, height / 2, 0xe0e0e0);
+			
+			// waits one frame, so that what's drawn has been displayed to the screen before letting the rendering start.
+			if(hasDrawnOverlayMessage) {
+				Minecraft.getMinecraft().displayGuiScreen(null);
+			}
+			hasDrawnOverlayMessage = true;
+		}
+	}
+	
+	protected void capturePreview()
+	{
+		capturingPreview = true;
+	}
+	
+	/**
+	 * Called from the main game loop to update the screen.
+	 */
+	@Override
+	public void updateScreen()
+	{
+		for (GuiTextField textfield : textFieldList) {
+			// increments the counter that makes the cursor blink
+			textfield.updateCursorCounter();
+		}
 	}
 	
 	/**

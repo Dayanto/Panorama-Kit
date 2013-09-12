@@ -1,14 +1,15 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens;
+package panoramakit.gui.screens.settings;
+
 
 /** 
  * @author dayanto
  */
-public class GuiScreenBackground extends GuiSettingsScreen
+public class GuiSettingsBackground extends GuiScreenSettings
 {
-	public GuiScreenBackground()
+	public GuiSettingsBackground()
 	{
 		super("Make a Background");
 	}

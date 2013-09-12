@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MouseHelper;
 import panoramakit.engine.accessor.EntityRendererAccessor;
-import panoramakit.util.LockableMouseHelper;
+import panoramakit.engine.util.LockableMouseHelper;
 
 /**
  * CompositeImage

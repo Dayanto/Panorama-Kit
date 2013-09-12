@@ -1,26 +1,26 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens;
+package panoramakit.gui.screens.menu;
 
 import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
+import panoramakit.gui.screens.settings.GuiSettingsCylindrical;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 /** 
  * @author dayanto
  */
-public class GuiMenuMain extends GuiScreen
-{
-	public String screenTitle = "Panorama Kit";
+public class GuiMenuPanoramas extends GuiScreen
+{	
+	public String screenTitle = "Panorama Types";
+	public String screenLabel = "Panorama Images...";
 	public static ArrayList<Class<GuiScreen>> menuLinks = new ArrayList<Class<GuiScreen>>();
-	private Minecraft mc = Minecraft.getMinecraft();
 	
 	static
 	{
-//		addMenuLink(GuiScreenBackground.class);
-		addMenuLink(GuiMenuPanoramas.class);
+		addMenuLink(GuiSettingsCylindrical.class);
+		//addMenuLink(GuiScreenEquirect.class);
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public class GuiMenuMain extends GuiScreen
 	public void actionPerformed(GuiButton guibutton)
 	{
 		if (guibutton.id == 100) {
-			mc.displayGuiScreen(null);
+			mc.displayGuiScreen(new GuiMenuMain());
 			return;
 		}
 		mc.displayGuiScreen(getScreen(guibutton.id));
@@ -69,7 +69,7 @@ public class GuiMenuMain extends GuiScreen
 	@SuppressWarnings("unchecked")
 	public static void addMenuLink(Class<? extends GuiScreen> screen)
 	{
-		menuLinks.add((Class<GuiScreen>) screen.asSubclass(GuiScreen.class));
+		menuLinks.add((Class<GuiScreen>)screen.asSubclass(GuiScreen.class));
 	}
 	
 	/**
@@ -82,7 +82,14 @@ public class GuiMenuMain extends GuiScreen
 			GuiScreen screen = guiscreen.newInstance();
 			return screen;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public String toString()
+	{
+		return screenLabel;
 	}
 }

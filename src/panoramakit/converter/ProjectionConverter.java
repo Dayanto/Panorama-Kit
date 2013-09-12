@@ -13,7 +13,7 @@ import panoramakit.converter.data.ColorData;
 import panoramakit.converter.data.PixelCoordinate;
 import panoramakit.converter.data.Position;
 import panoramakit.converter.interpolators.BilinearInterpolator;
-import panoramakit.engine.task.ProgressTracker;
+import panoramakit.engine.util.ProgressTracker;
 import panoramakit.mod.PanoramaKit;
 
 /**

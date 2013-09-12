@@ -1,10 +1,11 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.engine.task;
+package panoramakit.engine.task.threadedtasks;
 
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.engine.render.ImageLink;
+import panoramakit.engine.task.ThreadedTask;
 
 public class ProjectionConverterTask extends ThreadedTask
 {
@@ -33,19 +34,6 @@ public class ProjectionConverterTask extends ThreadedTask
 	{
 		return progressTracker.getCurrentProgress();
 	}
-	
-	
-	@Override
-	public void init()
-	{}
-	
-	@Override
-	public void finish()
-	{}
-	
-	@Override
-	public void perform()
-	{}
 	
 	@Override
 	public void stop()

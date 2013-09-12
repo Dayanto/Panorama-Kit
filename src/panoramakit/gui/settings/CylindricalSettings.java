@@ -10,7 +10,7 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public class PanoramaSettings
+public class CylindricalSettings
 {
 	private final PanoramaKit pk = PanoramaKit.instance;
 	
@@ -20,42 +20,42 @@ public class PanoramaSettings
 	private static final int DEF_PANORAMA_HEIGHT = 800;
 	private static final double DEF_SAMPLE_SIZE = 1.0;
 	
-	private Property panoramaWidth;
-	private Property panoramaHeight;
+	private Property width;
+	private Property height;
 	private Property sampleSize;
 	private static float orientation;
 	private static float angle;
 	
-	public PanoramaSettings()
+	public CylindricalSettings()
 	{
-		panoramaWidth = config.get("panorama", "width", DEF_PANORAMA_WIDTH);
-		panoramaHeight = config.get("panorama", "height", DEF_PANORAMA_HEIGHT);
-		sampleSize = config.get("panorama", "samplesize", DEF_SAMPLE_SIZE);
+		width = config.get("cylindrical", "width", DEF_PANORAMA_WIDTH);
+		height = config.get("cylindrical", "height", DEF_PANORAMA_HEIGHT);
+		sampleSize = config.get("cylindrical", "samplesize", DEF_SAMPLE_SIZE);
 	}
 	
-	public PanoramaSettings(float playerRotation)
+	public CylindricalSettings(float playerRotation)
 	{
 		this();
 		orientation = ((playerRotation % 360) + 360) % 360;
 		angle = 0;
 	}
 	
-	public int getPanoramaWidth()
+	public int getWidth()
 	{
-		return panoramaWidth.getInt(DEF_PANORAMA_WIDTH);
+		return width.getInt(DEF_PANORAMA_WIDTH);
 	}
-	public void setPanoramaWidth(int width)
+	public void setWidth(int width)
 	{
-		panoramaWidth.set(width);
+		this.width.set(width);
 	}
 	
-	public int getPanoramaHeight()
+	public int getHeight()
 	{
-		return panoramaHeight.getInt(DEF_PANORAMA_HEIGHT);
+		return height.getInt(DEF_PANORAMA_HEIGHT);
 	}
-	public void setPanoramaHeight(int height)
+	public void setHeight(int height)
 	{
-		panoramaHeight.set(height);
+		this.height.set(height);
 	}
 	
 	public float getSampleSize()
@@ -73,7 +73,7 @@ public class PanoramaSettings
 	}
 	public void setOrientation(float orientation)
 	{
-		PanoramaSettings.orientation = orientation;
+		CylindricalSettings.orientation = orientation;
 	}
 	
 	public float getAngle()
@@ -82,7 +82,7 @@ public class PanoramaSettings
 	}
 	public void setAngle(float angle)
 	{
-		PanoramaSettings.angle = angle;
+		CylindricalSettings.angle = angle;
 	}
 	
 	

@@ -1,12 +1,13 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.engine.task;
+package panoramakit.engine.task.tasks;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.minecraft.client.Minecraft;
 import panoramakit.engine.render.CompositeImageRenderer;
+import panoramakit.engine.task.Task;
 import panoramakit.mod.PanoramaKit;
 import panoramakitcore.CoreStates;
 
@@ -58,12 +59,6 @@ public class RenderTask extends Task
 	public void finish()
 	{
 		CoreStates.setRenderState(false);
-	}
-	
-	@Override
-	public void stop()
-	{ // TODO Auto-generated method stub
-	
 	}
 	
 	@Override
