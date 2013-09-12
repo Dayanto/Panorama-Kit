@@ -63,10 +63,10 @@ public class GuiScreenProgress extends GuiScreen
 		
 		double progress = currentTask.getProgress();
 		String percent = progress == -1 ? "Unknown" : (Math.round(100 * progress) + "%");
-		int tasksRemaining = TaskManager.instance.tasksRemaining() - 1;
+		int tasksRemaining = TaskManager.instance.tasksInQueue();
 		
 		drawString(fontRenderer, "Current progress: " + percent, xs - 80, ys += line, 0xa0a0a0);
-		drawString(fontRenderer, "Tasks remaining: " + tasksRemaining, xs - 80, ys += line, 0xa0a0a0);
+		drawString(fontRenderer, "Tasks in queue: " + tasksRemaining, xs - 80, ys += line, 0xa0a0a0);
 
 		
 		super.drawScreen(x, y, z);

@@ -5,6 +5,7 @@ package panoramakit.engine.task;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import panoramakit.engine.util.ProgressTracker;
 import panoramakit.mod.PanoramaKit;
 
 /**
@@ -51,7 +52,6 @@ public abstract class ThreadedTask extends Task implements Runnable
 		catch (Exception ex) {
 			L.log(Level.SEVERE, "Threaded task has failed", ex);
 			PanoramaKit.instance.printChat("Current task failed: " + ex);
-			PanoramaKit.instance.printChat("Canceling all scheduled tasks...");
 			TaskManager.instance.halt();
 			setStopped();
 			return;

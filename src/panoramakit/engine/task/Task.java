@@ -56,7 +56,7 @@ public abstract class Task
 	
 	/**
 	 * Once any cleanup has been performed after stopping a task, this has to be called to signal
-	 * that
+	 * that the task is done. If this is never done, the task manager will keep waiting forever.
 	 */
 	public void setStopped()
 	{
@@ -80,17 +80,6 @@ public abstract class Task
 	}
 	
 	/**
-	 * Whether the task is currently waiting for something. Some tasks need to wait before running
-	 * and some might take pauses.
-	 * 
-	 * Will probably be removed in favor of letting the tasks handle waiting themselves.
-	 */
-	public boolean isWaiting()
-	{
-		return false; // default value
-	}
-	
-	/**
 	 * Gives how far the task has progressed as a proportion.
 	 */
 	public double getProgress()
@@ -98,11 +87,17 @@ public abstract class Task
 		return 0;
 	}
 	
+	/**
+	 * Prevents this task from sending any messages to the chat.
+	 */
 	public void setSilent()
 	{
 		silent = true;
 	}
 	
+	/**
+	 * Attempts to send a message to the chat, but fails if this task has been silenced.
+	 */
 	public void printChat(String msg, Object... params) {
 		if(!silent)
 		{

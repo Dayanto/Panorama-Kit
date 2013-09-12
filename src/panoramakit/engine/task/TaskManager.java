@@ -14,30 +14,31 @@ public class TaskManager
 {
 	public static final TaskManager instance = new TaskManager();
 	
-	private ArrayList<Task> taskList = new ArrayList<>();
+	private Task activeTask = null;
+	private ArrayList<Task> taskQueue = new ArrayList<>();
 	
 	/**
-	 * Add a new task to the end of the task list.
+	 * Add a new task to the end of the task queue.
 	 */
 	public void addTask(Task task)
 	{
-		taskList.add(task);
+		taskQueue.add(task);
 	}
 	
 	/**
-	 * Returns whether or not there are any tasks in the taskList.
+	 * Returns whether or not the task manager has any tasks.
 	 */
 	public boolean hasTasks()
 	{
-		return !taskList.isEmpty();
+		return !taskQueue.isEmpty() || activeTask != null;
 	}
 	
 	/**
-	 * Returns the number of tasks that are still remaining.
+	 * Returns the number of tasks that are in the queue, waiting to run.
 	 */
-	public int tasksRemaining()
+	public int tasksInQueue()
 	{
-		return taskList.size();
+		return taskQueue.size();
 	}
 	
 	/**
@@ -45,11 +46,7 @@ public class TaskManager
 	 */
 	public Task getCurrentTask()
 	{
-		if(!taskList.isEmpty()) {
-			return taskList.get(0);
-		} else {
-			return null;
-		}
+		return activeTask;
 	}
 	
 	/**
@@ -58,53 +55,53 @@ public class TaskManager
 	 */
 	public void halt()
 	{
-		if (!taskList.isEmpty()) {
-			Task currentTask = getCurrentTask();
-			taskList.clear();
-			taskList.add(currentTask);
-			currentTask.stop();
+		if (!taskQueue.isEmpty()) {
+			taskQueue.clear();
+			activeTask.stop();
 		}
 	}
 	
 	/**
-	 * Executes the current task and 
+	 * Executes the current task and continues with the next task in the queue if it has finished.
 	 */
 	public void runTick()
 	{
-		Task currentTask;
+		if (!hasTasks()) return;
+		
 		do {
-			if (!hasTasks()) return;
+			if(activeTask == null) runNextTask();
 			
-			currentTask = getCurrentTask();
-			currentTask.perform();
-			
-			runNextTaskIfCompleted();
+			activeTask.perform();
+			clearTaskIfCompleted();
 			clearTaskIfStopped();
-		} while (currentTask != getCurrentTask()); // if one has been completed continue doing the next
+		} 
+		while(activeTask == null && taskQueue.size() > 0); // if one has been completed continue doing the next
 	}
 	
 	/**
-	 * Move on to the next task in the list if one exists.
+	 * Takes the first task in the queue and runs it.
 	 */
-	private void runNextTaskIfCompleted()
+	private void runNextTask()
 	{
-		if (hasTasks()) {
-			Task currentTask = getCurrentTask();
-			if (currentTask.hasCompleted()) {
-				currentTask.finish();
-				taskList.remove(0);
-				runNextTask();
+		if (taskQueue.size() > 0) {
+			activeTask = taskQueue.get(0);
+			taskQueue.remove(0);
+			activeTask.init();
+			if (activeTask instanceof ThreadedTask) {
+				((ThreadedTask)activeTask).start();
 			}
 		}
 	}
 	
-	private void runNextTask()
+	/**
+	 * If the current task has been completed, finish it off and get rid of it.
+	 */
+	private void clearTaskIfCompleted()
 	{
-		if (hasTasks()) {
-			Task currentTask = getCurrentTask();
-			currentTask.init();
-			if (currentTask instanceof ThreadedTask) {
-				((ThreadedTask) currentTask).start();
+		if (activeTask != null) {
+			if (activeTask.hasCompleted()) {
+				activeTask.finish();
+				activeTask = null;
 			}
 		}
 	}
@@ -114,8 +111,8 @@ public class TaskManager
 	 */
 	private void clearTaskIfStopped()
 	{
-		if (hasTasks() && getCurrentTask().hasStopped()) {
-			taskList.remove(0);
+		if (activeTask != null && activeTask.hasStopped()) {
+			activeTask = null;
 		}
 	}
 }
