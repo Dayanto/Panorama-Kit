@@ -44,10 +44,19 @@ public abstract class CompositeImageRenderer
 	
 	private TiledScreenshot screenshot;
 	
+	protected ImageLink imageLink;
+	
 	public CompositeImageRenderer(int screenshotWidth, int screenshotHeight)
 	{
 		this.screenshotWidth = screenshotWidth;
 		this.screenshotHeight = screenshotHeight;
+	}
+	
+	/**
+	 * Attaches an image link to this renderer. It is however up to the renderer to actually make use of it.
+	 */
+	public void setImageLink(ImageLink imageLink) {
+		this.imageLink = imageLink;
 	}
 	
 	public final void render() throws IOException

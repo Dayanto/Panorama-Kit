@@ -6,6 +6,10 @@ package panoramakit.engine.render;
 import java.awt.image.BufferedImage;
 
 /** 
+ * The image link is used to enable sending images between tasks. This improves performance 
+ * as it prevents the image from being saved and immediately loaded again. Since samples are 
+ * generally larger than the final image, this significantly reduces the load on the file system.
+ * 
  * @author dayanto
  */
 public class ImageLink
@@ -20,10 +24,5 @@ public class ImageLink
 	public void setImage(BufferedImage image)
 	{
 		this.image = image;
-	}
-	
-	public boolean hasImage()
-	{
-		return image != null;
 	}
 }

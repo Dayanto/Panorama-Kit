@@ -15,6 +15,7 @@ import panoramakit.converter.data.Position;
 import panoramakit.converter.interpolators.BilinearInterpolator;
 import panoramakit.engine.util.ProgressTracker;
 import panoramakit.mod.PanoramaKit;
+import panoramakit.engine.render.ImageLink;
 
 /**
  * This converter loads a panorama made with one projection and converts it to another projection.
@@ -43,34 +44,43 @@ public class ProjectionConverter
 	
 	private ProgressTracker progressTracker;
 	
-	private boolean stop = false;
+	private ImageLink imageLink;
 	
-	public ProjectionConverter(PositionMapper positionMapper, Interpolator interpolator, String imagePathInput, String imagePathOutput)
-	{
-		this.positionMapper = positionMapper;
-		this.interpolator = interpolator;
-		this.imagePathInput = imagePathInput;
-		this.imagePathOutput = imagePathOutput;
-	}
+	private boolean stop = false;
 	
 	public ProjectionConverter(PositionMapper positionMapper, String imagePathInput, String imagePathOutput)
 	{
-		this(positionMapper, new BilinearInterpolator(), imagePathInput, imagePathOutput);
+		this.positionMapper = positionMapper;
+		this.imagePathInput = imagePathInput;
+		this.imagePathOutput = imagePathOutput;
+		
+		setInterpolator(new BilinearInterpolator());
 	}
 	
 	public ProjectionConverter(PositionMapper positionMapper, String imagePathOverwrite)
 	{
 		this(positionMapper, imagePathOverwrite, imagePathOverwrite);
 	}
-
-	public void setInputImage(BufferedImage image)
+	
+	/**
+	 * Attaches an image link to this converter. If no image gets sent, the converter simply
+	 * ignores the link and loads an image as usual.
+	 */
+	public void setImageLink(ImageLink imageLink)
 	{
-		inputImage = image;
+		this.imageLink = imageLink;
+	}
+	
+	public void setInterpolator(Interpolator interpolator)
+	{
+		this.interpolator = interpolator;
 	}
 	
 	private void loadImage(String imagePath) throws IOException, IllegalArgumentException
 	{
-		if(inputImage == null) {
+		if(imageLink != null && imageLink.getImage() != null) {
+			inputImage = imageLink.getImage();
+		} else {
 			inputImage = ImageIO.read(new File(imagePath));
 		}
 		
@@ -152,7 +162,7 @@ public class ProjectionConverter
 		
 		saveImage(imagePathOutput);
 		
-		L.info("Time: " + (System.currentTimeMillis() - startTime));
+		L.info("Projection \"" + positionMapper.getClass().getSimpleName() + "\": " + (System.currentTimeMillis() - startTime) + "ms");
 		L.info("Done");
 	}
 	

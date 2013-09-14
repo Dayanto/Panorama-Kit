@@ -3,19 +3,14 @@
  */
 package panoramakit.engine.task.threadedtasks;
 
+import net.minecraft.client.settings.GameSettings;
 import panoramakit.converter.ProjectionConverter;
-import panoramakit.engine.render.ImageLink;
 import panoramakit.engine.task.ThreadedTask;
+import panoramakit.mod.MenuKeyHandler;
 
 public class ProjectionConverterTask extends ThreadedTask
 {
 	private ProjectionConverter projectionConverter;
-	
-	public ProjectionConverterTask(ProjectionConverter converter, ImageLink imagetransferer)
-	{
-		this(converter);
-		projectionConverter.setInputImage(imagetransferer.getImage());
-	}
 	
 	public ProjectionConverterTask(ProjectionConverter converter) {
 		this.projectionConverter = converter;
@@ -24,7 +19,7 @@ public class ProjectionConverterTask extends ThreadedTask
 	@Override
 	public void performThreaded() throws Exception
 	{
-		printChat("panoramakit.process");
+		printChat("panoramakit.process", GameSettings.getKeyDisplayString(MenuKeyHandler.MENU_KEY.keyCode));
 		projectionConverter.setProgressTracker(progressTracker);
 		projectionConverter.convert();
 	}
