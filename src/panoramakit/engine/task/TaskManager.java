@@ -4,6 +4,8 @@
 package panoramakit.engine.task;
 
 import java.util.ArrayList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMemoryErrorScreen;
 
 /**
  * The task manager keeps track of all the tasks currently running.
@@ -12,6 +14,8 @@ import java.util.ArrayList;
  */
 public class TaskManager
 {
+	private static final Minecraft mc = Minecraft.getMinecraft();
+	
 	public static final TaskManager instance = new TaskManager();
 	
 	private Task activeTask = null;
@@ -67,6 +71,7 @@ public class TaskManager
 	public void runTick()
 	{
 		if (!hasTasks()) return;
+		if (mc.currentScreen instanceof GuiMemoryErrorScreen) halt();
 		
 		do {
 			if(activeTask == null) runNextTask();

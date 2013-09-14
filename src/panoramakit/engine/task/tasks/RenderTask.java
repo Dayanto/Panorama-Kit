@@ -67,4 +67,10 @@ public class RenderTask extends Task
 		return 0;
 	}
 	
+	@Override
+	public void stop()
+	{
+		setStopped();
+	}
+	
 }
