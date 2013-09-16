@@ -67,7 +67,7 @@ public abstract class ThreadedTask extends Task implements Runnable
 	public abstract void performThreaded() throws Exception;
 	
 	/**
-	 * Threaded tasks rarely use this method, so doing this makes it optional.
+	 * Threaded tasks rarely use this method, so it's made optional through this empty implementation.
 	 */
 	@Override
 	public void perform()

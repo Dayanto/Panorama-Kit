@@ -61,16 +61,13 @@ public class GuiCustomButton extends GuiButton
 	private void updateDisplayString()
 	{
 		displayString = "";
-		if(baseString != null)
-		{
+		if(baseString != null) {
 			displayString += baseString;
-			if(options != null)
-			{
+			if(options != null) {
 				displayString += ": ";
 			}
 		}
-		if(options != null)
-		{
+		if(options != null) {
 			displayString += options[currentOption];
 		}
 	}

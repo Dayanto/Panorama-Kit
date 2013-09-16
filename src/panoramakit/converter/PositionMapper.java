@@ -25,7 +25,7 @@ public abstract class PositionMapper
 	public int outputHeight;
 	public int outputWidth;
 	
-	public PositionMapper(PositionMapper preProjection, PixelSampler pixelSampler) throws Exception
+	public PositionMapper(PositionMapper preProjection, PixelSampler pixelSampler)
 	{
 		this.preProjection = preProjection;
 		if (preProjection == null) {

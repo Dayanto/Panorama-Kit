@@ -7,58 +7,51 @@ import java.io.File;
 import java.util.logging.Logger;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
-import panoramakit.converter.ProjectionConverter;
-import panoramakit.converter.projections.CubicToEquirect;
 import panoramakit.engine.render.CubicRenderer;
-import panoramakit.engine.render.ImageLink;
-import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
 import panoramakit.engine.task.tasks.RenderTask;
-import panoramakit.engine.task.threadedtasks.ProjectionConverterTask;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomSlider;
 import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
 import panoramakit.gui.screens.menu.GuiMenuPanoramas;
-import panoramakit.gui.settings.EquirectSettings;
+import panoramakit.gui.settings.CubicSettings;
 import panoramakit.mod.PanoramaKit;
-import panoramakit.gui.menuitems.GuiCustomSliderSample;
 
 /**
  * @author dayanto
  */
-public class GuiSettingsEquirect extends GuiScreenSettings
+public class GuiSettingsCubic extends GuiScreenSettings
 {
 	private static Logger L = PanoramaKit.instance.L;
-	private static String screenTitle = "Equirectangular Panorama";
-	private static String screenLabel = "Equirectangular";
+	private static String screenTitle = "Cubic Panorama";
+	private static String screenLabel = "Cubic (Raw)";
 	
 	private static final int WIDTH = 0;
 	private static final int HEIGHT = 1;
-	private static final int SAMPLE_SIZE = 2;
-	private static final int ORIENTATION = 3;
-	private static final int ANGLE = 4;
+	private static final int ORIENTATION = 2;
+	private static final int ANGLE = 3;
 	
-	private static final int PREVIEW = 5;
+	private static final int PREVIEW = 4;
 	
-	private static final int BACK = 6;
-	private static final int CAPTURE = 7;
+	private static final int BACK = 5;
+	private static final int CAPTURE = 6;
 	
-	private EquirectSettings settings;
+	private CubicSettings settings;
 	
 	// make sure we don't update the orientation and angle after rendering a preview
 	private static boolean keepOrientation = false;
 	
-	public GuiSettingsEquirect()
+	public GuiSettingsCubic()
 	{
 		super(screenLabel);
 		if(keepOrientation)	{
-			settings = new EquirectSettings();
+			settings = new CubicSettings();
 			keepOrientation = false;
 		} else {
-			settings = new EquirectSettings(mc.thePlayer.rotationYaw);
+			settings = new CubicSettings(mc.thePlayer.rotationYaw);
 		}
 	}
 	
@@ -89,12 +82,11 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRenderer, WIDTH, leftCol - 12 - 64, currentY, 64, 20, true);
 		GuiCustomTextField fieldHeight = new GuiCustomTextField(fontRenderer, HEIGHT, leftCol + 12, currentY, 64, 20, true);
 		fieldWidth.setText(String.valueOf(settings.getResolution() * 4));
-		fieldHeight.setText(String.valueOf(settings.getResolution() * 2));
+		fieldHeight.setText(String.valueOf(settings.getResolution() * 3));
 		textFieldList.add(fieldWidth);
 		textFieldList.add(fieldHeight);
 		
 		// sliders beneath the textfields
-		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
 		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
 		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
 		
@@ -136,12 +128,6 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			previewRenderer.drawCenteredImage(rightCol - 64, contentStart, 128, 128);
 		}
 		
-		// draw the sample resolution
-		int sampleResolution = (int)(settings.getResolution() * settings.getSampleSize());
-		int sampleWidth = sampleResolution * 4;
-		int sampleHeight = sampleResolution * 3;
-		drawCenteredString(fontRenderer, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
-		
 		// draw the tip message
 		drawCenteredString(fontRenderer, tipMessage, width / 2, bottomRow - 12, 0xFFCF33);
 		
@@ -163,25 +149,13 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		if (id == CAPTURE) 
 		{
-			L.info("Render equirectangular panorama");
+			L.info("Render cubic panorama");
 			
-			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png").getPath();
-			
-			CubicToEquirect panorama = new CubicToEquirect(settings.getResolution());;
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);;
+			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Cubic.png").getPath();
 				
-			// create a cubic base image
-			int sampleResolution = (int) (settings.getResolution() * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
+			// create a cubic panorama
+			CubicRenderer renderer = new CubicRenderer(settings.getResolution(), filePath, settings.getOrientation(), settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
-			
-			// convert it to a panorama
-			TaskManager.instance.addTask(new ProjectionConverterTask(converter));
-			
-			// create an image link for sending images between tasks and attach it to the two sides
-			ImageLink imageLink = new ImageLink();
-			renderer.setImageLink(imageLink);
-			converter.setImageLink(imageLink);
 			
 			mc.displayGuiScreen(new GuiRenderNotice());
 		}
@@ -195,26 +169,13 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			int previewSize = 256;
 			int resolution = previewSize / 4;
 			
-			CubicToEquirect panorama = new CubicToEquirect(resolution);
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);
-			
-			// create a cubic base image
-			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
-			TaskManager.instance.addTask(new RenderTask(renderer));
+			// create a cubic panorama
+			RenderTask renderTask = new RenderTask(new CubicRenderer(resolution, filePath, settings.getOrientation(), settings.getAngle() - 90));
+			renderTask.setSilent();
+			TaskManager.instance.addTask(renderTask);
 			
 			// restore the gui screen
 			TaskManager.instance.addTask(new DisplayGuiScreenTask(this.getClass()));
-			
-			// convert it to a panorama
-			Task projectionTask = new ProjectionConverterTask(converter);
-			projectionTask.setSilent();
-			TaskManager.instance.addTask(projectionTask);
-			
-			// create an image link for sending images between tasks and attach it to the two sides
-			ImageLink imageLink = new ImageLink();
-			renderer.setImageLink(imageLink);
-			converter.setImageLink(imageLink);
 			
 			// display overlay and then close the gui
 			capturePreview();
@@ -228,9 +189,6 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 	@Override
 	public void sliderMoved(int id, float value)
 	{
-		if (id == SAMPLE_SIZE) {
-			settings.setSampleSize(value);
-		}
 		if (id == ORIENTATION) {
 			settings.setOrientation(value);
 		}
@@ -253,14 +211,14 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		if (id == WIDTH) {
 			if (intValue >= 4) {
 				settings.setResolution(intValue / 4);
-				setTextField(HEIGHT, String.valueOf(settings.getResolution() * 2)); // update the height when the resolution changed
+				setTextField(HEIGHT, String.valueOf(settings.getResolution() * 3)); // update the height when the resolution changed
 			} else {
 				textField.setError(true);
 			}
 		}
 		if (id == HEIGHT) {
-			if (intValue >= 2) {
-				settings.setResolution(intValue / 2);
+			if (intValue >= 3) {
+				settings.setResolution(intValue / 3);
 				setTextField(WIDTH, String.valueOf(settings.getResolution() * 4)); // update the width when the resolution changed
 			} else {
 				textField.setError(true);

@@ -19,26 +19,31 @@ public class CylindricalSettings
 	private static final int DEF_PANORAMA_WIDTH = 2000;
 	private static final int DEF_PANORAMA_HEIGHT = 800;
 	private static final double DEF_SAMPLE_SIZE = 1.0;
+	private static final double DEF_ANGLE = 0.0;
 	
 	private Property width;
 	private Property height;
 	private Property sampleSize;
+	private Property angle;
 	private static float orientation;
-	private static float angle;
 	
 	public CylindricalSettings()
 	{
-		width = config.get("cylindrical", "width", DEF_PANORAMA_WIDTH);
-		height = config.get("cylindrical", "height", DEF_PANORAMA_HEIGHT);
-		sampleSize = config.get("cylindrical", "samplesize", DEF_SAMPLE_SIZE);
+		String category = "cylindrical";
+		
+		width = config.get(category, "width", DEF_PANORAMA_WIDTH);
+		height = config.get(category, "height", DEF_PANORAMA_HEIGHT);
+		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
+		angle = config.get(category, "angle", DEF_ANGLE);
 	}
 	
 	public CylindricalSettings(float playerRotation)
 	{
 		this();
 		orientation = ((playerRotation % 360) + 360) % 360;
-		angle = 0;
 	}
+	
+	/* properties */
 	
 	public int getWidth()
 	{
@@ -67,6 +72,18 @@ public class CylindricalSettings
 		sampleSize.set(size);
 	}
 	
+	public float getAngle()
+	{
+		return (float)angle.getDouble(DEF_ANGLE);
+	}
+	public void setAngle(float angle)
+	{
+		this.angle.set(angle);
+	}
+	
+	
+	/* non-properties */
+	
 	public float getOrientation()
 	{
 		return orientation;
@@ -75,15 +92,4 @@ public class CylindricalSettings
 	{
 		CylindricalSettings.orientation = orientation;
 	}
-	
-	public float getAngle()
-	{
-		return angle;
-	}
-	public void setAngle(float angle)
-	{
-		CylindricalSettings.angle = angle;
-	}
-	
-	
 }

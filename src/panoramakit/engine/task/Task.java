@@ -3,7 +3,7 @@
  */
 package panoramakit.engine.task;
 
-import panoramakit.mod.PanoramaKit;
+import panoramakit.engine.util.ChatPrinter;
 
 /**
  * Task
@@ -12,7 +12,7 @@ import panoramakit.mod.PanoramaKit;
  */
 public abstract class Task
 {
-	private boolean silent = false;
+	protected ChatPrinter chat = new ChatPrinter();
 	
 	/**
 	 * Initalizes the task at the moment it ends up first in the tasklist. This allows things to be
@@ -92,17 +92,7 @@ public abstract class Task
 	 */
 	public void setSilent()
 	{
-		silent = true;
-	}
-	
-	/**
-	 * Attempts to send a message to the chat, but fails if this task has been silenced.
-	 */
-	public void printChat(String msg, Object... params) {
-		if(!silent)
-		{
-			PanoramaKit.instance.printChat(msg, params);
-		}
+		chat.setSilent();
 	}
 	
 }

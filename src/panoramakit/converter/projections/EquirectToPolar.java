@@ -24,13 +24,13 @@ public class EquirectToPolar extends PositionMapper
 	
 	public boolean invert;
 	
-	public EquirectToPolar(PositionMapper preProjection, boolean type) throws Exception
+	public EquirectToPolar(PositionMapper preProjection, boolean type)
 	{
 		super(preProjection, new FlatSampler());
 		invert = type;
 	}
 	
-	public EquirectToPolar(boolean type) throws Exception
+	public EquirectToPolar(boolean type)
 	{
 		this(null, type);
 	}

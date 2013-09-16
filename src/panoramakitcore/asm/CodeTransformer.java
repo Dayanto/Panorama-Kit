@@ -4,7 +4,7 @@
 package panoramakitcore.asm;
 
 import static org.objectweb.asm.Opcodes.ASM4;
-import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.IFNE;
 import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import java.util.Iterator;
 import org.objectweb.asm.ClassReader;
@@ -62,7 +62,7 @@ public class CodeTransformer implements IClassTransformer
 					
 					InsnList customInstrList = new InsnList();
 					customInstrList.add(new MethodInsnNode(INVOKESTATIC, "panoramakitcore/CoreStates", "isRendering", "()Z"));
-					customInstrList.add(new JumpInsnNode(IFEQ, jumpTo));
+					customInstrList.add(new JumpInsnNode(IFNE, jumpTo));
 					mn.instructions.insertBefore(instruction, customInstrList);
 					break;
 				}

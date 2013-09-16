@@ -39,6 +39,16 @@ public class PreviewRenderer
 		return new File(PanoramaKit.instance.getTempRenderDir(), "Preview.png");
 	}
 	
+	
+	
+	public void clearPreview()
+	{
+		File preview = getPreviewFile();
+		if(preview.exists()) {
+			preview.delete();
+		}
+	}
+	
 	public boolean previewAvailable()
 	{
 		if(getPreviewFile().exists()) {
@@ -50,7 +60,7 @@ public class PreviewRenderer
 		return false;
 	}
 	
-	public boolean loadPreview()
+	private boolean loadPreview()
 	{
 		try {
 			image = ImageIO.read(getPreviewFile());
@@ -60,14 +70,6 @@ public class PreviewRenderer
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
-		}
-	}
-	
-	public void clearPreview()
-	{
-		File preview = getPreviewFile();
-		if(preview.exists()) {
-			preview.delete();
 		}
 	}
 
@@ -81,8 +83,9 @@ public class PreviewRenderer
 			if(!successful) return;
 		}
 		double ratio = (double) image.getWidth() / (double) image.getHeight();
-		int imageWidth = ratio > 1 ? width : (int)(width / ratio);
-		int imageHeight = ratio < 1 ? height : (int)(height / ratio);
+		double boxRatio = (double) width / (double) height;
+		int imageWidth = ratio > boxRatio ? width : (int)(width * ratio);
+		int imageHeight = ratio < boxRatio ? height : (int)(height / ratio);
 		drawImage(xPos + (width - imageWidth) / 2, yPos + (height - imageHeight) / 2, imageWidth, imageHeight);
 	}
 	

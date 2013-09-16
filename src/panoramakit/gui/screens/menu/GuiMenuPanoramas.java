@@ -4,24 +4,30 @@
 package panoramakit.gui.screens.menu;
 
 import java.util.ArrayList;
-import panoramakit.gui.screens.settings.GuiSettingsCylindrical;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import panoramakit.gui.screens.settings.GuiSettingsCylindrical;
+import panoramakit.gui.screens.settings.GuiSettingsEquirect;
+import panoramakit.gui.screens.settings.GuiSettingsStereographic;
+import panoramakit.gui.screens.settings.GuiSettingsCubic;
 
 /** 
  * @author dayanto
  */
 public class GuiMenuPanoramas extends GuiScreen
-{	
-	public String screenTitle = "Panorama Types";
-	public String screenLabel = "Panorama Images...";
+{		
 	public static ArrayList<Class<GuiScreen>> menuLinks = new ArrayList<Class<GuiScreen>>();
 	
 	static
 	{
+		addMenuLink(GuiSettingsCubic.class);
 		addMenuLink(GuiSettingsCylindrical.class);
-		//addMenuLink(GuiScreenEquirect.class);
+		addMenuLink(GuiSettingsEquirect.class);
+		addMenuLink(GuiSettingsStereographic.class);
 	}
+	
+	public String screenTitle = "Panorama Types";
+	public String screenLabel = "Panorama Images...";
 	
 	/**
 	 * Adds the buttons (and other controls) to the screen in question.

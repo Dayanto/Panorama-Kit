@@ -10,31 +10,28 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public class EquirectSettings
+public class CubicSettings
 {
 	private final PanoramaKit pk = PanoramaKit.instance;
 	
 	private final Configuration config = pk.getConfig();
 	
 	private static final int DEF_RESOLUTION = 500;
-	private static final double DEF_SAMPLE_SIZE = 1.0;
 	private static final double DEF_ANGLE = 0.0;
 	
 	private Property resolution;
-	private Property sampleSize;
 	private Property angle;
 	private static float orientation;
 	
-	public EquirectSettings()
+	public CubicSettings()
 	{
-		String category = "equirect";
+		String category = "cubic";
 		
 		resolution = config.get(category, "resolution", DEF_RESOLUTION);
-		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
 		angle = config.get(category, "angle", DEF_ANGLE);
 	}
 	
-	public EquirectSettings(float playerRotation)
+	public CubicSettings(float playerRotation)
 	{
 		this();
 		orientation = ((playerRotation % 360) + 360) % 360;
@@ -49,16 +46,6 @@ public class EquirectSettings
 	public void setResolution(int resolution)
 	{
 		this.resolution.set(resolution);
-	}
-	
-	
-	public float getSampleSize()
-	{
-		return (float)sampleSize.getDouble(DEF_SAMPLE_SIZE);
-	}
-	public void setSampleSize(float size)
-	{
-		sampleSize.set(size);
 	}
 	
 	public float getAngle()
@@ -79,6 +66,6 @@ public class EquirectSettings
 	}
 	public void setOrientation(float orientation)
 	{
-		EquirectSettings.orientation = orientation;
+		CubicSettings.orientation = orientation;
 	}
 }

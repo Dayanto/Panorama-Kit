@@ -24,8 +24,8 @@ public class ZipTask extends ThreadedTask
 	@Override
 	public void performThreaded() throws Exception
 	{
-		printChat("Zipping...");
+		chat.print("Zipping...");
 		Zipper.zipFolder(folder, zipFile);
-		printChat("Done zipping!");
+		chat.print("Done zipping!");
 	}
 }

@@ -23,8 +23,8 @@ public class GuiScreenProgress extends GuiScreen
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0, width / 2 - 84, 126, "Stop All"));
-		buttonList.add(new GuiButton(1, width / 2 - 84, 150, "Back"));
+		buttonList.add(new GuiButton(0, width / 2 - 100, 126, "Stop All"));
+		buttonList.add(new GuiButton(1, width / 2 - 100, 150, "Back"));
 	}
 	
 	/**

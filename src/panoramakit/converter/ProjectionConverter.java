@@ -175,4 +175,12 @@ public class ProjectionConverter
 	{
 		stop = true;
 	}
+	
+	/**
+	 * Retrieves the name of the image being saved.
+	 */
+	public String getImageName()
+	{
+		return new File(imagePathOutput).getName();
+	}
 }

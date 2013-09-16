@@ -3,6 +3,7 @@
  */
 package panoramakit.gui.screens.settings;
 
+import java.io.File;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -12,6 +13,7 @@ import net.minecraftforge.common.Configuration;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomButton;
 import panoramakit.gui.menuitems.GuiCustomTextField;
+import panoramakit.gui.menuitems.HoverTips;
 import panoramakit.mod.PanoramaKit;
 
 /** 
@@ -31,6 +33,8 @@ public abstract class GuiScreenSettings extends GuiScreen
 	
 	// disables all input if the user is browsing for files.
 	protected boolean disableInput = false;
+	
+	protected String tipMessage = "";
 	
 	public GuiScreenSettings(String screenLabel) {
 		this.screenLabel = screenLabel;
@@ -53,6 +57,9 @@ public abstract class GuiScreenSettings extends GuiScreen
 	@Override
 	protected void keyTyped(char character, int keyCode)
 	{
+		// make sure it's always possible to escape out of a menu that lacks a back button
+		super.keyTyped(character, keyCode);
+		
 		if (textFieldList.isEmpty()) {
 			return;
 		}
@@ -152,6 +159,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 		for (GuiCustomTextField textfield : textFieldList) {
 			textfield.drawTextBox();
 		}
+		
 		super.drawScreen(x, y, z);
 		
 		// display an overlay if we're about to render a preview (it stays on the screen while it's rendering)
@@ -182,6 +190,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 			// increments the counter that makes the cursor blink
 			textfield.updateCursorCounter();
 		}
+		updateTipMessage();
 	}
 	
 	/**
@@ -208,5 +217,34 @@ public abstract class GuiScreenSettings extends GuiScreen
 	public String toString()
 	{
 		return screenLabel;
+	}
+	
+	protected void updateTipMessage()
+	{
+		for(Object button : buttonList) {
+			if(button instanceof HoverTips && ((HoverTips)button).isHovered()){
+				tipMessage = ((HoverTips)button).getTipMessage();
+				return;
+			}
+		}
+		
+		for(GuiCustomTextField textfield : textFieldList) {
+			if(textfield instanceof HoverTips && ((HoverTips)textfield).isHovered()){
+				tipMessage = ((HoverTips)textfield).getTipMessage();
+				return;
+			}
+		}
+		
+		tipMessage = "";
+	}
+	
+	public File increment(File file)
+	{
+		return null;
+	}
+	
+	public File date(File file)
+	{
+		return null;
 	}
 }

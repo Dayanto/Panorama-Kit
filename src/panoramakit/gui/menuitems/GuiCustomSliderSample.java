@@ -11,9 +11,9 @@ import panoramakit.gui.screens.settings.GuiScreenSettings;
 public class GuiCustomSliderSample extends GuiCustomSlider
 {
 	
-	public GuiCustomSliderSample(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, float min, float max, float step, float value)
+	public GuiCustomSliderSample(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, String tipMessage, float min, float max, float step, float value)
 	{
-		super(id, x, y, settingsScreen, baseString, min, max, step, value);
+		super(id, x, y, settingsScreen, baseString, tipMessage, min, max, step, value);
 	}
 	
 	public void updateDisplayString() 

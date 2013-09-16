@@ -22,23 +22,23 @@ public class CubicToEquirect extends PositionMapper
 {
 	int resolution = -1;
 	
-	public CubicToEquirect(PositionMapper preProjection) throws Exception
+	public CubicToEquirect(PositionMapper preProjection)
 	{
 		super(preProjection, new CubicSampler());
 	}
 	
-	public CubicToEquirect() throws Exception
+	public CubicToEquirect()
 	{
 		this(null);
 	}
 	
-	public CubicToEquirect(PositionMapper preProjection, int newResolution) throws Exception
+	public CubicToEquirect(PositionMapper preProjection, int newResolution)
 	{
 		this(preProjection);
 		resolution = newResolution;
 	}
 	
-	public CubicToEquirect(int newResolution) throws Exception
+	public CubicToEquirect(int newResolution)
 	{
 		this(null, newResolution);
 	}
@@ -50,34 +50,33 @@ public class CubicToEquirect extends PositionMapper
 		x += 0.5;
 		y += 0.5;
 		
-		double pieceSize = inputWidth / 4; // The height and width of any of the faces on the cube.
+		// the height and width of any of the faces on the cube in the outputImage.
+		double inPieceSize = inputWidth / 4;
+		double outPieceSize = outputWidth / 4; 
 		
-		double halfPieceSize = pieceSize / 2;
-		double radius = pieceSize / 2;
+		double radius = inPieceSize / 2;
 		
 		// offset the image to place the center of the cross in the center of the image
-		x -= halfPieceSize;
+		x -= outPieceSize / 2;
 		// make sure it stays within the original range
-		x = (x + outputWidth) % outputWidth;
+		x = (x + inputWidth) % inputWidth;
 		
-		int cardinalDirection = (int) Math.floor(x / pieceSize) % 4 - 1;
+		int cardinalDirection = (int) Math.floor(x / outPieceSize) % 4;
 		
-		double xCenteredLocal = (x % pieceSize) - halfPieceSize;
-		double yCentered = y - pieceSize;
+		double xCenteredLocal = (x % outPieceSize) - outPieceSize / 2;
+		double yCentered = y - outPieceSize;
 		
-		// The angles are calculated by dividing the distance in pixels by the
-		// circumferance in pixels and then converting to radians.
-		double horizontalAngle = xCenteredLocal * ((2 * Math.PI) / inputWidth);
-		double verticalAngle = yCentered * ((2 * Math.PI) / inputWidth);
+		// in equirectangular panoramas, the position directly corresponds to the current angle. (longitude & latitude, yaw & pitch, etc.)
+		double horizontalAngle = xCenteredLocal * ((2 * Math.PI) / outputWidth);
+		double verticalAngle = yCentered * ((2 * Math.PI) / outputWidth);
 		
-		// The trigonometric calculations used are pre-calculated to save some
-		// time. They are a quite time consuming part of the code.
+		// the trigonometric calculations used are pre-calculated to save some time
 		double sinHorizontal = Math.sin(horizontalAngle);
 		double cosHorizontal = Math.cos(horizontalAngle);
 		double tanHorizontal = sinHorizontal / cosHorizontal; // Math.tan(horizontalAngle); This is purely for optimization.
 		double tanVertical = Math.tan(verticalAngle);
 		
-		// The calculations are based on the idea of a sphere inside of a cube and following the straight lines
+		// the calculations are based on the idea of a sphere inside of a cube and following the straight lines
 		// from the center through the sphere and to the matching point on the outside cube.
 		
 		// Calculate the relative position from the equator.
@@ -85,8 +84,8 @@ public class CubicToEquirect extends PositionMapper
 		double y1 = tanVertical * radius / cosHorizontal;
 		
 		// Apply offsets to get the absolute position.
-		x1 = (x1 + pieceSize * 1.5 + (pieceSize * cardinalDirection)) % inputWidth;
-		y1 = y1 + pieceSize * 1.5;
+		x1 = (x1 + inPieceSize / 2 + (inPieceSize * cardinalDirection)) % inputWidth;
+		y1 = y1 + inPieceSize * 1.5;
 		
 		// adjust from position to pixel index
 		x1 -= 0.5;
@@ -94,11 +93,10 @@ public class CubicToEquirect extends PositionMapper
 		
 		Position equator = new Position(x1, y1);
 		
-		if (pieceSize <= Math.round(equator.y) && Math.round(equator.y) < pieceSize * 2) {
+		if (inPieceSize <= Math.round(equator.y) && Math.round(equator.y) < inPieceSize * 2) {
 			return equator;
 		} else {
-			// Which pole we're at currently. Represents a value of 1 or -1 where -1 is the pole on top and 1 is the one on the bottom.
-			// Since
+			// Which pole we're at currently. Represents a value of 1 or -1 where -1 is the pole on top and 1 is the one on the bottom. Since
 			// 1 doesn't change anything when multiplied, all calculations will be based off of the bottom pole and flipped for the top.
 			int hemisphere = (int) (verticalAngle / Math.abs(verticalAngle));
 			
@@ -107,13 +105,13 @@ public class CubicToEquirect extends PositionMapper
 			double x2 = -cosHorizontal * distanceFromCenter;
 			double y2 = -sinHorizontal * distanceFromCenter * hemisphere;
 			
-			Position temp = rotate(x2, y2, (cardinalDirection + 1) * hemisphere);
+			Position temp = rotate(x2, y2, cardinalDirection * hemisphere);
 			x2 = temp.x;
 			y2 = temp.y;
 			
 			// Apply offsets to get the actual position in pixels.
-			x2 = x2 + pieceSize * 1.5;
-			y2 = y2 + pieceSize * 1.5 + (hemisphere * pieceSize);
+			x2 = x2 + inPieceSize * 1.5;
+			y2 = y2 + inPieceSize * 1.5 + (hemisphere * inPieceSize);
 			
 			// adjust from position to pixel index
 			x2 -= 0.5;

@@ -14,12 +14,12 @@ import panoramakit.converter.samplers.FlatSampler;
  */
 public class EquirectToMollweide extends PositionMapper
 {
-	public EquirectToMollweide(PositionMapper preProjection) throws Exception
+	public EquirectToMollweide(PositionMapper preProjection)
 	{
 		super(preProjection, new FlatSampler());
 	}
 	
-	public EquirectToMollweide() throws Exception
+	public EquirectToMollweide()
 	{
 		this(null);
 	}

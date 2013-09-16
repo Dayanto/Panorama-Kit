@@ -20,7 +20,7 @@ import panoramakit.gui.screens.settings.GuiScreenSettings;
  * 
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class GuiCustomSlider extends GuiButton
+public class GuiCustomSlider extends GuiButton implements HoverTips
 {
 	private GuiScreenSettings settingsScreen;
 	
@@ -32,15 +32,18 @@ public class GuiCustomSlider extends GuiButton
 	protected float max;
 	protected float step;
 	protected String baseString;
+	protected String tipMessage;
 	
+	public boolean hovered = false;
 	public boolean dragged = false;
 	
-	public GuiCustomSlider(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, float min, float max, float step, float value)
+	public GuiCustomSlider(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, String tipMessage, float min, float max, float step, float value)
 	{
 		super(id, x, y, 150, 20, null);
 		
 		this.settingsScreen = settingsScreen;
 		this.baseString = baseString;
+		this.tipMessage = tipMessage;
 		
 		this.min = min;
 		this.max = max;
@@ -50,13 +53,13 @@ public class GuiCustomSlider extends GuiButton
 	}
 	
 	@Override
-	public void drawButton(Minecraft par1Minecraft, int par2, int par3)
+	public void drawButton(Minecraft par1Minecraft, int mouseX, int mouseY)
 	{
 		if (drawButton && displayString == null) {
 			updateDisplayString();
 		}
 		
-		super.drawButton(par1Minecraft, par2, par3);
+		super.drawButton(par1Minecraft, mouseX, mouseY);
 	}
 	
 	/**
@@ -143,5 +146,18 @@ public class GuiCustomSlider extends GuiButton
 	public void updateDisplayString()
 	{
 		displayString = String.format(baseString + ": %.1f", getValue());
+	}
+	
+	@Override
+	public String getTipMessage()
+	{
+		return tipMessage;
+	}
+	
+	@Override
+	public boolean isHovered()
+	{
+		if(!enabled) return false;
+		return field_82253_i; // field_82253_i translates to "isHovered"
 	}
 }

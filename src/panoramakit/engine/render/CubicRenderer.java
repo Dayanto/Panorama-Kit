@@ -44,11 +44,25 @@ public class CubicRenderer extends CompositeImageRenderer
 		
 		float radianMultiplier = (float) (2 * Math.PI / 360);
 		
+		/* we want the center to be in the middle of the image, so we need to rotate the starting point 180 degrees */
+		//float orientation = this.orientation - 180;  
+		
 		// render the middle row
 		for (int i = 0; i < 4; i++) {
 			float yaw = (i - 1) * 90;
 			float pitch = -angle * MathHelper.cos(yaw * radianMultiplier);
 			float roll = angle * MathHelper.sin(yaw * radianMultiplier);
+			
+			if (pitch > 90) {
+				pitch = 180 - pitch;
+				yaw += 180;
+				roll += 180;
+			}
+			if (pitch < -90) {
+				pitch = -180 - pitch;
+				yaw += 180;
+				roll += 180;
+			}
 			rotatePlayer(yaw + orientation, pitch, roll);
 			int[] screenshot = captureScreenshot();
 			image.setRGB(i * resolution, resolution, resolution, resolution, screenshot, 0, resolution);
@@ -59,6 +73,8 @@ public class CubicRenderer extends CompositeImageRenderer
 			float yaw = orientation;
 			float pitch = (i - 1) * 90 - angle;
 			float roll = 0;
+			
+			pitch = (pitch + 180) % 360 - 180; // cap it to the -180 to + 180 range
 			
 			if (pitch > 90) {
 				pitch = 180 - pitch;
@@ -84,6 +100,7 @@ public class CubicRenderer extends CompositeImageRenderer
 				file.createNewFile();
 			}
 			ImageIO.write(image, "png", file);
+			chat.print("panoramakit.saveimage", file.getName());
 		} else {
 			imageLink.setImage(image);
 		}

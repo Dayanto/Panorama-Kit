@@ -21,21 +21,15 @@ import panoramakit.converter.samplers.FlatSampler;
 
 public class EquirectToStereographic extends PositionMapper
 {
-	public static final boolean PLANET = true;
-	public static final boolean WELL = false;
-	
-	public boolean invert;
 	public double scale;
 	
 	public boolean customResolution;
 	public int newWidth;
 	public int newHeight;
 	
-	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView, int newWidth, int newHeight)
-			throws Exception
+	public EquirectToStereographic(PositionMapper preProjection, double fieldOfView, int newWidth, int newHeight)
 	{
 		super(preProjection, new FlatSampler());
-		invert = type;
 		scale = Math.tan(fieldOfView / 2 * (Math.PI / 180));
 		
 		customResolution = true;
@@ -43,21 +37,20 @@ public class EquirectToStereographic extends PositionMapper
 		this.newHeight = newHeight;
 	}
 	
-	public EquirectToStereographic(PositionMapper preProjection, boolean type, double fieldOfView) throws Exception
+	public EquirectToStereographic(double fieldOfView, int newWidth, int newHeight)
 	{
-		this(preProjection, type, fieldOfView, 0, 0);
+		this(null, fieldOfView, newWidth, newHeight);
+	}
+	
+	public EquirectToStereographic(PositionMapper preProjection, double fieldOfView)
+	{
+		this(preProjection, fieldOfView, 0, 0);
 		customResolution = false;
 	}
 	
-	public EquirectToStereographic(boolean type, double fieldOfView, int newWidth, int newHeight) throws Exception
+	public EquirectToStereographic(double fieldOfView)
 	{
-		this(null, type, fieldOfView, newWidth, newHeight);
-	}
-	
-	public EquirectToStereographic(boolean type, double fieldOfView) throws Exception
-	{
-		this(null, type, fieldOfView, 0, 0);
-		customResolution = false;
+		this(null, fieldOfView);
 	}
 	
 	@Override
@@ -103,6 +96,8 @@ public class EquirectToStereographic extends PositionMapper
 		y = y - outputHeight / 2;
 		
 		double angle = Math.atan2(y, x);
+		
+		// calculate the distance to the center of the image
 		double radius;
 		if (Math.abs(x) > Math.abs(y)) {
 			radius = x / Math.cos(angle);
@@ -118,17 +113,18 @@ public class EquirectToStereographic extends PositionMapper
 		
 		double relativeX = inputWidth * (angle / (2 * Math.PI));
 		
-		double xOut = -relativeX + (inputWidth / 2);
+		double xOut = relativeX + (inputWidth / 2);
 		double yOut = radius2;
 		
 		if (yOut > inputHeight) {
 			yOut = inputHeight;
 		}
 		
-		if (invert) {
-			yOut = inputHeight - yOut;
-			xOut = inputWidth - xOut;
-		}
+		yOut = inputHeight - yOut;
+		xOut = inputWidth - xOut;
+		
+		// straighten it up (not sure why this is necessary, but it's a solution)
+		xOut = (xOut + inputWidth / 4) % inputWidth;
 		
 		// adjust from position to pixel index
 		x -= 0.5;

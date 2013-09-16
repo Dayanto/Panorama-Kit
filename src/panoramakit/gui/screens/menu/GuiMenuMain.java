@@ -7,21 +7,23 @@ import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import panoramakit.gui.screens.settings.GuiSettingsBackground;
 
 /** 
  * @author dayanto
  */
 public class GuiMenuMain extends GuiScreen
 {
-	public String screenTitle = "Panorama Kit";
 	public static ArrayList<Class<GuiScreen>> menuLinks = new ArrayList<Class<GuiScreen>>();
-	private Minecraft mc = Minecraft.getMinecraft();
 	
 	static
 	{
-//		addMenuLink(GuiScreenBackground.class);
+		addMenuLink(GuiSettingsBackground.class);
 		addMenuLink(GuiMenuPanoramas.class);
 	}
+	
+	private Minecraft mc = Minecraft.getMinecraft();
+	public String screenTitle = "Panorama Kit";
 	
 	/**
 	 * Adds the buttons (and other controls) to the screen in question.

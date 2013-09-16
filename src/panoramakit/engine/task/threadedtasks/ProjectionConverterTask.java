@@ -19,9 +19,11 @@ public class ProjectionConverterTask extends ThreadedTask
 	@Override
 	public void performThreaded() throws Exception
 	{
-		printChat("panoramakit.process", GameSettings.getKeyDisplayString(MenuKeyHandler.MENU_KEY.keyCode));
+		chat.print("panoramakit.process", GameSettings.getKeyDisplayString(MenuKeyHandler.MENU_KEY.keyCode));
 		projectionConverter.setProgressTracker(progressTracker);
 		projectionConverter.convert();
+		chat.print("panoramakit.saveimage", projectionConverter.getImageName());
+		
 	}
 	
 	@Override

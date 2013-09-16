@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MouseHelper;
 import panoramakit.engine.accessor.EntityRendererAccessor;
+import panoramakit.engine.util.ChatPrinter;
 import panoramakit.engine.util.LockableMouseHelper;
 
 /**
@@ -46,6 +47,8 @@ public abstract class CompositeImageRenderer
 	
 	protected ImageLink imageLink;
 	
+	protected ChatPrinter chat;
+	
 	public CompositeImageRenderer(int screenshotWidth, int screenshotHeight)
 	{
 		this.screenshotWidth = screenshotWidth;
@@ -59,13 +62,20 @@ public abstract class CompositeImageRenderer
 		this.imageLink = imageLink;
 	}
 	
+	/** 
+	 * Enables the ability to print messages to chat. It can however also be silenced afterwards. 
+	 */
+	public void setChatPrinter(ChatPrinter chat)
+	{
+		this.chat = chat;
+	}
+	
 	public final void render() throws IOException
 	{ // store the game resolution
 //		displayWidth = mc.displayWidth;
 //		displayHeight = mc.displayHeight;
 //
-//		// calculate the optimal resolution not greater than the window size (to
-//		// avoid excess rendering)
+//		// calculate the optimal resolution not greater than the window size (to avoid excess rendering)
 //		double tilesX = Math.ceil((double) screenshotWidth / (double) displayWidth);
 //		double tilesY = Math.ceil((double) screenshotHeight / (double) displayHeight);	
 //		renderWidth = (int) Math.ceil(screenshotWidth / tilesX);

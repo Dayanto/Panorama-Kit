@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import panoramakit.engine.task.TaskManager;
-import panoramakit.gui.screens.GuiMenuMain;
+import panoramakit.gui.screens.menu.GuiMenuMain;
 import panoramakit.gui.screens.GuiScreenProgress;
 
 /**
@@ -20,8 +20,8 @@ import panoramakit.gui.screens.GuiScreenProgress;
  */
 public class MenuKeyHandler extends KeyHandler
 {
-	private static final KeyBinding MENU_KEY = new KeyBinding("key.panoramakit.menu", Keyboard.KEY_P);
-	private static final KeyBinding RENDER_KEY = new KeyBinding("key.panoramakit.rendertest", Keyboard.KEY_K);
+	public static final KeyBinding MENU_KEY = new KeyBinding("key.panoramakit.menu", Keyboard.KEY_P);
+	public static final KeyBinding RENDER_KEY = new KeyBinding("key.panoramakit.rendertest", Keyboard.KEY_K);
 	private static final KeyBinding[] KEYS = new KeyBinding[] { MENU_KEY, RENDER_KEY };
 	private static final boolean[] REPEAT = new boolean[] { false, false };
 	

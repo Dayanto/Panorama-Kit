@@ -15,12 +15,12 @@ import panoramakit.converter.samplers.FlatSampler;
 
 public class EquirectToEckerIV extends PositionMapper
 {
-	public EquirectToEckerIV(PositionMapper preProjection) throws Exception
+	public EquirectToEckerIV(PositionMapper preProjection)
 	{
 		super(preProjection, new FlatSampler());
 	}
 	
-	public EquirectToEckerIV() throws Exception
+	public EquirectToEckerIV()
 	{
 		this(null);
 	}

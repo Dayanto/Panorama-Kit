@@ -11,13 +11,13 @@ import panoramakit.converter.samplers.FlatSampler;
  * 
  * @author dayanto
  */
-public class EquirectToPanorama extends PositionMapper
+public class EquirectToCylindrical extends PositionMapper
 {
 	public boolean customResolution;
 	public int newWidth;
 	public int newHeight;
 	
-	public EquirectToPanorama(PositionMapper preProjection, int newWidth, int newHeight) throws Exception
+	public EquirectToCylindrical(PositionMapper preProjection, int newWidth, int newHeight)
 	{
 		super(preProjection, new FlatSampler());
 		
@@ -26,18 +26,18 @@ public class EquirectToPanorama extends PositionMapper
 		this.newHeight = newHeight;
 	}
 	
-	public EquirectToPanorama(PositionMapper preProjection) throws Exception
+	public EquirectToCylindrical(PositionMapper preProjection)
 	{
 		this(preProjection, 0, 0);
 		customResolution = false;
 	}
 	
-	public EquirectToPanorama(int newWidth, int newHeight) throws Exception
+	public EquirectToCylindrical(int newWidth, int newHeight)
 	{
 		this(null, newWidth, newHeight);
 	}
 	
-	public EquirectToPanorama() throws Exception
+	public EquirectToCylindrical()
 	{
 		this(null, 0, 0);
 		customResolution = false;
