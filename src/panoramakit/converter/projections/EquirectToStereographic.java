@@ -21,7 +21,7 @@ import panoramakit.converter.samplers.FlatSampler;
 
 public class EquirectToStereographic extends PositionMapper
 {
-	public double scale;
+	public double relativeViewPlaneSize;
 	
 	public boolean customResolution;
 	public int newWidth;
@@ -30,7 +30,7 @@ public class EquirectToStereographic extends PositionMapper
 	public EquirectToStereographic(PositionMapper preProjection, double fieldOfView, int newWidth, int newHeight)
 	{
 		super(preProjection, new FlatSampler());
-		scale = Math.tan(fieldOfView / 2 * (Math.PI / 180));
+		relativeViewPlaneSize = Math.tan(fieldOfView / 2 * (Math.PI / 180));
 		
 		customResolution = true;
 		this.newWidth = newWidth;
@@ -85,6 +85,9 @@ public class EquirectToStereographic extends PositionMapper
 		return true;
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public Position getProjectedPosition(double x, double y)
 	{
@@ -95,26 +98,41 @@ public class EquirectToStereographic extends PositionMapper
 		x = x - outputWidth / 2;
 		y = y - outputHeight / 2;
 		
-		double angle = Math.atan2(y, x);
+		double polarAngle = Math.atan2(y, x);
 		
 		// calculate the distance to the center of the image
-		double radius;
+		double distanceToCenter; // 
 		if (Math.abs(x) > Math.abs(y)) {
-			radius = x / Math.cos(angle);
+			distanceToCenter = x / Math.cos(polarAngle);
 		} else {
-			radius = y / Math.sin(angle);
+			distanceToCenter = y / Math.sin(polarAngle);
 		}
 		
-		double scalelessRadius = radius / outputHeight;
-		double width = scale * scalelessRadius;
+		// the distance of the current pixel to the center of the image expressed in units of half the image height
+		double relativeDistanceToCenter = distanceToCenter / (outputHeight / 2);
 		
-		double angle2 = Math.atan(width);
-		double radius2 = (angle2 * 2 * inputHeight / Math.PI);
+		/* The view plane (whose relative size was pre-calculated) represents an infinite plane tangent to the equirectangular
+		 * panorama (that we're sampling from) when it's bent along the y-axis as a quarter-circle and then rotated around a 
+		 * point (think of the polar coordinates filter in Photoshop), forming a dome. */
 		
-		double relativeX = inputWidth * (angle / (2 * Math.PI));
+		/* The relative size of the view plane is calculated based off of the field of view and is defined as a multiple of it's 
+		 * vertical size when the field of view is 90 degrees. */
+		
+		double planarRadius = relativeViewPlaneSize * relativeDistanceToCenter;
+		
+		// If we imagine the equirectangular panorama as a dome with an infinite plane on top, this is the vertical angle that
+		// you would get if a position on the plane was projected through the dome towards it's center point.
+		double domeVerticalAngle = Math.atan(planarRadius);
+		
+		// Map the angle of the view to the y coordinate of the equirectangular panorama. The equirectangular panorama normally
+		// represents 180 degrees vertically, but in order to cause the planet-like effect we shrink it to 90 degrees. However,
+		// since we're mapping in reverse, we stretch the sampled position to the double instead.
+		double equirectangularYPos = (2 * domeVerticalAngle * (inputHeight / Math.PI));
+		
+		double relativeX = inputWidth * (-polarAngle / (2 * Math.PI)); // it's minus because the angle counts counter-clockwise
 		
 		double xOut = relativeX + (inputWidth / 2);
-		double yOut = radius2;
+		double yOut = equirectangularYPos;
 		
 		if (yOut > inputHeight) {
 			yOut = inputHeight;
@@ -123,8 +141,8 @@ public class EquirectToStereographic extends PositionMapper
 		yOut = inputHeight - yOut;
 		xOut = inputWidth - xOut;
 		
-		// straighten it up (not sure why this is necessary, but it's a solution)
-		xOut = (xOut + inputWidth / 4) % inputWidth;
+		// rotate it 90 degrees to straighten it up (not sure why this is necessary, but it's a solution)
+		xOut = ((xOut - inputWidth / 4) % inputWidth + inputWidth) % inputWidth;
 		
 		// adjust from position to pixel index
 		x -= 0.5;
