@@ -38,7 +38,7 @@ public class GuiSettingsBackground extends GuiScreenSettings
 	{
 		drawDefaultBackground();
 		drawCenteredString(fontRenderer, "Placeholder menu", width / 2, height / 2 - 24, 0xa0a0a0);
-		drawCenteredString(fontRenderer, "Backgrounds will be added following Minecraft 1.7", width / 2, height / 2 - 12, 0xa0a0a0);
+		drawCenteredString(fontRenderer, "Backgrounds will be added following the release of Minecraft 1.7", width / 2, height / 2 - 12, 0xa0a0a0);
 		super.drawScreen(x, y, z);
 	}
 	

@@ -125,8 +125,8 @@ public abstract class CompositeImageRenderer
 		// mc.gameSettings.advancedOpengl = false;
 		
 		// change the field of view to a quarter circle (90 degrees)
-		fieldOfView = mc.gameSettings.fovSetting;
-		mc.gameSettings.fovSetting = (90F - 70F) / (110F - 70F); // fov 90 adjusted to a 0-1.0 scale representing 70-110
+		fieldOfView = mc.gameSettings.fovSetting; 
+		mc.gameSettings.fovSetting = (90F / mc.thePlayer.getFOVMultiplier() - 70F) / (110F - 70F); // fov 90 adjusted to a 0-1.0 scale representing 70-110
 		
 		// save player rotation
 		this.yaw = mc.thePlayer.rotationYaw;

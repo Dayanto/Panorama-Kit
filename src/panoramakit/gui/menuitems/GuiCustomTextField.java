@@ -3,6 +3,7 @@
  */
 package panoramakit.gui.menuitems;
 
+import static org.lwjgl.input.Keyboard.*;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -20,6 +21,8 @@ public class GuiCustomTextField extends GuiTextField
 	protected int yPos;
 	protected int width;
 	protected int height;
+	
+	private static int[] specialCharacters = {KEY_ESCAPE,KEY_BACK,KEY_HOME,KEY_LEFT,KEY_RIGHT,KEY_END,KEY_DELETE};
 	
 	public GuiCustomTextField(FontRenderer fontRenderer, int id, int xPos, int yPos, int width, int height, boolean onlyNumbers)
 	{
@@ -40,13 +43,21 @@ public class GuiCustomTextField extends GuiTextField
 	@Override
 	public boolean textboxKeyTyped(char character, int keyCode)
 	{
-		if(onlyNumbers && !((character >= 48 && character <= 57) || character == '\b'))
+		boolean specialCharacter = false;		
+		for(int specialKeyCode : specialCharacters) {
+			if(specialKeyCode == keyCode){
+				specialCharacter = true;
+				break;
+			}
+		}
+		
+		if(onlyNumbers && !(character >= 48 && character <= 57) && !specialCharacter)
 		{
 			return false;
 		}
 		else
 		{
-			return super.textboxKeyTyped(character, keyCode);
+			return super.textboxKeyTyped(character, keyCode); 
 		}
 	}
 	

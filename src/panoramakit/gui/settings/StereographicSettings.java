@@ -20,7 +20,7 @@ public class StereographicSettings
 	private static final int DEF_PANORAMA_HEIGHT = 1080;
 	private static final double DEF_SAMPLE_SIZE = 1.0;
 	private static final double DEF_FIELD_OF_VIEW = 90.0;
-	private static final double DEF_ANGLE = 0.0;
+	private static final double DEF_ANGLE = 90.0;
 	
 	private Property width;
 	private Property height;
@@ -36,7 +36,7 @@ public class StereographicSettings
 		
 		width = config.get(category, "width", DEF_PANORAMA_WIDTH);
 		height = config.get(category, "height", DEF_PANORAMA_HEIGHT);
-		sampleSize = config.get(category, "sampleresolution", DEF_SAMPLE_SIZE);
+		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
 		fieldOfView = config.get(category, "fieldofview", DEF_FIELD_OF_VIEW);
 		angle = config.get(category, "angle", DEF_ANGLE);
 	}

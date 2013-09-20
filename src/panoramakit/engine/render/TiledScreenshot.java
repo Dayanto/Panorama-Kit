@@ -48,6 +48,10 @@ public class TiledScreenshot
 		screenshot = new int[fullWidth * fullHeight];
 		
 		camZoom = (double) fullHeight / (double) tileHeight;
+		
+		// if the zoom is 1.0, Minecraft ignores camera offsets, so... :/
+		if(camZoom == 1.0)
+			camZoom = 1.000000000001; 
 	}
 	
 	public void capture()
@@ -58,7 +62,6 @@ public class TiledScreenshot
 		
 		for (int tileOfsX = 0; tileOfsX < fullWidth; tileOfsX += tileWidth) {
 			for (int tileOfsY = 0; tileOfsY < fullHeight; tileOfsY += tileHeight)
-			// for (int tileOfsY = fullHeight - fullHeight % tileHeight; tileOfsY >= 0; tileOfsY -= tileHeight)
 			{
 				if (era != null) {
 					double camOfsX = fullWidth - tileWidth - tileOfsX * 2;
