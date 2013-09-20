@@ -151,10 +151,11 @@ public class GuiSettingsCubic extends GuiScreenSettings
 		{
 			L.info("Render cubic panorama");
 			
-			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Cubic.png").getPath();
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cubic.png");
+			renderFile = numberFile(renderFile);
 				
 			// create a cubic panorama
-			CubicRenderer renderer = new CubicRenderer(settings.getResolution(), filePath, settings.getOrientation(), settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(settings.getResolution(), renderFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			mc.displayGuiScreen(new GuiRenderNotice());
@@ -164,13 +165,13 @@ public class GuiSettingsCubic extends GuiScreenSettings
 		{
 			L.info("Render preview panorama");
 			
-			String filePath = PreviewRenderer.getPreviewFile().getPath();
+			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
 			int resolution = previewSize / 4;
 			
 			// create a cubic panorama
-			RenderTask renderTask = new RenderTask(new CubicRenderer(resolution, filePath, settings.getOrientation(), settings.getAngle() - 90));
+			RenderTask renderTask = new RenderTask(new CubicRenderer(resolution, previewFile, settings.getOrientation(), settings.getAngle()));
 			renderTask.setSilent();
 			TaskManager.instance.addTask(renderTask);
 			

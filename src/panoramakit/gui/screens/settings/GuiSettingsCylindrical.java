@@ -167,14 +167,15 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		{
 			L.info("Render cylindrical panorama");
 			
-			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Cylindrical.png").getPath();
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cylindrical.png");
+			renderFile = numberFile(renderFile);
 			
 			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), settings.getWidth(), settings.getHeight());;
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);;
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
 			
 			// create a cubic base image
 			int sampleResolution = (int) (settings.getWidth() / 4 * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -192,7 +193,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		{
 			L.info("Render preview panorama");
 			
-			String filePath = PreviewRenderer.getPreviewFile().getPath();
+			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
 			double fullWidth = settings.getWidth();
@@ -204,7 +205,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			ProjectionConverter converter;
 			try {
 				panorama = new EquirectToCylindrical(new CubicToEquirect(), panoramaWidth, panoramaHeight);
-				converter = new ProjectionConverter(panorama, filePath);
+				converter = new ProjectionConverter(panorama, previewFile);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
@@ -212,7 +213,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen

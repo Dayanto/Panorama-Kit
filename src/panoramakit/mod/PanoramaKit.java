@@ -5,9 +5,10 @@ package panoramakit.mod;
 
 import java.io.File;
 import java.util.logging.Logger;
-import panoramakit.gui.PreviewRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.Configuration;
+import panoramakit.gui.PreviewRenderer;
+import panoramakit.gui.settings.ModSettings;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -35,6 +36,7 @@ public class PanoramaKit
 	public static PanoramaKit instance;
 	
 	private Configuration config;
+	private ModSettings settings;
 	private File renderDir;
 	private File tempRenderDir;
 	
@@ -43,6 +45,7 @@ public class PanoramaKit
 	{
 		L.setParent(FMLLog.getLogger());
 		config = ConfigLoader.getConfig(evt.getSuggestedConfigurationFile());
+		settings = new ModSettings();
 	}
 	
 	@EventHandler
@@ -62,6 +65,11 @@ public class PanoramaKit
 	public Configuration getConfig()
 	{
 		return config;
+	}
+	
+	public ModSettings getModSettings()
+	{
+		return settings;
 	}
 	
 	public File getRenderDir()

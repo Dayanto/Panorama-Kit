@@ -4,7 +4,10 @@
 package panoramakit.gui.screens.settings;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +17,7 @@ import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomButton;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.menuitems.HoverTips;
+import panoramakit.gui.settings.ModSettings;
 import panoramakit.mod.PanoramaKit;
 
 /** 
@@ -21,10 +25,12 @@ import panoramakit.mod.PanoramaKit;
  */
 public abstract class GuiScreenSettings extends GuiScreen
 {
-	protected Minecraft mc = Minecraft.getMinecraft();
+	protected static Minecraft mc = Minecraft.getMinecraft();
 	
 	private String screenLabel;
 	protected ArrayList<GuiCustomTextField> textFieldList = new ArrayList<GuiCustomTextField>();
+	
+	// used for rendering previews to the gui screen (does not actually create the previews themselves as might be implied)
 	protected PreviewRenderer previewRenderer = new PreviewRenderer(Minecraft.getMinecraft().renderEngine);
 	
 	// used for displaying the overlay before rendering a preview
@@ -238,13 +244,53 @@ public abstract class GuiScreenSettings extends GuiScreen
 		tipMessage = "";
 	}
 	
+	public File numberFile(File file)
+	{
+		file = cleanFilePath(file);
+		
+		ModSettings settings = PanoramaKit.instance.getModSettings();
+		System.out.println("Number file");
+		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Increment") return increment(file);
+		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Date") return date(file);
+		
+		return file;
+	}
+	
 	public File increment(File file)
 	{
-		return null;
+		System.out.println("Increment");
+		System.out.println("File path:" + file.getPath());
+		File parent = file.getParentFile();
+		String name = file.getName().substring(0,file.getName().lastIndexOf('.'));
+		String extension = file.getName().substring(file.getName().lastIndexOf('.'));
+		
+		int fileNumber = 2;
+		while(file.exists()){
+			System.out.println("File exists");
+			file = new File(parent, name + fileNumber + extension);
+			fileNumber++;
+		}
+		
+		return file;
 	}
+	
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 	
 	public File date(File file)
 	{
-		return null;
+		File parent = file.getParentFile();
+		String name = file.getName().substring(0,file.getName().lastIndexOf('.'));
+		String extension = file.getName().substring(file.getName().lastIndexOf('.'));
+		
+		String fileName = name + DATE_FORMAT.format(new Date()) + extension;
+		return new File(parent, fileName);
+	}
+	
+	private File cleanFilePath(File file)
+	{
+		String filePath = file.getPath();
+		filePath = filePath.replaceAll("/./", "/");
+		filePath = filePath.replaceAll("\\\\.\\\\", "\\\\");
+		return new File(filePath);
 	}
 }

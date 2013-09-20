@@ -175,16 +175,17 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		{
 			L.info("Render stereographic panorama");
 			
-			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Stereographic.png").getPath();
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Stereographic.png");
+			renderFile = numberFile(renderFile);
 			
 			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), settings.getWidth(), settings.getHeight());
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
 			
 			// create a cubic base image
-			int sampleResolution = (int)((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4 * settings.getSampleSize());
+			int sampleResolution = (int)(((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4) * settings.getSampleSize());
 			// since the orientation isn't centered in the middle of the image, but instead the side, we rotate it 180 degrees
 			// also, since the converter takes a normal equirectangular panorama and makes it into a planet, we need to offset the angle by 90 degrees to make it an edge case
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation() - 180, settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -202,7 +203,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		{
 			L.info("Render preview panorama");
 			
-			String filePath = PreviewRenderer.getPreviewFile().getPath();
+			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
 			double fullWidth = settings.getWidth();
@@ -211,11 +212,11 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			int panoramaHeight = fullHeight > fullWidth ? previewSize : (int) (previewSize * fullHeight / fullWidth);
 			
 			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), panoramaWidth, panoramaHeight);;
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);
+			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation() - 180, settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen

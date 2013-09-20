@@ -165,14 +165,15 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		{
 			L.info("Render equirectangular panorama");
 			
-			String filePath = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png").getPath();
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png");
+			renderFile = numberFile(renderFile);
 			
 			CubicToEquirect panorama = new CubicToEquirect(settings.getResolution());;
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);;
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);;
 				
 			// create a cubic base image
 			int sampleResolution = (int) (settings.getResolution() * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -190,17 +191,17 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		{
 			L.info("Render preview panorama");
 			
-			String filePath = PreviewRenderer.getPreviewFile().getPath();
+			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
 			int resolution = previewSize / 4;
 			
 			CubicToEquirect panorama = new CubicToEquirect(resolution);
-			ProjectionConverter converter = new ProjectionConverter(panorama, filePath);
+			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, filePath, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen

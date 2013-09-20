@@ -36,8 +36,8 @@ public class ProjectionConverter
 	private PositionMapper positionMapper;
 	private Interpolator interpolator;
 	
-	private String imagePathInput;
-	private String imagePathOutput;
+	private File imageFileInput;
+	private File imageFileOutput;
 	
 	private BufferedImage inputImage;
 	private BufferedImage outputImage;
@@ -48,18 +48,18 @@ public class ProjectionConverter
 	
 	private boolean stop = false;
 	
-	public ProjectionConverter(PositionMapper positionMapper, String imagePathInput, String imagePathOutput)
+	public ProjectionConverter(PositionMapper positionMapper, File imageFileInput, File imageFileOutput)
 	{
 		this.positionMapper = positionMapper;
-		this.imagePathInput = imagePathInput;
-		this.imagePathOutput = imagePathOutput;
+		this.imageFileInput = imageFileInput;
+		this.imageFileOutput = imageFileOutput;
 		
 		setInterpolator(new BilinearInterpolator());
 	}
 	
-	public ProjectionConverter(PositionMapper positionMapper, String imagePathOverwrite)
+	public ProjectionConverter(PositionMapper positionMapper, File imageFileOverwrite)
 	{
-		this(positionMapper, imagePathOverwrite, imagePathOverwrite);
+		this(positionMapper, imageFileOverwrite, imageFileOverwrite);
 	}
 	
 	/**
@@ -76,12 +76,12 @@ public class ProjectionConverter
 		this.interpolator = interpolator;
 	}
 	
-	private void loadImage(String imagePath) throws IOException, IllegalArgumentException
+	private void loadImage(File imageFile) throws IOException, IllegalArgumentException
 	{
 		if(imageLink != null && imageLink.getImage() != null) {
 			inputImage = imageLink.getImage();
 		} else {
-			inputImage = ImageIO.read(new File(imagePath));
+			inputImage = ImageIO.read(imageFile);
 		}
 		
 		int width = inputImage.getWidth();
@@ -97,15 +97,14 @@ public class ProjectionConverter
 		outputImage = new BufferedImage(positionMapper.getWidth(), positionMapper.getHeight(), inputImage.getType());
 	}
 	
-	private void saveImage(String imagePath) throws IOException
+	private void saveImage(File imageFile) throws IOException
 	{
 		// save the image
-		File file = new File(imagePath);
-		if (!file.exists()) {
-			file.mkdirs();
-			file.createNewFile();
+		if (!imageFile.exists()) {
+			imageFile.mkdirs();
+			imageFile.createNewFile();
 		}
-		ImageIO.write(outputImage, "png", new File(imagePath));
+		ImageIO.write(outputImage, "png", imageFile);
 	}
 	
 	/**
@@ -116,7 +115,7 @@ public class ProjectionConverter
 		L.info("Converting...");
 		long startTime = System.currentTimeMillis();
 		
-		loadImage(imagePathInput);
+		loadImage(imageFileInput);
 		
 		for (int xOutput = 0; xOutput < outputImage.getWidth(); xOutput++) {
 			// check once every column whether the task should stop
@@ -160,7 +159,7 @@ public class ProjectionConverter
 			}
 		}
 		
-		saveImage(imagePathOutput);
+		saveImage(imageFileOutput);
 		
 		L.info("Projection \"" + positionMapper.getClass().getSimpleName() + "\": " + (System.currentTimeMillis() - startTime) + "ms");
 		L.info("Done");
@@ -181,6 +180,6 @@ public class ProjectionConverter
 	 */
 	public String getImageName()
 	{
-		return new File(imagePathOutput).getName();
+		return imageFileOutput.getName();
 	}
 }

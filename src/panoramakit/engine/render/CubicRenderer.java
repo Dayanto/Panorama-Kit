@@ -22,15 +22,15 @@ public class CubicRenderer extends CompositeImageRenderer
 	
 	// image settings
 	private int resolution;
-	private String filePath;
+	private File file;
 	private float orientation;
 	private float angle;
 	
-	public CubicRenderer(int resolution, String filePath, float orientation, float angle)
+	public CubicRenderer(int resolution, File file, float orientation, float angle)
 	{
 		super(resolution, resolution);
 		this.resolution = resolution;
-		this.filePath = filePath;
+		this.file = file;
 		this.orientation = orientation;
 		this.angle = angle;
 	}
@@ -94,7 +94,6 @@ public class CubicRenderer extends CompositeImageRenderer
 		
 		if(imageLink == null){
 			// save the image
-			File file = new File(filePath);
 			if (!file.exists()) {
 				file.mkdirs();
 				file.createNewFile();
