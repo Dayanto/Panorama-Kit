@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -9,8 +9,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
-import panoramakit.converter.projections.EquirectToCylindrical;
+import panoramakit.converter.projections.EquirectToStereographic;
 import panoramakit.engine.render.CubicRenderer;
+import panoramakit.engine.render.ImageLink;
 import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
@@ -22,44 +23,44 @@ import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
 import panoramakit.gui.menuitems.GuiCustomSliderSample;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
-import panoramakit.gui.screens.menu.GuiMenuPanoramas;
-import panoramakit.gui.settings.CylindricalSettings;
+import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
+import panoramakit.gui.settings.StereographicSettings;
 import panoramakit.mod.PanoramaKit;
-import panoramakit.engine.render.ImageLink;
 
 /**
  * @author dayanto
  */
-public class GuiSettingsCylindrical extends GuiScreenSettings
+public class GuiSettingsStereographic extends GuiScreenSettings
 {
 	private static Logger L = PanoramaKit.instance.L;
-	private static String screenTitle = "Cylindrical Panorama";
-	private static String screenLabel = "Cylindrical";
+	private static String screenTitle = "Stereographic \"Little planet\" Panorama";
+	private static String screenLabel = "Stereographic \"Little planet\"";
 	
 	private static final int WIDTH = 0;
 	private static final int HEIGHT = 1;
 	private static final int SAMPLE_SIZE = 2;
 	private static final int ORIENTATION = 3;
 	private static final int ANGLE = 4;
+	private static final int FIELD_OF_VIEW = 5;
 	
-	private static final int PREVIEW = 5;
+	private static final int PREVIEW = 6;
 	
-	private static final int BACK = 6;
-	private static final int CAPTURE = 7;
+	private static final int BACK = 7;
+	private static final int CAPTURE = 8;
 	
-	private CylindricalSettings settings;
+	private StereographicSettings settings;
 	
 	// make sure we don't update the orientation and angle after rendering a preview
 	private static boolean keepOrientation = false;
 	
-	public GuiSettingsCylindrical()
+	public GuiSettingsStereographic()
 	{
 		super(screenLabel);
 		if(keepOrientation)	{
-			settings = new CylindricalSettings();
+			settings = new StereographicSettings();
 			keepOrientation = false;
 		} else {
-			settings = new CylindricalSettings(mc.thePlayer.rotationYaw);
+			settings = new StereographicSettings(mc.thePlayer.rotationYaw);
 		}
 	}
 	
@@ -97,7 +98,14 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		// sliders beneath the textfields
 		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
 		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
-		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
+		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()) {
+			public void updateDisplayString() { 
+				displayString = String.format(baseString + ": %.1f", getValue());
+				if(getValue() == 90) displayString = "Planet";
+				if(getValue() == -90) displayString = "Inverted";
+			}
+		});
+		buttonList.add(new GuiCustomSlider(FIELD_OF_VIEW, leftCol - 75, currentY += rowHeight, this,"Field of View", "", 0F, 180F, 0, settings.getFieldOfView()));
 		
 		// preview button underneath the preview image
 		buttonList.add((new GuiButton(PREVIEW, rightCol - 40, contentStart + 128 + 6, 80, 20, "Preview")));
@@ -139,7 +147,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		}
 		
 		// draw the sample resolution
-		int sampleResolution = (int)(settings.getWidth() / 4 * settings.getSampleSize());
+		int sampleResolution = (int)((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4 * settings.getSampleSize());
 		int sampleWidth = sampleResolution * 4;
 		int sampleHeight = sampleResolution * 3;
 		drawCenteredString(fontRenderer, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
@@ -165,17 +173,19 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		
 		if (id == CAPTURE) 
 		{
-			L.info("Render cylindrical panorama");
+			L.info("Render stereographic panorama");
 			
-			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cylindrical.png");
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Stereographic.png");
 			renderFile = numberFile(renderFile);
 			
-			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), settings.getWidth(), settings.getHeight());;
+			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), settings.getWidth(), settings.getHeight());
 			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
 			
 			// create a cubic base image
-			int sampleResolution = (int) (settings.getWidth() / 4 * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
+			int sampleResolution = (int)(((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4) * settings.getSampleSize());
+			// since the orientation isn't centered in the middle of the image, but instead the side, we rotate it 180 degrees
+			// also, since the converter takes a normal equirectangular panorama and makes it into a planet, we need to offset the angle by 90 degrees to make it an edge case
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -201,19 +211,12 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			int panoramaWidth = fullWidth > fullHeight ? previewSize : (int) (previewSize * fullWidth / fullHeight);
 			int panoramaHeight = fullHeight > fullWidth ? previewSize : (int) (previewSize * fullHeight / fullWidth);
 			
-			EquirectToCylindrical panorama;
-			ProjectionConverter converter;
-			try {
-				panorama = new EquirectToCylindrical(new CubicToEquirect(), panoramaWidth, panoramaHeight);
-				converter = new ProjectionConverter(panorama, previewFile);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
+			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), panoramaWidth, panoramaHeight);;
+			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen
@@ -250,6 +253,9 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		if (id == ANGLE) {
 			settings.setAngle(value);
 		}
+		if(id == FIELD_OF_VIEW){
+			settings.setFieldOfView(value);
+		}
 	}
 	
 	/**
@@ -271,7 +277,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			}
 		}
 		if (id == HEIGHT) {
-			if (intValue >= 3) {
+			if (intValue >= 4) {
 				settings.setHeight(intValue);
 			} else {
 				textField.setError(true);

@@ -3,7 +3,7 @@
  */
 package panoramakit.gui.menuitems;
 
-import panoramakit.gui.screens.settings.GuiScreenSettings;
+import panoramakit.gui.screens.settingsscreens.GuiScreenSettings;
 
 /**
  * @author dayanto

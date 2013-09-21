@@ -1,9 +1,9 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
-import panoramakit.gui.screens.menu.GuiMenuMain;
+import panoramakit.gui.screens.menuscreens.GuiMenuMain;
 import net.minecraft.client.gui.GuiButton;
 
 

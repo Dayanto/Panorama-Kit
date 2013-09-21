@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
-import panoramakit.gui.screens.settings.GuiScreenSettings;
+import panoramakit.gui.screens.settingsscreens.GuiScreenSettings;
 
 /**
  * Customizable slider button.

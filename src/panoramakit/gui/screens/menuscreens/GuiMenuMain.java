@@ -1,13 +1,13 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.menu;
+package panoramakit.gui.screens.menuscreens;
 
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import panoramakit.gui.screens.settings.GuiSettingsBackground;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsBackground;
 
 /** 
  * @author dayanto

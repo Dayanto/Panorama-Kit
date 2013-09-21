@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
 import panoramakit.engine.task.TaskManager;
-import panoramakit.gui.screens.menu.GuiMenuMain;
+import panoramakit.gui.screens.menuscreens.GuiMenuMain;
 import panoramakit.gui.screens.GuiScreenProgress;
 
 /**

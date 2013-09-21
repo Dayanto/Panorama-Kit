@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -16,7 +16,7 @@ import panoramakit.gui.menuitems.GuiCustomSlider;
 import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
-import panoramakit.gui.screens.menu.GuiMenuPanoramas;
+import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
 import panoramakit.gui.settings.CubicSettings;
 import panoramakit.mod.PanoramaKit;
 

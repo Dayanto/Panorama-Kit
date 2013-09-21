@@ -5,7 +5,7 @@ package panoramakit.engine.task.threadedtasks;
 
 import java.io.File;
 import panoramakit.engine.task.ThreadedTask;
-import panoramakit.engine.util.Zipper;
+import panoramakit.engine.tools.Zipper;
 
 /** 
  * @author dayanto

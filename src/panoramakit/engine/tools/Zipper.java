@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.engine.util;
+package panoramakit.engine.tools;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
+import panoramakit.converter.projections.EquirectToCylindrical;
 import panoramakit.engine.render.CubicRenderer;
-import panoramakit.engine.render.ImageLink;
 import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
@@ -19,21 +19,22 @@ import panoramakit.engine.task.threadedtasks.ProjectionConverterTask;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomSlider;
 import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
+import panoramakit.gui.menuitems.GuiCustomSliderSample;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
-import panoramakit.gui.screens.menu.GuiMenuPanoramas;
-import panoramakit.gui.settings.EquirectSettings;
+import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
+import panoramakit.gui.settings.CylindricalSettings;
 import panoramakit.mod.PanoramaKit;
-import panoramakit.gui.menuitems.GuiCustomSliderSample;
+import panoramakit.engine.render.ImageLink;
 
 /**
  * @author dayanto
  */
-public class GuiSettingsEquirect extends GuiScreenSettings
+public class GuiSettingsCylindrical extends GuiScreenSettings
 {
 	private static Logger L = PanoramaKit.instance.L;
-	private static String screenTitle = "Equirectangular Panorama";
-	private static String screenLabel = "Equirectangular";
+	private static String screenTitle = "Cylindrical Panorama";
+	private static String screenLabel = "Cylindrical";
 	
 	private static final int WIDTH = 0;
 	private static final int HEIGHT = 1;
@@ -46,19 +47,19 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 	private static final int BACK = 6;
 	private static final int CAPTURE = 7;
 	
-	private EquirectSettings settings;
+	private CylindricalSettings settings;
 	
 	// make sure we don't update the orientation and angle after rendering a preview
 	private static boolean keepOrientation = false;
 	
-	public GuiSettingsEquirect()
+	public GuiSettingsCylindrical()
 	{
 		super(screenLabel);
 		if(keepOrientation)	{
-			settings = new EquirectSettings();
+			settings = new CylindricalSettings();
 			keepOrientation = false;
 		} else {
-			settings = new EquirectSettings(mc.thePlayer.rotationYaw);
+			settings = new CylindricalSettings(mc.thePlayer.rotationYaw);
 		}
 	}
 	
@@ -88,8 +89,8 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		// textfields for width and height
 		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRenderer, WIDTH, leftCol - 12 - 64, currentY, 64, 20, true);
 		GuiCustomTextField fieldHeight = new GuiCustomTextField(fontRenderer, HEIGHT, leftCol + 12, currentY, 64, 20, true);
-		fieldWidth.setText(String.valueOf(settings.getResolution() * 4));
-		fieldHeight.setText(String.valueOf(settings.getResolution() * 2));
+		fieldWidth.setText(String.valueOf(settings.getWidth()));
+		fieldHeight.setText(String.valueOf(settings.getHeight()));
 		textFieldList.add(fieldWidth);
 		textFieldList.add(fieldHeight);
 		
@@ -105,6 +106,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		buttonList.add(new GuiSmallButton(BACK, leftCol - 75, bottomRow, "Back"));
 		buttonList.add(new GuiSmallButton(CAPTURE, rightCol - 75, bottomRow, "Capture"));
 	}
+	
 	
 	/**
 	 * Draws the screen and all the components in it.
@@ -137,7 +139,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		}
 		
 		// draw the sample resolution
-		int sampleResolution = (int)(settings.getResolution() * settings.getSampleSize());
+		int sampleResolution = (int)(settings.getWidth() / 4 * settings.getSampleSize());
 		int sampleWidth = sampleResolution * 4;
 		int sampleHeight = sampleResolution * 3;
 		drawCenteredString(fontRenderer, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
@@ -163,16 +165,16 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		if (id == CAPTURE) 
 		{
-			L.info("Render equirectangular panorama");
+			L.info("Render cylindrical panorama");
 			
-			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png");
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cylindrical.png");
 			renderFile = numberFile(renderFile);
 			
-			CubicToEquirect panorama = new CubicToEquirect(settings.getResolution());;
-			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);;
-				
+			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), settings.getWidth(), settings.getHeight());;
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
+			
 			// create a cubic base image
-			int sampleResolution = (int) (settings.getResolution() * settings.getSampleSize());
+			int sampleResolution = (int) (settings.getWidth() / 4 * settings.getSampleSize());
 			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
@@ -194,10 +196,20 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
-			int resolution = previewSize / 4;
+			double fullWidth = settings.getWidth();
+			double fullHeight = settings.getHeight();
+			int panoramaWidth = fullWidth > fullHeight ? previewSize : (int) (previewSize * fullWidth / fullHeight);
+			int panoramaHeight = fullHeight > fullWidth ? previewSize : (int) (previewSize * fullHeight / fullWidth);
 			
-			CubicToEquirect panorama = new CubicToEquirect(resolution);
-			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
+			EquirectToCylindrical panorama;
+			ProjectionConverter converter;
+			try {
+				panorama = new EquirectToCylindrical(new CubicToEquirect(), panoramaWidth, panoramaHeight);
+				converter = new ProjectionConverter(panorama, previewFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
 			
 			// create a cubic base image
 			int sampleResolution = 256;
@@ -253,16 +265,14 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		if (id == WIDTH) {
 			if (intValue >= 4) {
-				settings.setResolution(intValue / 4);
-				setTextField(HEIGHT, String.valueOf(settings.getResolution() * 2)); // update the height when the resolution changed
+				settings.setWidth(intValue);
 			} else {
 				textField.setError(true);
 			}
 		}
 		if (id == HEIGHT) {
-			if (intValue >= 2) {
-				settings.setResolution(intValue / 2);
-				setTextField(WIDTH, String.valueOf(settings.getResolution() * 4)); // update the width when the resolution changed
+			if (intValue >= 3) {
+				settings.setHeight(intValue);
 			} else {
 				textField.setError(true);
 			}

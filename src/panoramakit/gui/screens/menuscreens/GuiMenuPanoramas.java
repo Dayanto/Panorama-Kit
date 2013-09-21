@@ -1,15 +1,15 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.menu;
+package panoramakit.gui.screens.menuscreens;
 
 import java.util.ArrayList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import panoramakit.gui.screens.settings.GuiSettingsCylindrical;
-import panoramakit.gui.screens.settings.GuiSettingsEquirect;
-import panoramakit.gui.screens.settings.GuiSettingsStereographic;
-import panoramakit.gui.screens.settings.GuiSettingsCubic;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsCubic;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsCylindrical;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsEquirect;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsStereographic;
 
 /** 
  * @author dayanto

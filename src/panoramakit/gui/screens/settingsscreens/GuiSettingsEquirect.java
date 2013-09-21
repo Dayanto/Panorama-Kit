@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
-import panoramakit.converter.projections.EquirectToStereographic;
 import panoramakit.engine.render.CubicRenderer;
 import panoramakit.engine.render.ImageLink;
 import panoramakit.engine.task.Task;
@@ -20,47 +19,46 @@ import panoramakit.engine.task.threadedtasks.ProjectionConverterTask;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomSlider;
 import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
-import panoramakit.gui.menuitems.GuiCustomSliderSample;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
-import panoramakit.gui.screens.menu.GuiMenuPanoramas;
-import panoramakit.gui.settings.StereographicSettings;
+import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
+import panoramakit.gui.settings.EquirectSettings;
 import panoramakit.mod.PanoramaKit;
+import panoramakit.gui.menuitems.GuiCustomSliderSample;
 
 /**
  * @author dayanto
  */
-public class GuiSettingsStereographic extends GuiScreenSettings
+public class GuiSettingsEquirect extends GuiScreenSettings
 {
 	private static Logger L = PanoramaKit.instance.L;
-	private static String screenTitle = "Stereographic \"Little planet\" Panorama";
-	private static String screenLabel = "Stereographic \"Little planet\"";
+	private static String screenTitle = "Equirectangular Panorama";
+	private static String screenLabel = "Equirectangular";
 	
 	private static final int WIDTH = 0;
 	private static final int HEIGHT = 1;
 	private static final int SAMPLE_SIZE = 2;
 	private static final int ORIENTATION = 3;
 	private static final int ANGLE = 4;
-	private static final int FIELD_OF_VIEW = 5;
 	
-	private static final int PREVIEW = 6;
+	private static final int PREVIEW = 5;
 	
-	private static final int BACK = 7;
-	private static final int CAPTURE = 8;
+	private static final int BACK = 6;
+	private static final int CAPTURE = 7;
 	
-	private StereographicSettings settings;
+	private EquirectSettings settings;
 	
 	// make sure we don't update the orientation and angle after rendering a preview
 	private static boolean keepOrientation = false;
 	
-	public GuiSettingsStereographic()
+	public GuiSettingsEquirect()
 	{
 		super(screenLabel);
 		if(keepOrientation)	{
-			settings = new StereographicSettings();
+			settings = new EquirectSettings();
 			keepOrientation = false;
 		} else {
-			settings = new StereographicSettings(mc.thePlayer.rotationYaw);
+			settings = new EquirectSettings(mc.thePlayer.rotationYaw);
 		}
 	}
 	
@@ -90,22 +88,15 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		// textfields for width and height
 		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRenderer, WIDTH, leftCol - 12 - 64, currentY, 64, 20, true);
 		GuiCustomTextField fieldHeight = new GuiCustomTextField(fontRenderer, HEIGHT, leftCol + 12, currentY, 64, 20, true);
-		fieldWidth.setText(String.valueOf(settings.getWidth()));
-		fieldHeight.setText(String.valueOf(settings.getHeight()));
+		fieldWidth.setText(String.valueOf(settings.getResolution() * 4));
+		fieldHeight.setText(String.valueOf(settings.getResolution() * 2));
 		textFieldList.add(fieldWidth);
 		textFieldList.add(fieldHeight);
 		
 		// sliders beneath the textfields
 		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
 		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
-		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()) {
-			public void updateDisplayString() { 
-				displayString = String.format(baseString + ": %.1f", getValue());
-				if(getValue() == 90) displayString = "Planet";
-				if(getValue() == -90) displayString = "Inverted";
-			}
-		});
-		buttonList.add(new GuiCustomSlider(FIELD_OF_VIEW, leftCol - 75, currentY += rowHeight, this,"Field of View", "", 0F, 180F, 0, settings.getFieldOfView()));
+		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
 		
 		// preview button underneath the preview image
 		buttonList.add((new GuiButton(PREVIEW, rightCol - 40, contentStart + 128 + 6, 80, 20, "Preview")));
@@ -114,7 +105,6 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		buttonList.add(new GuiSmallButton(BACK, leftCol - 75, bottomRow, "Back"));
 		buttonList.add(new GuiSmallButton(CAPTURE, rightCol - 75, bottomRow, "Capture"));
 	}
-	
 	
 	/**
 	 * Draws the screen and all the components in it.
@@ -147,7 +137,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		}
 		
 		// draw the sample resolution
-		int sampleResolution = (int)((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4 * settings.getSampleSize());
+		int sampleResolution = (int)(settings.getResolution() * settings.getSampleSize());
 		int sampleWidth = sampleResolution * 4;
 		int sampleHeight = sampleResolution * 3;
 		drawCenteredString(fontRenderer, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
@@ -173,19 +163,17 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		
 		if (id == CAPTURE) 
 		{
-			L.info("Render stereographic panorama");
+			L.info("Render equirectangular panorama");
 			
-			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Stereographic.png");
+			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png");
 			renderFile = numberFile(renderFile);
 			
-			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), settings.getWidth(), settings.getHeight());
-			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
-			
+			CubicToEquirect panorama = new CubicToEquirect(settings.getResolution());;
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);;
+				
 			// create a cubic base image
-			int sampleResolution = (int)(((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4) * settings.getSampleSize());
-			// since the orientation isn't centered in the middle of the image, but instead the side, we rotate it 180 degrees
-			// also, since the converter takes a normal equirectangular panorama and makes it into a planet, we need to offset the angle by 90 degrees to make it an edge case
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation() - 180, settings.getAngle() - 90);
+			int sampleResolution = (int) (settings.getResolution() * settings.getSampleSize());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -206,17 +194,14 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			File previewFile = PreviewRenderer.getPreviewFile();
 			
 			int previewSize = 256;
-			double fullWidth = settings.getWidth();
-			double fullHeight = settings.getHeight();
-			int panoramaWidth = fullWidth > fullHeight ? previewSize : (int) (previewSize * fullWidth / fullHeight);
-			int panoramaHeight = fullHeight > fullWidth ? previewSize : (int) (previewSize * fullHeight / fullWidth);
+			int resolution = previewSize / 4;
 			
-			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), panoramaWidth, panoramaHeight);;
+			CubicToEquirect panorama = new CubicToEquirect(resolution);
 			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation() - 180, settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen
@@ -253,9 +238,6 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		if (id == ANGLE) {
 			settings.setAngle(value);
 		}
-		if(id == FIELD_OF_VIEW){
-			settings.setFieldOfView(value);
-		}
 	}
 	
 	/**
@@ -271,14 +253,16 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		
 		if (id == WIDTH) {
 			if (intValue >= 4) {
-				settings.setWidth(intValue);
+				settings.setResolution(intValue / 4);
+				setTextField(HEIGHT, String.valueOf(settings.getResolution() * 2)); // update the height when the resolution changed
 			} else {
 				textField.setError(true);
 			}
 		}
 		if (id == HEIGHT) {
-			if (intValue >= 4) {
-				settings.setHeight(intValue);
+			if (intValue >= 2) {
+				settings.setResolution(intValue / 2);
+				setTextField(WIDTH, String.valueOf(settings.getResolution() * 4)); // update the width when the resolution changed
 			} else {
 				textField.setError(true);
 			}

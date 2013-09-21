@@ -1,7 +1,7 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.gui.screens.settings;
+package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -249,7 +249,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 		file = cleanFilePath(file);
 		
 		ModSettings settings = PanoramaKit.instance.getModSettings();
-		System.out.println("Number file");
+		
 		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Increment") return increment(file);
 		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Date") return date(file);
 		
@@ -258,15 +258,12 @@ public abstract class GuiScreenSettings extends GuiScreen
 	
 	public File increment(File file)
 	{
-		System.out.println("Increment");
-		System.out.println("File path:" + file.getPath());
 		File parent = file.getParentFile();
 		String name = file.getName().substring(0,file.getName().lastIndexOf('.'));
 		String extension = file.getName().substring(file.getName().lastIndexOf('.'));
 		
 		int fileNumber = 2;
 		while(file.exists()){
-			System.out.println("File exists");
 			file = new File(parent, name + fileNumber + extension);
 			fileNumber++;
 		}
@@ -279,11 +276,12 @@ public abstract class GuiScreenSettings extends GuiScreen
 	public File date(File file)
 	{
 		File parent = file.getParentFile();
-		String name = file.getName().substring(0,file.getName().lastIndexOf('.'));
-		String extension = file.getName().substring(file.getName().lastIndexOf('.'));
 		
-		String fileName = name + DATE_FORMAT.format(new Date()) + extension;
-		return new File(parent, fileName);
+		String fileName = file.getName();
+		String name = fileName.substring(0, fileName.lastIndexOf('.'));
+		String extension = fileName.substring(fileName.lastIndexOf('.'));
+		
+		return new File(parent, name + DATE_FORMAT.format(new Date()) + extension);
 	}
 	
 	private File cleanFilePath(File file)
