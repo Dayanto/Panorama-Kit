@@ -10,7 +10,8 @@ import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
 import panoramakit.converter.projections.EquirectToCylindrical;
-import panoramakit.engine.render.CubicRenderer;
+import panoramakit.engine.render.ImageLink;
+import panoramakit.engine.render.renderers.CubicRenderer;
 import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
@@ -25,7 +26,8 @@ import panoramakit.gui.screens.GuiRenderNotice;
 import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
 import panoramakit.gui.settings.CylindricalSettings;
 import panoramakit.mod.PanoramaKit;
-import panoramakit.engine.render.ImageLink;
+import panoramakit.gui.settings.SharedSettings;
+import panoramakit.gui.util.FileNumerator;
 
 /**
  * @author dayanto
@@ -49,18 +51,10 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 	
 	private CylindricalSettings settings;
 	
-	// make sure we don't update the orientation and angle after rendering a preview
-	private static boolean keepOrientation = false;
-	
 	public GuiSettingsCylindrical()
 	{
 		super(screenLabel);
-		if(keepOrientation)	{
-			settings = new CylindricalSettings();
-			keepOrientation = false;
-		} else {
-			settings = new CylindricalSettings(mc.thePlayer.rotationYaw);
-		}
+		settings = new CylindricalSettings();
 	}
 	
 	/**
@@ -96,7 +90,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 		
 		// sliders beneath the textfields
 		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
-		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
+		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", -180F, 180F, 0, SharedSettings.getOrientation()));
 		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
 		
 		// preview button underneath the preview image
@@ -168,17 +162,16 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			L.info("Render cylindrical panorama");
 			
 			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cylindrical.png");
-			renderFile = numberFile(renderFile);
-			
-			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), settings.getWidth(), settings.getHeight());;
-			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
+			renderFile = FileNumerator.numberFile(renderFile);
 			
 			// create a cubic base image
 			int sampleResolution = (int) (settings.getWidth() / 4 * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, SharedSettings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
+			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), settings.getWidth(), settings.getHeight());;
+			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
 			TaskManager.instance.addTask(new ProjectionConverterTask(converter));
 			
 			// create an image link for sending images between tasks and attach it to the two sides
@@ -201,28 +194,21 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			int panoramaWidth = fullWidth > fullHeight ? previewSize : (int) (previewSize * fullWidth / fullHeight);
 			int panoramaHeight = fullHeight > fullWidth ? previewSize : (int) (previewSize * fullHeight / fullWidth);
 			
-			EquirectToCylindrical panorama;
-			ProjectionConverter converter;
-			try {
-				panorama = new EquirectToCylindrical(new CubicToEquirect(), panoramaWidth, panoramaHeight);
-				converter = new ProjectionConverter(panorama, previewFile);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
-			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, SharedSettings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen
 			TaskManager.instance.addTask(new DisplayGuiScreenTask(this.getClass()));
 			
 			// convert it to a panorama
+			EquirectToCylindrical panorama = new EquirectToCylindrical(new CubicToEquirect(), panoramaWidth, panoramaHeight);
+			ProjectionConverter converter = new ProjectionConverter(panorama, previewFile);
 			Task projectionTask = new ProjectionConverterTask(converter);
-			projectionTask.setSilent();
 			TaskManager.instance.addTask(projectionTask);
+			
+			projectionTask.setSilent();
 			
 			// create an image link for sending images between tasks and attach it to the two sides
 			ImageLink imageLink = new ImageLink();
@@ -231,7 +217,6 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			
 			// display overlay and then close the gui
 			capturePreview();
-			keepOrientation = true;
 		}
 	}
 	
@@ -245,7 +230,7 @@ public class GuiSettingsCylindrical extends GuiScreenSettings
 			settings.setSampleSize(value);
 		}
 		if (id == ORIENTATION) {
-			settings.setOrientation(value);
+			SharedSettings.setOrientation(value);
 		}
 		if (id == ANGLE) {
 			settings.setAngle(value);

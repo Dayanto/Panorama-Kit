@@ -9,22 +9,26 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /** 
- * Takes an image and slicer it into a number of images with file names based on their tile position.
+ * Takes an image and slices it into a number of images with file names based on their tile position.
  * 
  * @author dayanto
  */
 public class ImageSlicer
 {
 	private File imageFile;
+	private File outputFolder;
+	
 	private int xTiles;
 	private int yTiles;
 	
+	// local working variables
 	private int tileWidth;
 	private int tileHeight;
 	
-	public ImageSlicer(File imageFile, int xTiles, int yTiles)
+	public ImageSlicer(File imageFile, File outputFolder, int xTiles, int yTiles)
 	{
 		this.imageFile = imageFile;
+		this.outputFolder = outputFolder;
 		this.xTiles = xTiles;
 		this.yTiles = yTiles;
 	}
@@ -46,18 +50,17 @@ public class ImageSlicer
 		}
 	}
 	
-	public void createTile(BufferedImage image, int xTile, int yTile) throws IOException
+	private void createTile(BufferedImage image, int xTile, int yTile) throws IOException
 	{
 		BufferedImage imageTile = image.getSubimage(xTile * tileWidth, yTile * tileHeight, tileWidth, tileHeight);
-		ImageIO.write(imageTile, "png", new File(getTileName(xTile,yTile)));
+		File imageTileFile = new File(outputFolder, getTileName(xTile,yTile));
+		if(imageTileFile.getParentFile().exists()) imageTileFile.mkdirs();
+		if(imageTileFile.exists()) imageTileFile.createNewFile();
+		ImageIO.write(imageTile, "png", imageTileFile);
 	}
 	
-	public String getTileName(int xTile, int yTile)
+	private String getTileName(int xTile, int yTile)
 	{
-		String fileName = imageFile.getName();
-		String name = fileName.substring(0, fileName.lastIndexOf('.'));
-		String extension = fileName.substring(fileName.lastIndexOf('.'));
-		
-		return name + "_" + xTile + "_" + yTile + extension;
+		return xTile + "_" + yTile + ".png";
 	}
 }

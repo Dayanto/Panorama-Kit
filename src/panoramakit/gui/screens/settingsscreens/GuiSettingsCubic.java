@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.logging.Logger;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
-import panoramakit.engine.render.CubicRenderer;
+import panoramakit.engine.render.renderers.CubicRenderer;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
 import panoramakit.engine.task.tasks.RenderTask;
@@ -19,6 +19,8 @@ import panoramakit.gui.screens.GuiRenderNotice;
 import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
 import panoramakit.gui.settings.CubicSettings;
 import panoramakit.mod.PanoramaKit;
+import panoramakit.gui.settings.SharedSettings;
+import panoramakit.gui.util.FileNumerator;
 
 /**
  * @author dayanto
@@ -41,18 +43,10 @@ public class GuiSettingsCubic extends GuiScreenSettings
 	
 	private CubicSettings settings;
 	
-	// make sure we don't update the orientation and angle after rendering a preview
-	private static boolean keepOrientation = false;
-	
 	public GuiSettingsCubic()
 	{
 		super(screenLabel);
-		if(keepOrientation)	{
-			settings = new CubicSettings();
-			keepOrientation = false;
-		} else {
-			settings = new CubicSettings(mc.thePlayer.rotationYaw);
-		}
+		settings = new CubicSettings();
 	}
 	
 	/**
@@ -87,7 +81,7 @@ public class GuiSettingsCubic extends GuiScreenSettings
 		textFieldList.add(fieldHeight);
 		
 		// sliders beneath the textfields
-		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
+		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", -180F, 180F, 0, SharedSettings.getOrientation()));
 		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
 		
 		// preview button underneath the preview image
@@ -152,10 +146,10 @@ public class GuiSettingsCubic extends GuiScreenSettings
 			L.info("Render cubic panorama");
 			
 			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Cubic.png");
-			renderFile = numberFile(renderFile);
+			renderFile = FileNumerator.numberFile(renderFile);
 				
 			// create a cubic panorama
-			CubicRenderer renderer = new CubicRenderer(settings.getResolution(), renderFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(settings.getResolution(), renderFile, SharedSettings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			mc.displayGuiScreen(new GuiRenderNotice());
@@ -171,7 +165,7 @@ public class GuiSettingsCubic extends GuiScreenSettings
 			int resolution = previewSize / 4;
 			
 			// create a cubic panorama
-			RenderTask renderTask = new RenderTask(new CubicRenderer(resolution, previewFile, settings.getOrientation(), settings.getAngle()));
+			RenderTask renderTask = new RenderTask(new CubicRenderer(resolution, previewFile, SharedSettings.getOrientation(), settings.getAngle()));
 			renderTask.setSilent();
 			TaskManager.instance.addTask(renderTask);
 			
@@ -180,7 +174,6 @@ public class GuiSettingsCubic extends GuiScreenSettings
 			
 			// display overlay and then close the gui
 			capturePreview();
-			keepOrientation = true;
 		}
 	}
 	
@@ -191,7 +184,7 @@ public class GuiSettingsCubic extends GuiScreenSettings
 	public void sliderMoved(int id, float value)
 	{
 		if (id == ORIENTATION) {
-			settings.setOrientation(value);
+			SharedSettings.setOrientation(value);
 		}
 		if (id == ANGLE) {
 			settings.setAngle(value);

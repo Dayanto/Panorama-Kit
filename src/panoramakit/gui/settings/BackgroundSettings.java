@@ -10,24 +10,27 @@ import panoramakit.mod.PanoramaKit;
 /** 
  * @author dayanto
  */
-public class CubicSettings
+public class BackgroundSettings
 {
 	private final PanoramaKit pk = PanoramaKit.instance;
 	
 	private final Configuration config = pk.getConfig();
 	
-	private static final int DEF_RESOLUTION = 500;
-	private static final double DEF_ANGLE = 0.0;
+	public static final String saveBackground, replaceBackground;
+	public static final String[] modes = {saveBackground = "Just Save As Zip", replaceBackground = "Placeholder! Wait for MC 1.7" /*"Add To The Game"*/};
+	
+	private static final int DEF_RESOLUTION = 256;
+	private static final int DEF_MODE = 0;
 	
 	private Property resolution;
-	private Property angle;
+	private Property mode;
 	
-	public CubicSettings()
+	public BackgroundSettings()
 	{
-		String category = "cubic";
+		String category = "background";
 		
 		resolution = config.get(category, "resolution", DEF_RESOLUTION);
-		angle = config.get(category, "angle", DEF_ANGLE);
+		mode = config.get(category, "mode", DEF_MODE);
 	}
 	
 	/* properties */
@@ -41,12 +44,13 @@ public class CubicSettings
 		this.resolution.set(resolution);
 	}
 	
-	public float getAngle()
+	public int getMode()
 	{
-		return (float)angle.getDouble(DEF_ANGLE);
+		int value = mode.getInt(DEF_MODE);
+		return value < modes.length ? value : modes.length - 1;
 	}
-	public void setAngle(float angle)
+	public void setMode(int mode)
 	{
-		this.angle.set(angle);
+		this.mode.set(mode);
 	}
 }

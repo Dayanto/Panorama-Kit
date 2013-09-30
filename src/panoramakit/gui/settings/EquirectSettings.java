@@ -23,7 +23,6 @@ public class EquirectSettings
 	private Property resolution;
 	private Property sampleSize;
 	private Property angle;
-	private static float orientation;
 	
 	public EquirectSettings()
 	{
@@ -33,13 +32,7 @@ public class EquirectSettings
 		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
 		angle = config.get(category, "angle", DEF_ANGLE);
 	}
-	
-	public EquirectSettings(float playerRotation)
-	{
-		this();
-		orientation = ((playerRotation % 360) + 360) % 360;
-	}
-	
+
 	/* properties */
 	
 	public int getResolution()
@@ -68,17 +61,5 @@ public class EquirectSettings
 	public void setAngle(float angle)
 	{
 		this.angle.set(angle);
-	}
-	
-	
-	/* non-properties */
-	
-	public float getOrientation()
-	{
-		return orientation;
-	}
-	public void setOrientation(float orientation)
-	{
-		EquirectSettings.orientation = orientation;
 	}
 }

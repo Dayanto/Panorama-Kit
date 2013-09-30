@@ -1,13 +1,14 @@
 /* 
  * This code isn't copyrighted. Do what you want with it. :) 
  */
-package panoramakit.engine.render;
+package panoramakit.engine.render.renderers;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import panoramakit.engine.render.CompositeImageRenderer;
 import panoramakit.mod.PanoramaKit;
 
 /**
@@ -21,10 +22,10 @@ public class BackgroundRenderer extends CompositeImageRenderer
 	
 	// settings
 	private int resolution;
-	private String folderPath;
+	private File folderPath;
 	private float orientation;
 	
-	public BackgroundRenderer(int resolution, String folderPath, float orientation, float angle)
+	public BackgroundRenderer(int resolution, File folderPath, float orientation)
 	{
 		super(resolution, resolution);
 		this.resolution = resolution;
@@ -37,12 +38,12 @@ public class BackgroundRenderer extends CompositeImageRenderer
 	{
 		long startTime = System.currentTimeMillis();
 		
-		BufferedImage image = new BufferedImage(4 * resolution, 3 * resolution, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image = new BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_ARGB);
 		
 		// render the first four images along the horizon
 		for (int i = 0; i < 4; i++) {
-			float yaw = (i - 1) * 90;
-			rotatePlayer(yaw + orientation, 0, 0);
+			float yaw = orientation + (i - 1) * 90;
+			rotatePlayer(yaw + 90, 0, 0);
 			int[] screenshot = captureScreenshot();
 			image.setRGB(0, 0, resolution, resolution, screenshot, 0, resolution);
 			saveBackgroundImage(image, i);

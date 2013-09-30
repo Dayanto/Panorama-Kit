@@ -25,7 +25,6 @@ public class CylindricalSettings
 	private Property height;
 	private Property sampleSize;
 	private Property angle;
-	private static float orientation;
 	
 	public CylindricalSettings()
 	{
@@ -35,12 +34,6 @@ public class CylindricalSettings
 		height = config.get(category, "height", DEF_PANORAMA_HEIGHT);
 		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
 		angle = config.get(category, "angle", DEF_ANGLE);
-	}
-	
-	public CylindricalSettings(float playerRotation)
-	{
-		this();
-		orientation = ((playerRotation % 360) + 360) % 360;
 	}
 	
 	/* properties */
@@ -79,17 +72,5 @@ public class CylindricalSettings
 	public void setAngle(float angle)
 	{
 		this.angle.set(angle);
-	}
-	
-	
-	/* non-properties */
-	
-	public float getOrientation()
-	{
-		return orientation;
-	}
-	public void setOrientation(float orientation)
-	{
-		CylindricalSettings.orientation = orientation;
 	}
 }

@@ -18,7 +18,8 @@ import panoramakit.gui.screens.settingsscreens.GuiScreenSettings;
 /**
  * Customizable slider button.
  * 
- * @author Nico Bergemann <barracuda415 at yahoo.de>
+ * @author Nico Bergemann <barracuda415 at yahoo.de> - original author
+ * @author dayanto - some minor modifications
  */
 public class GuiCustomSlider extends GuiButton implements HoverTips
 {

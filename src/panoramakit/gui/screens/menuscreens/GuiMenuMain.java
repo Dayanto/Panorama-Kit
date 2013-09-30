@@ -4,9 +4,9 @@
 package panoramakit.gui.screens.menuscreens;
 
 import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsMod;
 import panoramakit.gui.screens.settingsscreens.GuiSettingsBackground;
 
 /** 
@@ -22,8 +22,10 @@ public class GuiMenuMain extends GuiScreen
 		addMenuLink(GuiMenuPanoramas.class);
 	}
 	
-	private Minecraft mc = Minecraft.getMinecraft();
 	public String screenTitle = "Panorama Kit";
+	
+	private static final int MOD_SETTINGS = 100;
+	private static final int BACK = 101;
 	
 	/**
 	 * Adds the buttons (and other controls) to the screen in question.
@@ -38,7 +40,8 @@ public class GuiMenuMain extends GuiScreen
 			buttonList.add(new GuiButton(i, width / 2 - 75, height / 6 + 24 * i, 150, 20, getScreen(i).toString()));
 		}
 		
-		buttonList.add(new GuiButton(100, width / 2 - 75, 5 * height / 6 - 12, 150, 20, "Back"));
+		buttonList.add(new GuiButton(MOD_SETTINGS, width / 2 - 75, 5 * height / 6 - 12 - 24, 150, 20, "Settings"));
+		buttonList.add(new GuiButton(BACK, width / 2 - 75, 5 * height / 6 - 12, 150, 20, "Back"));
 	}
 	
 	/**
@@ -47,8 +50,12 @@ public class GuiMenuMain extends GuiScreen
 	@Override
 	public void actionPerformed(GuiButton guibutton)
 	{
-		if (guibutton.id == 100) {
+		if (guibutton.id == BACK) {
 			mc.displayGuiScreen(null);
+			return;
+		}
+		if (guibutton.id == MOD_SETTINGS) {
+			mc.displayGuiScreen(new GuiSettingsMod());
 			return;
 		}
 		mc.displayGuiScreen(getScreen(guibutton.id));

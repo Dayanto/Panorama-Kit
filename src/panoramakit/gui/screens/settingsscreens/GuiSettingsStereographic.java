@@ -10,8 +10,8 @@ import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
 import panoramakit.converter.projections.EquirectToStereographic;
-import panoramakit.engine.render.CubicRenderer;
 import panoramakit.engine.render.ImageLink;
+import panoramakit.engine.render.renderers.CubicRenderer;
 import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
@@ -26,6 +26,8 @@ import panoramakit.gui.screens.GuiRenderNotice;
 import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
 import panoramakit.gui.settings.StereographicSettings;
 import panoramakit.mod.PanoramaKit;
+import panoramakit.gui.settings.SharedSettings;
+import panoramakit.gui.util.FileNumerator;
 
 /**
  * @author dayanto
@@ -50,18 +52,10 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 	
 	private StereographicSettings settings;
 	
-	// make sure we don't update the orientation and angle after rendering a preview
-	private static boolean keepOrientation = false;
-	
 	public GuiSettingsStereographic()
 	{
 		super(screenLabel);
-		if(keepOrientation)	{
-			settings = new StereographicSettings();
-			keepOrientation = false;
-		} else {
-			settings = new StereographicSettings(mc.thePlayer.rotationYaw);
-		}
+		settings = new StereographicSettings();
 	}
 	
 	/**
@@ -97,7 +91,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 		
 		// sliders beneath the textfields
 		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
-		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
+		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", -180F, 180F, 0, SharedSettings.getOrientation()));
 		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()) {
 			public void updateDisplayString() { 
 				displayString = String.format(baseString + ": %.1f", getValue());
@@ -176,7 +170,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			L.info("Render stereographic panorama");
 			
 			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Stereographic.png");
-			renderFile = numberFile(renderFile);
+			renderFile = FileNumerator.numberFile(renderFile);
 			
 			EquirectToStereographic panorama = new EquirectToStereographic(new CubicToEquirect(), settings.getFieldOfView(), settings.getWidth(), settings.getHeight());
 			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);
@@ -185,7 +179,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			int sampleResolution = (int)(((settings.getWidth() > settings.getHeight() ? settings.getWidth() : settings.getHeight()) / 4) * settings.getSampleSize());
 			// since the orientation isn't centered in the middle of the image, but instead the side, we rotate it 180 degrees
 			// also, since the converter takes a normal equirectangular panorama and makes it into a planet, we need to offset the angle by 90 degrees to make it an edge case
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation() - 180, settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, SharedSettings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -216,7 +210,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation() - 180, settings.getAngle() - 90);
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, SharedSettings.getOrientation() - 180, settings.getAngle() - 90);
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen
@@ -234,7 +228,6 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			
 			// display overlay and then close the gui
 			capturePreview();
-			keepOrientation = true;
 		}
 	}
 	
@@ -248,7 +241,7 @@ public class GuiSettingsStereographic extends GuiScreenSettings
 			settings.setSampleSize(value);
 		}
 		if (id == ORIENTATION) {
-			settings.setOrientation(value);
+			SharedSettings.setOrientation(value);
 		}
 		if (id == ANGLE) {
 			settings.setAngle(value);

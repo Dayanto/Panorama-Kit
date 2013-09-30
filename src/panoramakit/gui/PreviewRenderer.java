@@ -65,7 +65,7 @@ public class PreviewRenderer
 		try {
 			image = ImageIO.read(getPreviewFile());
 			previewTexture = new DynamicTexture(image);
-			resourceLocation = textureManager.func_110578_a("preivew", previewTexture);
+			resourceLocation = textureManager.getDynamicTextureLocation("preivew", previewTexture);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,9 +91,9 @@ public class PreviewRenderer
 	
 	private void drawImage(int xPos, int yPos, int width, int height)
 	{
-		previewTexture.func_110564_a();
+		previewTexture.updateDynamicTexture();
 		Tessellator tessellator = Tessellator.instance;
-		textureManager.func_110577_a(resourceLocation);
+		textureManager.bindTexture(resourceLocation);
 		GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_ALPHA_TEST);

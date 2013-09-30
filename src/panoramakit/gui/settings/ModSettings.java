@@ -17,7 +17,8 @@ public class ModSettings
 	
 	private static final int DEF_FILE_NUMBERING = 0;
 	
-	public static final String[] fileNumberingOptions = {"Increment", "Date"};
+	public static final String increment, date;
+	public static final String[] fileNumberingOptions = {increment = "Increment" , date = "Date"};
 	
 	private Property fileNumbering;
 	
@@ -30,7 +31,8 @@ public class ModSettings
 	
 	public int getFileNumbering()
 	{
-		return fileNumbering.getInt(DEF_FILE_NUMBERING);
+		int value = fileNumbering.getInt(DEF_FILE_NUMBERING);
+		return value < fileNumberingOptions.length ? value : fileNumberingOptions.length - 1;
 	}
 	public void setFileNumbering(int fileNumbering)
 	{

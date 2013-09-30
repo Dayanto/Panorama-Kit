@@ -59,7 +59,7 @@ public class TaskManager
 	 */
 	public void halt()
 	{
-		if (!taskQueue.isEmpty()) {
+		if (hasTasks()) {
 			taskQueue.clear();
 			activeTask.stop();
 		}

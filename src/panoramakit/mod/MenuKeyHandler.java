@@ -12,6 +12,7 @@ import cpw.mods.fml.common.TickType;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.gui.screens.menuscreens.GuiMenuMain;
 import panoramakit.gui.screens.GuiScreenProgress;
+import panoramakit.gui.settings.SharedSettings;
 
 /**
  * This class acts as the connection between the tick handlers and the task manager.
@@ -46,6 +47,7 @@ public class MenuKeyHandler extends KeyHandler
 				mc.displayGuiScreen(new GuiScreenProgress());
 			} else if(mc.currentScreen == null) {
 				mc.displayGuiScreen(new GuiMenuMain());
+				SharedSettings.setOrientation(mc.thePlayer.rotationYaw);
 			}
 		}
 	}

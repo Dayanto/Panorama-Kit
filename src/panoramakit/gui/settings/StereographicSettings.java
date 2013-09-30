@@ -27,7 +27,6 @@ public class StereographicSettings
 	private Property sampleSize;
 	private Property fieldOfView;
 	private Property angle;
-	private static float orientation;
 
 	
 	public StereographicSettings()
@@ -39,12 +38,6 @@ public class StereographicSettings
 		sampleSize = config.get(category, "samplesize", DEF_SAMPLE_SIZE);
 		fieldOfView = config.get(category, "fieldofview", DEF_FIELD_OF_VIEW);
 		angle = config.get(category, "angle", DEF_ANGLE);
-	}
-	
-	public StereographicSettings(float playerRotation)
-	{
-		this();
-		orientation = ((playerRotation % 360) + 360) % 360;
 	}
 	
 	/* properties */
@@ -92,17 +85,5 @@ public class StereographicSettings
 	public void setAngle(float angle)
 	{
 		this.angle.set(angle);
-	}
-	
-	
-	/* non-properties */
-	
-	public float getOrientation()
-	{
-		return orientation;
-	}
-	public void setOrientation(float orientation)
-	{
-		StereographicSettings.orientation = orientation;
 	}
 }

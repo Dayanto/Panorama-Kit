@@ -3,11 +3,7 @@
  */
 package panoramakit.gui.screens.settingsscreens;
 
-import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,7 +13,6 @@ import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomButton;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.menuitems.HoverTips;
-import panoramakit.gui.settings.ModSettings;
 import panoramakit.mod.PanoramaKit;
 
 /** 
@@ -47,13 +42,15 @@ public abstract class GuiScreenSettings extends GuiScreen
 	}
 	
 	@Override
-	protected final void actionPerformed(GuiButton guibutton)
+	protected void actionPerformed(GuiButton guibutton)
 	{
-		int value = 0;
+		int currentOption = 0;
 		if (guibutton instanceof GuiCustomButton) {
-			value = ((GuiCustomButton) guibutton).getValue();
+			GuiCustomButton customButton = (GuiCustomButton) guibutton;
+			customButton.cycleOptions();
+			currentOption = customButton.getCurrentOption();
 		}
-		buttonPressed(guibutton, guibutton.id, value);
+		buttonPressed(guibutton, guibutton.id, currentOption);
 	}
 	
 	/**
@@ -111,7 +108,8 @@ public abstract class GuiScreenSettings extends GuiScreen
 	
 	/**
 	 * Called whenever a button has been pressed. If there are multiple options,
-	 * the button will have cycled among them on its own.
+	 * the button will have cycled among them on its own. If the button is a
+	 * vanilla GuiButton, it will 
 	 */
 	public void buttonPressed(GuiButton button, int id, int currentOption)
 	{}
@@ -242,53 +240,5 @@ public abstract class GuiScreenSettings extends GuiScreen
 		}
 		
 		tipMessage = "";
-	}
-	
-	public File numberFile(File file)
-	{
-		file = cleanFilePath(file);
-		
-		ModSettings settings = PanoramaKit.instance.getModSettings();
-		
-		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Increment") return increment(file);
-		if(ModSettings.fileNumberingOptions[settings.getFileNumbering()] == "Date") return date(file);
-		
-		return file;
-	}
-	
-	public File increment(File file)
-	{
-		File parent = file.getParentFile();
-		String name = file.getName().substring(0,file.getName().lastIndexOf('.'));
-		String extension = file.getName().substring(file.getName().lastIndexOf('.'));
-		
-		int fileNumber = 2;
-		while(file.exists()){
-			file = new File(parent, name + fileNumber + extension);
-			fileNumber++;
-		}
-		
-		return file;
-	}
-	
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-	
-	public File date(File file)
-	{
-		File parent = file.getParentFile();
-		
-		String fileName = file.getName();
-		String name = fileName.substring(0, fileName.lastIndexOf('.'));
-		String extension = fileName.substring(fileName.lastIndexOf('.'));
-		
-		return new File(parent, name + DATE_FORMAT.format(new Date()) + extension);
-	}
-	
-	private File cleanFilePath(File file)
-	{
-		String filePath = file.getPath();
-		filePath = filePath.replaceAll("/./", "/");
-		filePath = filePath.replaceAll("\\\\.\\\\", "\\\\");
-		return new File(filePath);
 	}
 }

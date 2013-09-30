@@ -26,6 +26,6 @@ public class ZipTask extends ThreadedTask
 	{
 		chat.print("Zipping...");
 		Zipper.zipFolder(folder, zipFile);
-		chat.print("Done zipping!");
+		chat.print("Saved as " + zipFile.getName());
 	}
 }

@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
-import panoramakit.engine.render.CubicRenderer;
 import panoramakit.engine.render.ImageLink;
+import panoramakit.engine.render.renderers.CubicRenderer;
 import panoramakit.engine.task.Task;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.DisplayGuiScreenTask;
@@ -19,12 +19,14 @@ import panoramakit.engine.task.threadedtasks.ProjectionConverterTask;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomSlider;
 import panoramakit.gui.menuitems.GuiCustomSliderOrientation;
+import panoramakit.gui.menuitems.GuiCustomSliderSample;
 import panoramakit.gui.menuitems.GuiCustomTextField;
 import panoramakit.gui.screens.GuiRenderNotice;
 import panoramakit.gui.screens.menuscreens.GuiMenuPanoramas;
 import panoramakit.gui.settings.EquirectSettings;
 import panoramakit.mod.PanoramaKit;
-import panoramakit.gui.menuitems.GuiCustomSliderSample;
+import panoramakit.gui.settings.SharedSettings;
+import panoramakit.gui.util.FileNumerator;
 
 /**
  * @author dayanto
@@ -48,18 +50,10 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 	
 	private EquirectSettings settings;
 	
-	// make sure we don't update the orientation and angle after rendering a preview
-	private static boolean keepOrientation = false;
-	
 	public GuiSettingsEquirect()
 	{
 		super(screenLabel);
-		if(keepOrientation)	{
-			settings = new EquirectSettings();
-			keepOrientation = false;
-		} else {
-			settings = new EquirectSettings(mc.thePlayer.rotationYaw);
-		}
+		settings = new EquirectSettings();
 	}
 	
 	/**
@@ -95,7 +89,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		// sliders beneath the textfields
 		buttonList.add(new GuiCustomSliderSample(SAMPLE_SIZE, leftCol - 75, currentY += rowHeight, this, "Sample Size", "Warning! Large samples eat lots of RAM!", 1F, 8F, 0.5F, settings.getSampleSize()));
-		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", 0F, 360F, 0, settings.getOrientation()));
+		buttonList.add(new GuiCustomSliderOrientation(ORIENTATION, leftCol - 75, currentY += rowHeight, this, "Orientation", "", -180F, 180F, 0, SharedSettings.getOrientation()));
 		buttonList.add(new GuiCustomSlider(ANGLE, leftCol - 75, currentY += rowHeight, this, "Angle", "", -90F, 90F, 0, settings.getAngle()));
 		
 		// preview button underneath the preview image
@@ -166,14 +160,14 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			L.info("Render equirectangular panorama");
 			
 			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png");
-			renderFile = numberFile(renderFile);
+			renderFile = FileNumerator.numberFile(renderFile);
 			
 			CubicToEquirect panorama = new CubicToEquirect(settings.getResolution());;
 			ProjectionConverter converter = new ProjectionConverter(panorama, renderFile);;
 				
 			// create a cubic base image
 			int sampleResolution = (int) (settings.getResolution() * settings.getSampleSize());
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, renderFile, SharedSettings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// convert it to a panorama
@@ -201,7 +195,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			
 			// create a cubic base image
 			int sampleResolution = 256;
-			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, settings.getOrientation(), settings.getAngle());
+			CubicRenderer renderer = new CubicRenderer(sampleResolution, previewFile, SharedSettings.getOrientation(), settings.getAngle());
 			TaskManager.instance.addTask(new RenderTask(renderer));
 			
 			// restore the gui screen
@@ -219,7 +213,6 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			
 			// display overlay and then close the gui
 			capturePreview();
-			keepOrientation = true;
 		}
 	}
 	
@@ -233,7 +226,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 			settings.setSampleSize(value);
 		}
 		if (id == ORIENTATION) {
-			settings.setOrientation(value);
+			SharedSettings.setOrientation(value);
 		}
 		if (id == ANGLE) {
 			settings.setAngle(value);

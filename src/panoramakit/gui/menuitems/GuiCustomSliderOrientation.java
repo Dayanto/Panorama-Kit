@@ -10,7 +10,7 @@ import panoramakit.gui.screens.settingsscreens.GuiScreenSettings;
  */
 public class GuiCustomSliderOrientation extends GuiCustomSlider
 {
-	public static final String[] POINTS_OF_COMPASS = {"S","SW","W","NW","N","NE","E","SE"};
+	public static final String[] POINTS_OF_COMPASS = {"South","West","North","East"};
 	
 	public GuiCustomSliderOrientation(int id, int x, int y, GuiScreenSettings settingsScreen, String baseString, String tipMessage, float min, float max, float step, float value)
 	{

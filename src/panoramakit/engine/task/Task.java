@@ -11,7 +11,7 @@ import panoramakit.engine.util.ChatPrinter;
  * @author dayanto
  */
 public abstract class Task
-{
+{	
 	protected ChatPrinter chat = new ChatPrinter();
 	
 	/**
