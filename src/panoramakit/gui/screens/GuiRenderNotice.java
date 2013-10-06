@@ -11,7 +11,18 @@ import net.minecraft.client.gui.GuiScreen;
  */
 public class GuiRenderNotice extends GuiScreen
 {
+	private String message;
 	boolean hasDrawn = false; 
+	
+	public GuiRenderNotice()
+	{
+		message = "Rendering...";
+	}
+	
+	public GuiRenderNotice(String message)
+	{
+		this.message = message;
+	}
 	
 	/**
 	 * Draws the screen and all the components in it.
@@ -25,7 +36,7 @@ public class GuiRenderNotice extends GuiScreen
 		}
 		
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, "Rendering...", width / 2, height / 2, 0xe0e0e0);
+		drawCenteredString(fontRenderer, message, width / 2, height / 2, 0xe0e0e0);
 		
 		hasDrawn = true;
 	}
