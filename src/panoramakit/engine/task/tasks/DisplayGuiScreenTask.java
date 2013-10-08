@@ -30,7 +30,7 @@ public class DisplayGuiScreenTask extends Task
 			mc.displayGuiScreen(guiScreen.newInstance());
 			// render a clean frame immedaitely to hide the transition.
 			mc.entityRenderer.updateCameraAndRender(0);
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			PanoramaKit.instance.L.log(Level.SEVERE, "Failed to swap screen: ", e);
 		}
 		setCompleted();

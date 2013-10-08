@@ -19,7 +19,7 @@ public class TaskManager
 	public static final TaskManager instance = new TaskManager();
 	
 	private Task activeTask = null;
-	private ArrayList<Task> taskQueue = new ArrayList<>();
+	private ArrayList<Task> taskQueue = new ArrayList<Task>();
 	
 	/**
 	 * Add a new task to the end of the task queue.
