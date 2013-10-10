@@ -30,7 +30,7 @@ public class CodeTransformer implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
-		if ("net.minecraft.client.renderer.EntityRenderer".equals(name)) {
+		if ("bfe".equals(name)) { // "net.minecraft.client.renderer.EntityRenderer"
 			ClassNode classNode = readBytes(bytes);
 			doViewPositionTransform(classNode);
 			bytes = writeBytes(classNode);
@@ -45,7 +45,7 @@ public class CodeTransformer implements IClassTransformer
 	public ClassNode doViewPositionTransform(ClassNode classNode)
 	{
 		for (MethodNode mn : classNode.methods) {
-			if (!"orientCamera".equals(mn.name)) {
+			if (!"g".equals(mn.name)) { //orientCamera
 				continue;
 			}
 			
