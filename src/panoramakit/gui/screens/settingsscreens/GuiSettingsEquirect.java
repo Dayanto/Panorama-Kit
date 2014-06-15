@@ -4,9 +4,9 @@
 package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
 import panoramakit.engine.render.ImageLink;
@@ -33,7 +33,6 @@ import panoramakit.gui.util.FileNumerator;
  */
 public class GuiSettingsEquirect extends GuiScreenSettings
 {
-	private static Logger L = PanoramaKit.instance.L;
 	private static String screenTitle = "Equirectangular Panorama";
 	private static String screenLabel = "Equirectangular";
 	
@@ -80,8 +79,8 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		int currentY = contentStart + 12;
 		
 		// textfields for width and height
-		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRenderer, WIDTH, leftCol - 12 - 64, currentY, 64, 20, true);
-		GuiCustomTextField fieldHeight = new GuiCustomTextField(fontRenderer, HEIGHT, leftCol + 12, currentY, 64, 20, true);
+		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRendererObj, WIDTH, leftCol - 12 - 64, currentY, 64, 20, true);
+		GuiCustomTextField fieldHeight = new GuiCustomTextField(fontRendererObj, HEIGHT, leftCol + 12, currentY, 64, 20, true);
 		fieldWidth.setText(String.valueOf(settings.getResolution() * 4));
 		fieldHeight.setText(String.valueOf(settings.getResolution() * 2));
 		textFieldList.add(fieldWidth);
@@ -96,8 +95,8 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		buttonList.add((new GuiButton(PREVIEW, rightCol - 40, contentStart + 128 + 6, 80, 20, "Preview")));
 		
 		// bottom row buttons
-		buttonList.add(new GuiSmallButton(BACK, leftCol - 75, bottomRow, "Back"));
-		buttonList.add(new GuiSmallButton(CAPTURE, rightCol - 75, bottomRow, "Capture"));
+		buttonList.add(new GuiButton(BACK, leftCol - 75, bottomRow, 150, 20, "Back"));
+		buttonList.add(new GuiButton(CAPTURE, rightCol - 75, bottomRow, 150, 20, "Capture"));
 	}
 	
 	/**
@@ -115,12 +114,12 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		int bottomRow = height / 2 + 84;
 		
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, screenTitle, width / 2, contentStart - 24, 0xffffff);
+		drawCenteredString(fontRendererObj, screenTitle, width / 2, contentStart - 24, 0xffffff);
 		
 		// draw the strings related to the height and width
-		drawCenteredString(fontRenderer, "Width", leftCol - 32 - 12, contentStart, 0xa0a0a0);
-		drawCenteredString(fontRenderer, "Height", leftCol + 32 + 12, contentStart, 0xa0a0a0);
-		drawString(fontRenderer, "x", leftCol - 2, contentStart + 16, 0xffffff);
+		drawCenteredString(fontRendererObj, "Width", leftCol - 32 - 12, contentStart, 0xa0a0a0);
+		drawCenteredString(fontRendererObj, "Height", leftCol + 32 + 12, contentStart, 0xa0a0a0);
+		drawString(fontRendererObj, "x", leftCol - 2, contentStart + 16, 0xffffff);
 		
 		// draw the preview box background
 		drawRect(rightCol - 64 - 1, contentStart - 1, rightCol - 64 + 128 + 1, contentStart + 128 + 1, 0xff000000);
@@ -134,10 +133,10 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		int sampleResolution = (int)(settings.getResolution() * settings.getSampleSize());
 		int sampleWidth = sampleResolution * 4;
 		int sampleHeight = sampleResolution * 3;
-		drawCenteredString(fontRenderer, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
+		drawCenteredString(fontRendererObj, "Sampled image: " + sampleWidth + "x" + sampleHeight, leftCol, bottomRow - 24 - 4, 0xa0a0a0);
 		
 		// draw the tip message
-		drawCenteredString(fontRenderer, tipMessage, width / 2, bottomRow - 12, 0xFFCF33);
+		drawCenteredString(fontRendererObj, tipMessage, width / 2, bottomRow - 12, 0xFFCF33);
 		
 		// draw buttons and texfields
 		super.drawScreen(x, y, z);
@@ -157,7 +156,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		if (id == CAPTURE) 
 		{
-			L.info("Render equirectangular panorama");
+			FMLLog.info("Render equirectangular panorama");
 			
 			File renderFile = new File(PanoramaKit.instance.getRenderDir(), "Equirectangular.png");
 			renderFile = FileNumerator.numberFile(renderFile);
@@ -183,7 +182,7 @@ public class GuiSettingsEquirect extends GuiScreenSettings
 		
 		if(id == PREVIEW) 
 		{
-			L.info("Render preview panorama");
+			FMLLog.info("Render preview panorama");
 			
 			File previewFile = PreviewRenderer.getPreviewFile();
 			

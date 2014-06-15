@@ -3,6 +3,7 @@
  */
 package panoramakit.engine.util;
 
+import net.minecraft.util.IChatComponent;
 import panoramakit.mod.PanoramaKit;
 
 /** 
@@ -15,10 +16,30 @@ public class ChatPrinter
 	/**
 	 * Attempts to send a message to the chat, but fails if this task has been silenced.
 	 */
-	public void print(String msg, Object... params) {
+	public void print(String msg) {
 		if(!silent)
 		{
-			PanoramaKit.instance.printChat(msg, params);
+			PanoramaKit.instance.printChatMessage(msg);
+		}
+	}
+
+	/**
+	 * Attempts to send an instance of IChatComponent to the chat, but fails if this task has been silenced.
+	 */
+	public void print(IChatComponent msg) {
+		if(!silent)
+		{
+			PanoramaKit.instance.printChatMessage(msg);
+		}
+	}
+
+	/**
+	 * Attempts to send a translated message to the chat, but fails if this task has been silenced.
+	 */
+	public void printTranslated(String msg, String ... params) {
+		if(!silent)
+		{
+			PanoramaKit.instance.printTranslatedMessage(msg, params);
 		}
 	}
 	

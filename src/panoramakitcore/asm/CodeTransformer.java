@@ -30,9 +30,9 @@ public class CodeTransformer implements IClassTransformer
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes)
 	{
-		if ("bfe".equals(name)) { // "net.minecraft.client.renderer.EntityRenderer"
+		if ("bll".equals(name)) { // "net.minecraft.client.renderer.EntityRenderer"
 			ClassNode classNode = readBytes(bytes);
-			doViewPositionTransform(classNode);
+			applyViewPositionTransform(classNode);
 			bytes = writeBytes(classNode);
 		}
 		
@@ -40,20 +40,20 @@ public class CodeTransformer implements IClassTransformer
 	}
 	
 	/**
-	 * Adds an if statement before line 551, skipping it whenever the mod is rendering.
+	 * Adds an if statement before line the line that adds an offset, skipping it whenever the mod is rendering.
 	 */
-	public ClassNode doViewPositionTransform(ClassNode classNode)
+	public ClassNode applyViewPositionTransform(ClassNode classNode)
 	{
 		for (MethodNode mn : classNode.methods) {
 			if (!"g".equals(mn.name)) { //orientCamera
 				continue;
 			}
-			
-			Iterator<AbstractInsnNode> instructionItterator = mn.instructions.iterator();
-			while (instructionItterator.hasNext()) {
-				AbstractInsnNode instruction = instructionItterator.next();
+
+			Iterator<AbstractInsnNode> instructionIterator = mn.instructions.iterator();
+			while (instructionIterator.hasNext()) {
+				AbstractInsnNode instruction = instructionIterator.next();
 				
-				if (instruction instanceof LineNumberNode && ((LineNumberNode) instruction).line == 551) {
+				if (instruction instanceof LineNumberNode && ((LineNumberNode) instruction).line == 709) {
 					AbstractInsnNode nextLineNumInstr = instruction.getNext();
 					while (!(nextLineNumInstr instanceof LineNumberNode)) {
 						nextLineNumInstr = nextLineNumInstr.getNext();

@@ -4,19 +4,26 @@
 package panoramakit.mod;
 
 import java.io.File;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.Configuration;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import panoramakit.gui.PreviewRenderer;
+import panoramakit.gui.screens.settingsscreens.GuiSettingsMod;
 import panoramakit.gui.settings.ModSettings;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.eventhandler.EventBus;
 import cpw.mods.fml.relauncher.Side;
 
 /**
@@ -25,12 +32,12 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(
 		modid = "PanoramaKit",
 		name = "Panorama Kit",
-		version = VersionInfo.VERSION
+		version = VersionInfo.VERSION,
+		useMetadata = true
 )
 public class PanoramaKit
 {
 	private final Minecraft mc = Minecraft.getMinecraft();
-	public final Logger L = Logger.getLogger("PanoramaKit");
 	
 	@Instance("PanoramaKit")
 	public static PanoramaKit instance;
@@ -43,7 +50,6 @@ public class PanoramaKit
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
 	{
-		L.setParent(FMLLog.getLogger());
 		config = ConfigLoader.getConfig(evt.getSuggestedConfigurationFile());
 		settings = new ModSettings();
 	}
@@ -51,8 +57,11 @@ public class PanoramaKit
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
-		TickRegistry.registerTickHandler(new OnFrameTickHandler(), Side.CLIENT);
-		KeyBindingRegistry.registerKeyBinding(new MenuKeyHandler());
+		EventBus eventBus = FMLCommonHandler.instance().bus();
+		eventBus.register(new TickHandler());
+		eventBus.register(new KeyHandler());
+		// TODO Add options menu to list. Something like -> GuiModOptions.registerMod("Panorama Kit", new GuiSettingsMod());
+		
 		renderDir = new File(mc.mcDataDir, "panoramas");
 		tempRenderDir = new File(renderDir, "temp");
 		
@@ -82,7 +91,23 @@ public class PanoramaKit
 		return tempRenderDir;
 	}
 	
-	public void printChat(String msg, Object... params) {
-        mc.ingameGUI.getChatGUI().addTranslatedMessage(msg, params);
+	public void printChatMessage(String msg)
+	{
+		printChatMessage(new ChatComponentText(msg));
     }
+
+	public void printChatMessage(IChatComponent msg)
+	{
+		mc.ingameGUI.getChatGUI().printChatMessage(msg);
+	}
+
+	public void printTranslatedMessage(String key, String ... params)
+	{
+		ArrayList<Object> list = new ArrayList<Object>();
+		for(String s : params)
+		{
+			list.add(new ChatComponentText(s));
+		}
+		printChatMessage(new ChatComponentTranslation(key, list.toArray()));
+	}
 }

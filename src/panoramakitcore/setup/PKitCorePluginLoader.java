@@ -4,6 +4,7 @@
 package panoramakitcore.setup;
 
 import java.util.Map;
+
 import panoramakit.mod.VersionInfo;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
@@ -32,12 +33,6 @@ public class PKitCorePluginLoader implements IFMLLoadingPlugin
 	}
 	
 	@Override
-	public String[] getLibraryRequestClass()
-	{
-		return null;
-	}
-	
-	@Override
 	public String getSetupClass()
 	{
 		return null;
@@ -46,5 +41,10 @@ public class PKitCorePluginLoader implements IFMLLoadingPlugin
 	@Override
 	public void injectData(Map<String, Object> data)
 	{}
+
+	@Override
+	public String getAccessTransformerClass() {
+		return null;
+	}
 	
 }

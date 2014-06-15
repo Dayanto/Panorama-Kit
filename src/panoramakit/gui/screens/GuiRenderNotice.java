@@ -36,7 +36,7 @@ public class GuiRenderNotice extends GuiScreen
 		}
 		
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, message, width / 2, height / 2, 0xe0e0e0);
+		drawCenteredString(fontRendererObj, message, width / 2, height / 2, 0xe0e0e0);
 		
 		hasDrawn = true;
 	}

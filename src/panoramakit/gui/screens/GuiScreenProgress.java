@@ -56,7 +56,7 @@ public class GuiScreenProgress extends GuiScreen
 		int xs = width / 2;
 		
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, screenTitle, xs - 10, 32, 0xffffff);
+		drawCenteredString(fontRendererObj, screenTitle, xs - 10, 32, 0xffffff);
 		
 		int ys = 60;
 		int line = 12;
@@ -65,8 +65,8 @@ public class GuiScreenProgress extends GuiScreen
 		String percent = progress == -1 ? "Unknown" : (Math.round(100 * progress) + "%");
 		int tasksRemaining = TaskManager.instance.tasksInQueue();
 		
-		drawString(fontRenderer, "Current progress: " + percent, xs - 80, ys += line, 0xa0a0a0);
-		drawString(fontRenderer, "Tasks in queue: " + tasksRemaining, xs - 80, ys += line, 0xa0a0a0);
+		drawString(fontRendererObj, "Current progress: " + percent, xs - 80, ys += line, 0xa0a0a0);
+		drawString(fontRendererObj, "Tasks in queue: " + tasksRemaining, xs - 80, ys += line, 0xa0a0a0);
 
 		
 		super.drawScreen(x, y, z);

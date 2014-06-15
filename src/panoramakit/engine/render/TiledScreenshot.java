@@ -46,7 +46,7 @@ public class TiledScreenshot
 		// allocate buffers
 		captureBuffer = BufferUtils.createIntBuffer(tileWidth * tileHeight);
 		screenshot = new int[fullWidth * fullHeight];
-		
+
 		camZoom = (double) fullHeight / (double) tileHeight;
 		
 		// if the zoom is 1.0, Minecraft ignores camera offsets, so... :/

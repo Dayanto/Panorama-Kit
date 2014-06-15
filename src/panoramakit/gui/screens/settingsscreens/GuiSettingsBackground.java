@@ -4,9 +4,10 @@
 package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.Logger;
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiSmallButton;
 import panoramakit.engine.render.renderers.BackgroundRenderer;
 import panoramakit.engine.task.TaskManager;
 import panoramakit.engine.task.tasks.RenderTask;
@@ -26,7 +27,6 @@ import panoramakit.gui.util.FileNumerator;
  */
 public class GuiSettingsBackground extends GuiScreenSettings
 {
-	private static Logger L = PanoramaKit.instance.L;
 	private static String screenTitle = "Main Menu Background";
 	private static String screenLabel = "Make a Background";
 	
@@ -69,7 +69,7 @@ public class GuiSettingsBackground extends GuiScreenSettings
 		int currentY = contentStart + 12;
 		
 		// resolution
-		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRenderer, RESOLUTION, width / 2 - 10, currentY, 80, 20, true);
+		GuiCustomTextField fieldWidth = new GuiCustomTextField(fontRendererObj, RESOLUTION, width / 2 - 10, currentY, 80, 20, true);
 		fieldWidth.setText(String.valueOf(settings.getResolution()));
 		textFieldList.add(fieldWidth);
 		
@@ -80,8 +80,8 @@ public class GuiSettingsBackground extends GuiScreenSettings
 		buttonList.add(new GuiCustomButton(MODE, width / 2 - 75, currentY += rowHeight, 150, 20, null, "The option \"Add To The Game\" will be added after Minecraft 1.7", BackgroundSettings.modes, settings.getMode()));
 		
 		// bottom row buttons
-		buttonList.add(new GuiSmallButton(BACK, leftCol - 75, bottomRow, "Back"));
-		buttonList.add(new GuiSmallButton(CREATE, rightCol - 75, bottomRow, "Create"));
+		buttonList.add(new GuiButton(BACK, leftCol - 75, bottomRow, 150, 20, "Back"));
+		buttonList.add(new GuiButton(CREATE, rightCol - 75, bottomRow, 150, 20, "Create"));
 		
 		// straighten the camera so we can see where the background rotation would begin
 		updateView(SharedSettings.getOrientation());
@@ -98,13 +98,13 @@ public class GuiSettingsBackground extends GuiScreenSettings
 		int bottomRow = height / 2 + 60;
 		
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, screenTitle, width / 2, contentStart - 24, 0xffffff);
+		drawCenteredString(fontRendererObj, screenTitle, width / 2, contentStart - 24, 0xffffff);
 		
 		// draw the strings related to the height and width
-		drawString(fontRenderer, "Resolution", width / 2 - 75 + 5, contentStart + 12 + 6, 0xa0a0a0);
+		drawString(fontRendererObj, "Resolution", width / 2 - 75 + 5, contentStart + 12 + 6, 0xa0a0a0);
 		
 		// draw the tip message
-		drawCenteredString(fontRenderer, tipMessage, width / 2, bottomRow - 12, 0xFFCF33);
+		drawCenteredString(fontRendererObj, tipMessage, width / 2, bottomRow - 12, 0xFFCF33);
 		
 		// draw buttons and texfields
 		super.drawScreen(x, y, z);
@@ -129,7 +129,7 @@ public class GuiSettingsBackground extends GuiScreenSettings
 		if (id == CREATE) 
 		{
 			if(BackgroundSettings.modes[currentOption] == BackgroundSettings.saveBackground) {
-				L.info("Create new background");
+				FMLLog.info("Create new background");
 				
 				File renderDir = new File(PanoramaKit.instance.getTempRenderDir(), "assets/minecraft/textures/gui/title/background/");
 					

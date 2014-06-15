@@ -26,7 +26,7 @@ public class PKitCoreModContainer extends DummyModContainer
 		myMeta.version = VersionInfo.VERSION;
 		myMeta.authorList = Arrays.asList(new String[] { "Dayanto" });
 		myMeta.description = "Enables Panorama Kit to capture images properly";
-		myMeta.url = "http://www.minecraftforum.net/topic/792414-panorama-kit/";
+		myMeta.url = "http://bit.ly/panorama-kit/";
 	}
 	
 	public boolean registerBus(EventBus eb, LoadController lc)

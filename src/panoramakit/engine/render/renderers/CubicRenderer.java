@@ -6,7 +6,8 @@ package panoramakit.engine.render.renderers;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
+import cpw.mods.fml.common.FMLLog;
 import javax.imageio.ImageIO;
 import net.minecraft.util.MathHelper;
 import panoramakit.engine.render.CompositeImageRenderer;
@@ -18,9 +19,6 @@ import panoramakit.mod.PanoramaKit;
  */
 public class CubicRenderer extends CompositeImageRenderer
 {
-	
-	private final Logger L = PanoramaKit.instance.L;
-	
 	// image settings
 	private int resolution;
 	private File file;
@@ -101,12 +99,12 @@ public class CubicRenderer extends CompositeImageRenderer
 				file.createNewFile();
 			}
 			ImageIO.write(image, "png", file);
-			chat.print("panoramakit.saveimage", file.getName());
+			chat.printTranslated("panoramakit.saveimage", file.getName());
 		} else {
 			imageLink.setImage(image);
 		}
 		
-		L.info("Cubic render: " + (System.currentTimeMillis() - startTime) + "ms");
+		FMLLog.info("Cubic render: " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 	
 }

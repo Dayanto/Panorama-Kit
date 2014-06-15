@@ -3,8 +3,9 @@
  */
 package panoramakit.engine.task;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
+
+import cpw.mods.fml.common.FMLLog;
 import panoramakit.engine.util.ProgressTracker;
 import panoramakit.mod.PanoramaKit;
 
@@ -25,8 +26,6 @@ public abstract class ThreadedTask extends Task implements Runnable
 	 * process which can't report it's progress directly.
 	 */
 	public final ProgressTracker progressTracker = new ProgressTracker();
-
-	private final Logger L = PanoramaKit.instance.L;
 	
 	/**
 	 * This method is automatically called when it's time to run the threaded task. It should not be
@@ -45,13 +44,13 @@ public abstract class ThreadedTask extends Task implements Runnable
 			performThreaded();
 		} 
 		catch (InterruptedException ex) {
-			L.warning("Threaded task stopped.");
+			FMLLog.warning("Threaded task stopped.");
 			setStopped();
 			return;
 		}
 		catch (Exception ex) {
-			L.log(Level.SEVERE, "Threaded task has failed", ex);
-			PanoramaKit.instance.printChat("Current task failed: " + ex);
+			FMLLog.log(Level.ERROR, ex, "Threaded task has failed");
+			chat.print("Current task failed: " + ex);
 			TaskManager.instance.halt();
 			setStopped();
 			return;
@@ -65,11 +64,11 @@ public abstract class ThreadedTask extends Task implements Runnable
 	 * Once it has finished, it will automatically be marked as completed. 
 	 */
 	public abstract void performThreaded() throws Exception;
-	
+
 	/**
 	 * Threaded tasks rarely use this method, so it's made optional through this empty implementation.
 	 */
 	@Override
-	public void perform()
+	public final void perform()
 	{}
 }

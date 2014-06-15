@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import panoramakit.gui.PreviewRenderer;
 import panoramakit.gui.menuitems.GuiCustomButton;
 import panoramakit.gui.menuitems.GuiCustomTextField;
@@ -169,7 +169,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 		// display an overlay if we're about to render a preview (it stays on the screen while it's rendering)
 		if(capturingPreview){
 			drawDefaultBackground();
-			drawCenteredString(fontRenderer, "Rendering Preview...", width / 2, height / 2, 0xe0e0e0);
+			drawCenteredString(fontRendererObj, "Rendering Preview...", width / 2, height / 2, 0xe0e0e0);
 			
 			// waits one frame, so that what's drawn has been displayed to the screen before letting the rendering start.
 			if(hasDrawnOverlayMessage) {

@@ -1,0 +1,65 @@
+/* 
+ * This code isn't copyrighted. Do what you want with it. :) 
+ */
+package panoramakit.mod;
+
+import java.util.EnumSet;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+
+import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import panoramakit.engine.task.TaskManager;
+import panoramakit.gui.screens.menuscreens.GuiMenuMain;
+import panoramakit.gui.screens.GuiScreenProgress;
+import panoramakit.gui.settings.SharedSettings;
+
+/**
+ * This class acts as the connection between the tick handlers and the task manager.
+ * 
+ * @author dayanto
+ */
+public class KeyHandler
+{
+	private static final Minecraft mc = Minecraft.getMinecraft();
+	private static TaskManager taskManager = TaskManager.instance;
+	
+	public static final KeyBinding MENU_KEY = new KeyBinding("key.panoramakit.menu", Keyboard.KEY_P, "key.categories.gui"); // TODO Fix placeholder categories
+	public static final KeyBinding RENDER_KEY = new KeyBinding("key.panoramakit.rendertest", Keyboard.KEY_K, "key.categories.gui");
+
+	public KeyHandler()
+	{
+		ClientRegistry.registerKeyBinding(MENU_KEY);
+		ClientRegistry.registerKeyBinding(RENDER_KEY);
+	}
+	
+	@SubscribeEvent
+	public void keyDown(KeyInputEvent keyInputEvent)
+	{
+		if (MENU_KEY.isPressed())
+		{
+			if (taskManager.hasTasks())
+			{
+				mc.displayGuiScreen(new GuiScreenProgress());
+			}
+			else if(mc.currentScreen == null)
+			{
+				mc.displayGuiScreen(new GuiMenuMain());
+				SharedSettings.setOrientation(mc.thePlayer.rotationYaw);
+			}
+		}
+		
+		if (RENDER_KEY.isPressed())
+		{
+			if (!taskManager.hasTasks())
+			{
+				
+			}
+		}	
+	}
+
+}

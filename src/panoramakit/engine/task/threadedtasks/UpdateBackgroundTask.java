@@ -6,7 +6,7 @@ package panoramakit.engine.task.threadedtasks;
 import panoramakit.engine.task.ThreadedTask;
 
 /** 
- * Moves the zipped bakground to the resource pack directory and attaches it to the list 
+ * Moves the zipped background to the resource pack directory and attaches it to the list
  * of active resource packs. To make sure that the background is displayed, it's placed
  * at the top of the list.
  * 

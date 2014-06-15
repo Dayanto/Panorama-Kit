@@ -3,8 +3,8 @@
  */
 package panoramakit.gui.settings;
 
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import panoramakit.mod.PanoramaKit;
 
 /** 
@@ -18,7 +18,7 @@ public class CylindricalSettings
 	
 	private static final int DEF_PANORAMA_WIDTH = 2000;
 	private static final int DEF_PANORAMA_HEIGHT = 800;
-	private static final double DEF_SAMPLE_SIZE = 1.0;
+	private static final double DEF_SAMPLE_SIZE = 2.0;
 	private static final double DEF_ANGLE = 0.0;
 	
 	private Property width;

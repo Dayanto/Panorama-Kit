@@ -6,7 +6,8 @@ package panoramakit.converter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Logger;
+import cpw.mods.fml.common.FMLLog;
 import javax.imageio.ImageIO;
 import panoramakit.converter.data.Bounds;
 import panoramakit.converter.data.ColorData;
@@ -29,10 +30,7 @@ import panoramakit.engine.render.ImageLink;
  * @author dayanto
  */
 public class ProjectionConverter
-{
-	
-	private final Logger L = PanoramaKit.instance.L;
-	
+{	
 	private PositionMapper positionMapper;
 	private Interpolator interpolator;
 	
@@ -112,7 +110,7 @@ public class ProjectionConverter
 	 */
 	public void convert() throws IOException, IllegalArgumentException, InterruptedException
 	{
-		L.info("Converting...");
+		FMLLog.info("Converting...");
 		long startTime = System.currentTimeMillis();
 		
 		loadImage(imageFileInput);
@@ -161,8 +159,8 @@ public class ProjectionConverter
 		
 		saveImage(imageFileOutput);
 		
-		L.info("Projection \"" + positionMapper.getClass().getSimpleName() + "\": " + (System.currentTimeMillis() - startTime) + "ms");
-		L.info("Done");
+		FMLLog.info("Projection \"" + positionMapper.getClass().getSimpleName() + "\": " + (System.currentTimeMillis() - startTime) + "ms");
+		FMLLog.info("Done");
 	}
 	
 	public void setProgressTracker(ProgressTracker progressTracker)
@@ -176,10 +174,10 @@ public class ProjectionConverter
 	}
 	
 	/**
-	 * Retrieves the name of the image being saved.
+	 * Retrieves the instance of the image being saved.
 	 */
-	public String getImageName()
+	public File getImage()
 	{
-		return imageFileOutput.getName();
+		return imageFileOutput;
 	}
 }

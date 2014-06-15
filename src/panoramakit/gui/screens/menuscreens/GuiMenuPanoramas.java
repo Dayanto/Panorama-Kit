@@ -65,7 +65,7 @@ public class GuiMenuPanoramas extends GuiScreen
 	public void drawScreen(int x, int y, float z)
 	{
 		drawDefaultBackground();
-		drawCenteredString(fontRenderer, screenTitle, width / 2, height / 6 - 18, 0xffffff);
+		drawCenteredString(fontRendererObj, screenTitle, width / 2, height / 6 - 18, 0xffffff);
 		super.drawScreen(x, y, z);
 	}
 	
