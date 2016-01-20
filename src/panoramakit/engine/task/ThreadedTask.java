@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.common.FMLLog;
 import panoramakit.engine.util.ProgressTracker;
-import panoramakit.mod.PanoramaKit;
 
 /**
  * Threaded tasks are tasks that run in a separate thread in the background. Some tasks run for a
@@ -28,10 +27,10 @@ public abstract class ThreadedTask extends Task implements Runnable
 	public final ProgressTracker progressTracker = new ProgressTracker();
 	
 	/**
-	 * This method is automatically called when it's time to run the threaded task. It should not be
+	 * This method is automatically called when it's time to run the threaded task. It is never
 	 * used manually.
 	 */
-	public void start()
+	void start()
 	{
 		Thread task = new Thread(this);
 		task.start();

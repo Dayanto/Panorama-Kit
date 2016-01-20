@@ -1,18 +1,16 @@
-/* 
+/*
  * This code is in the public domain. You are free to do whatever you want with it. :)
  */
 package panoramakit.engine.task.threadedtasks;
 
 import panoramakit.engine.task.ThreadedTask;
 
-/** 
- * Moves the zipped background to the resource pack directory and attaches it to the list
- * of active resource packs. To make sure that the background is displayed, it's placed
- * at the top of the list.
- * 
- * @author dayanto
+/**
+ * Detatches any currently active background pack and attempts to delete the file.
+ *
+ * Created by Dayanto.
  */
-public class UpdateBackgroundTask extends ThreadedTask
+public class DisableBackgroundTask extends ThreadedTask
 {
 	@Override
 	public void performThreaded() throws Exception

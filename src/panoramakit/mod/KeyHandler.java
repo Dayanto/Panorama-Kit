@@ -3,8 +3,6 @@
  */
 package panoramakit.mod;
 
-import java.util.EnumSet;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
@@ -50,6 +48,7 @@ public class KeyHandler
 			{
 				mc.displayGuiScreen(new GuiMenuMain());
 				SharedSettings.setOrientation(mc.thePlayer.rotationYaw);
+				String s = "Something";
 			}
 		}
 		
@@ -57,7 +56,7 @@ public class KeyHandler
 		{
 			if (!taskManager.hasTasks())
 			{
-				
+				// TODO Needs an implementation or it should be removed!
 			}
 		}	
 	}

@@ -10,21 +10,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import panoramakit.gui.PreviewRenderer;
-import panoramakit.gui.screens.settingsscreens.GuiSettingsMod;
 import panoramakit.gui.settings.ModSettings;
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.EventBus;
-import cpw.mods.fml.relauncher.Side;
+
 
 /**
  * @author dayanto
@@ -37,7 +33,7 @@ import cpw.mods.fml.relauncher.Side;
 )
 public class PanoramaKit
 {
-	private final Minecraft mc = Minecraft.getMinecraft();
+	private static final Minecraft mc = Minecraft.getMinecraft();
 	
 	@Instance("PanoramaKit")
 	public static PanoramaKit instance;
@@ -90,24 +86,5 @@ public class PanoramaKit
 	{
 		return tempRenderDir;
 	}
-	
-	public void printChatMessage(String msg)
-	{
-		printChatMessage(new ChatComponentText(msg));
-    }
 
-	public void printChatMessage(IChatComponent msg)
-	{
-		mc.ingameGUI.getChatGUI().printChatMessage(msg);
-	}
-
-	public void printTranslatedMessage(String key, String ... params)
-	{
-		ArrayList<Object> list = new ArrayList<Object>();
-		for(String s : params)
-		{
-			list.add(new ChatComponentText(s));
-		}
-		printChatMessage(new ChatComponentTranslation(key, list.toArray()));
-	}
 }

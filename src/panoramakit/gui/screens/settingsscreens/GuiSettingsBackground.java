@@ -5,7 +5,6 @@ package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 
-import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.client.gui.GuiButton;
 import panoramakit.engine.render.renderers.BackgroundRenderer;
