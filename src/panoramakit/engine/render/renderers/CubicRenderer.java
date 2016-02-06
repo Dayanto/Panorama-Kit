@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import org.apache.logging.log4j.Logger;
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import javax.imageio.ImageIO;
 import net.minecraft.util.MathHelper;
 import panoramakit.engine.render.CompositeImageRenderer;

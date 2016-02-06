@@ -5,7 +5,7 @@ package panoramakit.engine.task.tasks;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Level;
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.client.Minecraft;
 import panoramakit.engine.render.CompositeImageRenderer;
 import panoramakit.engine.task.Task;

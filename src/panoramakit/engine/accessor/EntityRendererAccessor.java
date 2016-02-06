@@ -9,7 +9,7 @@
  */
 package panoramakit.engine.accessor;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import java.lang.reflect.Field;
 
 import net.minecraft.client.Minecraft;

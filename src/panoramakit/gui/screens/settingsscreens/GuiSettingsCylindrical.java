@@ -5,7 +5,7 @@ package panoramakit.gui.screens.settingsscreens;
 
 import java.io.File;
 import org.apache.logging.log4j.Logger;
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.client.gui.GuiButton;
 import panoramakit.converter.ProjectionConverter;
 import panoramakit.converter.projections.CubicToEquirect;
