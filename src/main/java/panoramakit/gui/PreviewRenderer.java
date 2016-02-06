@@ -92,17 +92,17 @@ public class PreviewRenderer
 	private void drawImage(int xPos, int yPos, int width, int height)
 	{
 		previewTexture.updateDynamicTexture();
-		Tessellator tessellator = Tessellator.instance;
+		Tessellator tessellator = Tessellator.getInstance();
 		textureManager.bindTexture(resourceLocation);
 		GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         GL11.glColor4f(1, 1, 1, 1);
-        tessellator.startDrawingQuads();
+        /**tessellator.startDrawingQuads();
         tessellator.addVertexWithUV(xPos        , yPos + height, 0, 0.0, 1.0);
         tessellator.addVertexWithUV(xPos + width, yPos + height, 0, 1.0, 1.0);
         tessellator.addVertexWithUV(xPos + width, yPos         , 0, 1.0, 0.0);
-        tessellator.addVertexWithUV(xPos        , yPos         , 0, 0.0, 0.0);
+        tessellator.addVertexWithUV(xPos        , yPos         , 0, 0.0, 0.0);*/
         tessellator.draw();
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glDisable(GL11.GL_BLEND);

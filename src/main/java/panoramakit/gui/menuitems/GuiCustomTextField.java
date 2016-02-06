@@ -26,7 +26,7 @@ public class GuiCustomTextField extends GuiTextField
 	
 	public GuiCustomTextField(FontRenderer fontRenderer, int id, int xPos, int yPos, int width, int height, boolean onlyNumbers)
 	{
-		super(fontRenderer, xPos, yPos, width, height);
+		super(0/*?*/, fontRenderer, xPos, yPos, width, height);
 		this.id = id;
 		this.onlyNumbers = onlyNumbers;
 		

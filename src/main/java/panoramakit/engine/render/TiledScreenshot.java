@@ -75,7 +75,7 @@ public class TiledScreenshot
 					era.setCameraOffsetY(camOfsY);
 				}
 				
-				mc.entityRenderer.updateCameraAndRender(partialTicks);
+				mc.entityRenderer.updateCameraAndRender(partialTicks, 0/*?*/);
 				
 				// reset buffer position
 				captureBuffer.clear();

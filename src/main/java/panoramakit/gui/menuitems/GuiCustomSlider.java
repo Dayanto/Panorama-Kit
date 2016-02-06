@@ -159,7 +159,7 @@ public class GuiCustomSlider extends GuiButton implements HoverTips
 	public boolean isHovered()
 	{
 		if(!enabled) return false;
-		return field_146123_n; 
+		return hovered;
 		// TODO make sure that the variable is correct. The current variable is merely a guess
 		
 		// Previous comment: "field_82253_i translates to 'isHovered'"

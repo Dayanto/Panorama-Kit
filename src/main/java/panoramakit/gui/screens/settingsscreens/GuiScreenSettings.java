@@ -3,6 +3,7 @@
  */
 package panoramakit.gui.screens.settingsscreens;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -58,7 +59,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 	 * KeyListener.keyTyped(KeyEvent e).
 	 */
 	@Override
-	protected void keyTyped(char character, int keyCode)
+	protected void keyTyped(char character, int keyCode) throws IOException
 	{
 		// make sure it's always possible to escape out of a menu that lacks a back button
 		super.keyTyped(character, keyCode);
@@ -98,7 +99,7 @@ public abstract class GuiScreenSettings extends GuiScreen
 	 * Called when the mouse is clicked.
 	 */
 	@Override
-	protected void mouseClicked(int par1, int par2, int par3)
+	protected void mouseClicked(int par1, int par2, int par3) throws IOException
 	{
 		super.mouseClicked(par1, par2, par3);
 		for (GuiTextField textfield : textFieldList) {

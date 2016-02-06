@@ -31,7 +31,7 @@ public class DisplayGuiScreenTask extends Task
 		try {
 			mc.displayGuiScreen(guiScreen.newInstance());
 			// render a clean frame immediately to hide the transition.
-			mc.entityRenderer.updateCameraAndRender(0);
+			mc.entityRenderer.updateCameraAndRender(0, 0/*?*/);
 		} catch (Exception e) {
 			FMLLog.log(Level.ERROR, "Failed to swap screen: ", e);
 		}

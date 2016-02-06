@@ -121,12 +121,12 @@ public abstract class CompositeImageRenderer
 		mc.gameSettings.hideGUI = true;
 		
 		// disable advanced OpenGL features, they cause flickering on render chunks
-		advancedOpengl = mc.gameSettings.advancedOpengl;
+		//advancedOpengl = mc.gameSettings. advancedOpengl; // TODO Reenable! (Port 1.8)
 		// mc.gameSettings.advancedOpengl = false;
 		
 		// change the field of view to a quarter circle (90 degrees)
 		fieldOfView = mc.gameSettings.fovSetting; 
-		mc.gameSettings.fovSetting = (90F / mc.thePlayer.getFOVMultiplier() - 70F) / (110F - 70F); // fov 90 adjusted to a 0-1.0 scale representing 70-110
+		mc.gameSettings.fovSetting = (90F / mc.thePlayer.getFovModifier() - 70F) / (110F - 70F); // fov 90 adjusted to a 0-1.0 scale representing 70-110
 		
 		// save player rotation
 		this.yaw = mc.thePlayer.rotationYaw;
@@ -174,7 +174,7 @@ public abstract class CompositeImageRenderer
 		
 		// restore user settings
 		mc.gameSettings.hideGUI = hideGui;
-		mc.gameSettings.advancedOpengl = advancedOpengl;
+		//mc.gameSettings.advancedOpengl = advancedOpengl; // TODO Reenable! (Port 1.8)
 		mc.gameSettings.fovSetting = fieldOfView;
 		
 		// unlock mouse

@@ -37,7 +37,7 @@ public class RenderTask extends Task
 			return;
 		}
 
-		mc.entityRenderer.updateCameraAndRender(0);
+		mc.entityRenderer.updateCameraAndRender(0, 0/*?(Port 1.8)*/);
 
 		try {
 			FMLLog.info("Rendering screenshot");
@@ -47,7 +47,7 @@ public class RenderTask extends Task
 			chat.printTranslated("panoramakit.renderfail", ex.getMessage());
 		}
 		// Render a clean image to hide what was just rendered.
-		mc.entityRenderer.updateCameraAndRender(0);
+		mc.entityRenderer.updateCameraAndRender(0, 0/*?(Port 1.8)*/);
 		setCompleted();
 	}
 	
